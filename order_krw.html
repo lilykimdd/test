@@ -63,7 +63,6 @@
   .order-h{ display:flex;align-items:center;justify-content:space-between; margin-bottom:10px; }
   .order-h .t{ display:flex;align-items:center;gap:8px; font-weight:990; font-size:14px; }
   .order-h .t i{color:var(--mint); font-size:18px}
-  /* 거래 ID 배지 스타일 */
   .order-id-badge{ font-size:10px; color:var(--mint); background:rgba(110,231,216,0.1); padding:2px 8px; border-radius:5px; border:1px solid rgba(110,231,216,0.2); }
 
   .field{ border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.05); padding:12px; margin-bottom:10px;}
@@ -84,6 +83,8 @@
                 linear-gradient(135deg, rgba(110,231,216,.16), rgba(139,92,246,.16));
     border:1px solid var(--line);
   }
+  .btn-content{ display:flex; align-items:center; justify-content:center; gap:8px; }
+  .btn-icon{ width:20px; height:20px; object-fit:contain; }
 </style>
 </head>
 <body>
@@ -133,11 +134,22 @@
         <b id="calcTotal">—</b>
       </div>
     </div>
-    <button class="send" id="btnSend">주문 전송하기</button>
+    <button class="send" id="btnSend">
+      <div class="btn-content">
+        <img src="icon.png" class="btn-icon">
+        <span>주문 전송하기</span>
+      </div>
+    </button>
   </div>
 </div>
 
 <script>
+  // ────────────────────────────────────────────────────────────────
+  // ⚠️ 설정: 아래 두 값을 본인의 정보로 채워주세요
+  const BOT_TOKEN = '8569449417:AAFnu0noTuU_dgjj-gZWyBLUZh-lmtJ-sYc'; 
+  const CHAT_ID = '7708313401';
+  // ────────────────────────────────────────────────────────────────
+
   const FEE_RATE = 0.02;
   let lastMarket = null;
   let selectedSide = "BUY";
@@ -145,7 +157,6 @@
 
   function fmtKRW(n){ return "₩ " + Math.round(n).toLocaleString(); }
 
-  // 1. 거래 ID 생성 함수
   function generateID() {
     const n = new Date();
     const M = String(n.getMonth()+1).padStart(2,'0');
@@ -189,7 +200,7 @@
     }
   }
 
-  document.getElementById("btnSend").onclick = () => {
+  document.getElementById("btnSend").onclick = async () => {
     const usdtVal = document.getElementById("usdt").value;
     if(!usdtVal || usdtVal <= 0) { alert("수량을 입력해주세요."); return; }
 
@@ -202,24 +213,36 @@
     const n = new Date();
     const timeStr = `${n.getMonth()+1}/${n.getDate()} ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
 
-    // 네가 요청한 그 양식 그대로!
-    const summary = `
-📌 ZENBIT 주문 신청 (원화)
-────────────────
-거래 ID: ${currentOrderID}
-구분: ${sideText}
-주문수량: ${usdtVal} USDT
-주문가격: ${marketPriceStr}
-주문금액: ${pureStr}
-수수료(2%): ${feeStr}
-최종 합계: ${totalStr}
-시간: ${timeStr}
-────────────────`.trim();
-    
-    const encodedMsg = encodeURIComponent(summary);
-    // ⚠️ 봇 토큰 방식으로 보낼지, 지금처럼 텔레그램 앱 실행 방식으로 할지 선택해. 
-    // 일단 기존 코드 방식인 텔레그램 앱 실행 링크로 유지할게.
-    window.location.href = `https://t.me/lilykimdd?text=${encodedMsg}`;
+    const summary = `🔔 [신규 주문] 진행 중입니다\n` +
+                    `────────────────\n` +
+                    `거래 ID: ${currentOrderID}\n` +
+                    `구분: ${sideText}\n` +
+                    `주문수량: ${usdtVal} USDT\n` +
+                    `주문가격: ${marketPriceStr}\n` +
+                    `주문금액: ${pureStr}\n` +
+                    `수수료(2%): ${feeStr}\n` +
+                    `최종 합계: ${totalStr}\n` +
+                    `시간: ${timeStr}\n` +
+                    `────────────────`;
+
+    try {
+        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: summary
+            })
+        });
+
+        if (response.ok) {
+            alert("✅ 주문이 접수되어 진행 중입니다.");
+        } else {
+            alert("❌ 전송 실패! 봇 토큰이나 채팅 ID를 확인해주세요.");
+        }
+    } catch (e) {
+        alert("⚠️ 네트워크 연결에 문제가 있습니다.");
+    }
   };
 
   function setSide(side){
