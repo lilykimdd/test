@@ -57,7 +57,6 @@
   .quote-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
   .pair{ font-size:16px; color:var(--mint); font-weight:990; display:flex;align-items:center;gap:8px; }
   
-  /* ✅ 리얼타임 배지: 너비 82px 고정 */
   .badge{ font-size:11px;font-weight:950; min-width:82px; justify-content:center; padding:7px 10px;border-radius:999px; background:rgba(110,231,216,.10); border:1px solid rgba(110,231,216,.20); color:var(--mint); display:flex;align-items:center;gap:8px; }
   .spark{ width:10px;height:10px;border-radius:50%; background:var(--mint); box-shadow:0 0 10px var(--mint); animation:blink 0.85s infinite; }
   @keyframes blink{ 0%,100%{opacity:.28;transform:scale(.86)} 50%{opacity:1;transform:scale(1.22)} }
@@ -73,13 +72,13 @@
     border-radius:22px; padding:14px 14px 12px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06);
     cursor:pointer; transition:transform .12s ease; min-height:92px; display:flex; flex-direction:column; justify-content:space-between; align-items:center; text-align:center;
   }
-  .pick .topline{ display:flex; align-items:center; justify-content:center; gap:10px; }
+
+  /* ✅ 아이콘과 텍스트 간격 조절: gap을 10px -> 4px로 줄임 */
+  .pick .topline{ display:flex; align-items:center; justify-content:center; gap:4px; }
   
-  /* ✅ icon.png 이미지 스타일 */
   .pick .topline .custom-icon{ width:22px; height:22px; object-fit:contain; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.2)); }
   .pick .label{ font-size:14px; font-weight:990; letter-spacing:-0.2px; }
 
-  /* ✅ 하단 주문하기 버튼: 상단 REAL-TIME 배지와 동일한 82px 고정 */
   .pick .cta{ font-size:11px; font-weight:950; min-width:82px; justify-content:center; padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.16); display:inline-flex; align-items:center; gap:8px; }
   
   .pick.krw{ background: radial-gradient(520px 220px at 22% 18%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%), linear-gradient(135deg, rgba(34,197,184,.22), rgba(15,23,42,.62)); border-color:rgba(110,231,216,.28); }
