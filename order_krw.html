@@ -36,7 +36,7 @@
   /* top */
   .top{
     display:flex;align-items:center;justify-content:space-between;
-    padding:10px 2px 8px;
+    padding:10px 2px 4px; /* ✅ 아래 여백 줄임 (기존 8px) */
     position:sticky; top:0;
     background:transparent;
     z-index:10;
@@ -52,10 +52,13 @@
     cursor:pointer;
   }
   .back i{font-size:18px;color:rgba(255,255,255,.92)}
+
+  /* ✅ 로고 20% 축소: 58px -> 46px */
   .logo{
-    height:58px;width:auto;display:block;
+    height:46px;width:auto;display:block;
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));
   }
+
   .pill{
     display:flex;align-items:center;gap:8px;
     padding:8px 10px;border-radius:999px;
@@ -69,14 +72,13 @@
 
   /* cards */
   .card{
-    margin-top:10px;
+    margin-top:6px; /* ✅ 헤더~카드 간격 줄임 (기존 10px) */
     background:var(--card);
     border:1px solid rgba(255,255,255,.08);
     border-radius:22px;
     box-shadow:0 10px 26px rgba(0,0,0,.26);
     overflow:hidden;
   }
-  /* ✅ 박스 세로 길이 줄이기: 패딩 약간 축소 */
   .card-h{
     padding:12px 14px 8px;
     display:flex;align-items:center;justify-content:space-between;
@@ -85,18 +87,15 @@
     display:flex;align-items:center;gap:8px;
     font-weight:990;
     letter-spacing:.2px;
-    font-size:14px; /* 주문과 동일 */
+    font-size:14px;
   }
   .card-h .t i{color:var(--mint);font-size:18px}
-
-  /* ✅ 기준 시간: 상단 오른쪽으로 */
   .card-h .stamp{
     font-size:12px;
     color:var(--muted2);
     white-space:nowrap;
     margin-left:10px;
   }
-
   .card-b{padding:0 14px 12px}
 
   .pairline{
@@ -108,7 +107,6 @@
     letter-spacing:.2px;
   }
 
-  /* ✅ USDT 시세 숫자: 체결가(기존 fill-price) 느낌 + 화이트 */
   .price{
     margin-top:6px;
     text-align:center;
@@ -120,7 +118,6 @@
     color:#fff;
   }
 
-  /* ✅ 체결가 숫자: 민트 + 더 크게 */
   .fill{
     margin-top:10px;
     text-align:center;
@@ -146,7 +143,7 @@
     color:var(--mint);
   }
 
-  /* ✅ BUY/SELL 선택 박스 (시세 박스와 주문 박스 사이) */
+  /* BUY/SELL 선택 */
   .side{
     margin-top:12px;
     display:grid;
@@ -197,8 +194,6 @@
     font-weight:990;font-size:14px;letter-spacing:.2px;
   }
   .order-h .t i{color:var(--mint);font-size:18px}
-
-  /* ✅ 최소 100 USDT: 볼드 제거 */
   .min{
     font-size:12px;
     color:var(--muted2);
@@ -224,7 +219,6 @@
     font-weight:900;
     margin-bottom:8px;
   }
-  /* ✅ 입력후 자동계산: 볼드 취소 */
   .label .r{
     color:var(--muted2);
     font-weight:400;
@@ -249,8 +243,6 @@
     background:rgba(255,255,255,.05);
     padding:12px;
   }
-
-  /* ✅ 현재가/체결가 글자 작음 해결: total과 동일 사이즈(13px)로 */
   .calc-row{
     display:flex;align-items:center;justify-content:space-between;
     gap:10px;
@@ -267,14 +259,12 @@
   }
   .calc-row b{color:#fff}
 
-  /* ✅ 체결 예상금액(총액) 민트 포인트 */
   #calcTotal{
     color:var(--mint);
     font-weight:990;
     letter-spacing:.2px;
   }
 
-  /* ✅ 주문 전송하기(와이드 버튼) */
   .send{
     margin-top:10px;
     width:100%;
@@ -346,7 +336,6 @@
     </div>
   </div>
 
-  <!-- ✅ 기본값: 구입(왼쪽) 선택 상태 -->
   <div class="side" aria-label="side selection">
     <div class="side-btn" id="sideBuy" role="button" tabindex="0">
       <i class="ri-shopping-bag-3-line"></i> 구입
@@ -406,7 +395,7 @@
   const TG_USERNAME = "lilykimdd";
 
   let lastMarket = null;
-  let selectedSide = "BUY"; // ✅ 기본값: 구입
+  let selectedSide = "BUY";
 
   function toast(msg){
     const t=document.getElementById("toast");
@@ -421,10 +410,12 @@
     if(!Number.isFinite(v)) return "—";
     return "₩ " + Math.round(v).toLocaleString("ko-KR");
   }
+
+  // ✅ 천단위 콤마 + 소수 2자리 고정 (기존 버그 수정)
   function fmtKRWPrecise(n){
     const v = Number(n);
     if(!Number.isFinite(v)) return "—";
-    return "₩ " + v.toFixed(2).toLocaleString("ko-KR");
+    return "₩ " + v.toLocaleString("ko-KR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   function calcFillPrice(market){
@@ -557,11 +548,9 @@ USDT 시세: ${fmtKRW(market)}
     openTelegramDraft(msg);
   }
 
-  // ===== events =====
   const usdtInput = document.getElementById("usdt");
   usdtInput.addEventListener("input", renderCalc);
 
-  // ✅ 키보드 '이동/완료/엔터' 누르면 키보드 내려가고 계산 갱신
   usdtInput.addEventListener("keydown", (e)=>{
     if(e.key === "Enter"){
       e.preventDefault();
@@ -572,15 +561,12 @@ USDT 시세: ${fmtKRW(market)}
 
   document.getElementById("sideBuy").addEventListener("click", ()=>setSide("BUY"));
   document.getElementById("sideSell").addEventListener("click", ()=>setSide("SELL"));
-
   document.getElementById("sideBuy").addEventListener("keydown", (e)=>{ if(e.key==="Enter") setSide("BUY"); });
   document.getElementById("sideSell").addEventListener("keydown", (e)=>{ if(e.key==="Enter") setSide("SELL"); });
 
   document.getElementById("btnSend").addEventListener("click", submitSelectedOrder);
 
-  // ✅ 기본값(구입) 활성화
   updateSideUI();
-
   fetchMarket();
   setInterval(fetchMarket, REFRESH_MS);
 </script>
