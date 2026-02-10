@@ -3,62 +3,325 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ZENBIT</title>
+<title>ZENBIT · Home</title>
+
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
 <style>
-body{
-  margin:0;
-  background:#0b1220;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  color:#fff;
-  display:flex;
-  justify-content:center;
-}
-.wrap{
-  width:100%;
-  max-width:430px;
-  padding:24px 16px;
-}
-h1{
-  text-align:center;
-  font-size:22px;
-  margin-bottom:24px;
-}
-.card{
-  background:#111a2e;
-  border-radius:18px;
-  padding:18px;
-  margin-bottom:14px;
-  cursor:pointer;
-  border:1px solid rgba(255,255,255,.08);
-}
-.card:active{transform:scale(.98)}
-.title{
-  font-size:16px;
-  font-weight:700;
-  margin-bottom:6px;
-}
-.sub{
-  font-size:13px;
-  opacity:.7;
-}
+  :root{
+    --navy:#0b1220;
+    --navy2:#111a2e;
+    --card:rgba(15,23,42,.75);
+    --line:rgba(255,255,255,.10);
+    --mint:#6ee7d8;
+    --purple:#8b5cf6;
+    --text:#ffffff;
+    --muted:rgba(255,255,255,.72);
+    --muted2:rgba(255,255,255,.55);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  body{background:var(--navy);display:flex;justify-content:center;color:var(--text);}
+
+  .app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:
+      radial-gradient(900px 420px at 18% 6%, rgba(110,231,216,.10) 0%, rgba(110,231,216,0) 55%),
+      radial-gradient(900px 420px at 82% 10%, rgba(139,92,246,.10) 0%, rgba(139,92,246,0) 55%),
+      linear-gradient(180deg,var(--navy) 0%, var(--navy2) 100%);
+    padding:16px 14px 28px;
+  }
+
+  /* Header */
+  .top{
+    display:flex;align-items:center;justify-content:center;
+    padding:10px 2px 8px;
+    position:sticky; top:0;
+    background:linear-gradient(180deg, rgba(11,18,32,.98) 0%, rgba(11,18,32,.86) 70%, rgba(11,18,32,0) 100%);
+    backdrop-filter: blur(10px);
+    z-index:10;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+  }
+  .brand .name{
+    font-size:18px;font-weight:990;letter-spacing:.2px;
+    display:flex;align-items:center;gap:10px;
+    white-space:nowrap;
+  }
+  .brand .name i{color:var(--mint);font-size:20px}
+
+  /* Hero */
+  .hero{
+    margin-top:12px;
+    border-radius:22px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 14px 44px rgba(0,0,0,.40);
+    background:
+      radial-gradient(900px 240px at 22% 30%, rgba(110,231,216,.18) 0%, rgba(110,231,216,0) 60%),
+      radial-gradient(800px 240px at 80% 20%, rgba(139,92,246,.18) 0%, rgba(139,92,246,0) 55%),
+      linear-gradient(135deg, rgba(27,42,74,.92), rgba(43,31,82,.92));
+    position:relative;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;right:-70px;top:-50px;
+    width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(110,231,216,.55), rgba(139,92,246,.35), rgba(0,0,0,0));
+    opacity:.95;
+  }
+  .hero-inner{position:relative;padding:18px 14px 14px;}
+  .hero-h{
+    font-size:17px;font-weight:990;letter-spacing:.2px;
+    display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  }
+  .hero-h i{color:var(--mint)}
+  .hero-p{
+    font-size:12px;line-height:1.55;color:var(--muted);
+    max-width:340px;
+  }
+
+  /* Services */
+  .grid{
+    margin-top:12px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .svc{
+    background:var(--card);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:14px 12px;
+    box-shadow:0 10px 26px rgba(0,0,0,.26);
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    user-select:none;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .svc:active{ transform: scale(.992); }
+
+  .svc::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-40px;
+    width:170px; height:170px;
+    border-radius:50%;
+    opacity:.55;
+  }
+  .svc.usdt::after{
+    background:radial-gradient(circle at 30% 30%, rgba(110,231,216,.55), rgba(110,231,216,0));
+  }
+  .svc.btc::after{
+    background:radial-gradient(circle at 30% 30%, rgba(139,92,246,.55), rgba(139,92,246,0));
+  }
+
+  .svc-top{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:10px;
+    position:relative;
+  }
+  .svc-title{
+    display:flex;align-items:center;gap:10px;
+    font-size:15px;font-weight:990;letter-spacing:.2px;
+  }
+  .svc-title .icon{
+    width:40px;height:40px;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .svc-title .icon i{font-size:20px;color:var(--mint)}
+  .svc.btc .svc-title .icon i{color:#c7b3ff}
+
+  .arrow{
+    width:38px;height:38px;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .arrow i{ font-size:18px; color:rgba(255,255,255,.88); }
+
+  .svc-sub{
+    font-size:12px;color:var(--muted);
+    position:relative;
+    line-height:1.55;
+  }
+
+  .meta{
+    margin-top:12px;
+    display:flex;gap:8px;flex-wrap:wrap;
+  }
+  .pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 10px;border-radius:999px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    color:rgba(255,255,255,.90);
+    font-size:11px;
+    font-weight:950;
+    white-space:nowrap;
+  }
+  .pill .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--mint);
+    box-shadow:0 0 0 0 rgba(110,231,216,.45);
+    animation:pulse 1.25s infinite;
+  }
+  .svc.btc .pill .dot{
+    background:#c7b3ff;
+    box-shadow:0 0 0 0 rgba(139,92,246,.45);
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(110,231,216,.45)}
+    70%{box-shadow:0 0 0 10px rgba(110,231,216,0)}
+    100%{box-shadow:0 0 0 0 rgba(110,231,216,0)}
+  }
+
+  /* Quick actions */
+  .quick{
+    margin-top:12px;
+    background:var(--card);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:14px 12px;
+    box-shadow:0 10px 26px rgba(0,0,0,.26);
+  }
+  .quick-h{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .quick-h .t{
+    font-weight:990;font-size:14px;letter-spacing:.2px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .quick-h .t i{color:var(--mint);font-size:18px}
+  .row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .qbtn{
+    border-radius:18px;
+    padding:14px 12px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#fff;
+    font-weight:980;
+    font-size:13px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .qbtn i{font-size:18px;color:var(--mint)}
+  .qbtn:active{transform:scale(.992)}
+  .qbtn.alt i{color:#c7b3ff}
+
+  .footer{
+    margin-top:14px;
+    padding:12px 12px;
+    border-radius:16px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.55;
+  }
+  .footer b{color:rgba(255,255,255,.92)}
 </style>
 </head>
+
 <body>
-<div class="wrap">
+<div class="app">
 
-<h1>ZENBIT</h1>
+  <div class="top">
+    <div class="brand">
+      <div class="name"><i class="ri-shield-check-line"></i> ZENBIT</div>
+    </div>
+  </div>
 
-<div class="card" onclick="location.href='ORDER_USDT.html'">
-  <div class="title">테더 환전 (USDT)</div>
-  <div class="sub">실시간 시세 기반 주문</div>
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-h"><i class="ri-compass-3-line"></i> 서비스 선택</div>
+      <div class="hero-p">
+        테더(USDT) 환전과 비트코인(BTC) 서비스를 제공합니다.<br>
+        원하시는 서비스를 선택해 주세요.
+      </div>
+
+      <div class="grid">
+        <!-- USDT -->
+        <div class="svc usdt" onclick="go('USDT')">
+          <div class="svc-top">
+            <div class="svc-title">
+              <div class="icon"><i class="ri-exchange-2-line"></i></div>
+              테더 환전 (USDT)
+            </div>
+            <div class="arrow"><i class="ri-arrow-right-line"></i></div>
+          </div>
+          <div class="svc-sub">
+            실시간 시세 기반 주문 접수 · BUY/SELL 요청
+          </div>
+          <div class="meta">
+            <span class="pill"><span class="dot"></span> REAL-TIME</span>
+            <span class="pill"><i class="ri-lock-2-line"></i> Secure</span>
+            <span class="pill"><i class="ri-time-line"></i> Fast</span>
+          </div>
+        </div>
+
+        <!-- BTC -->
+        <div class="svc btc" onclick="go('BTC')">
+          <div class="svc-top">
+            <div class="svc-title">
+              <div class="icon"><i class="ri-bit-coin-line"></i></div>
+              비트코인 (BTC)
+            </div>
+            <div class="arrow"><i class="ri-arrow-right-line"></i></div>
+          </div>
+          <div class="svc-sub">
+            비트코인 안내/주문/상담 등 확장형 서비스
+          </div>
+          <div class="meta">
+            <span class="pill"><span class="dot"></span> REAL-TIME</span>
+            <span class="pill"><i class="ri-bar-chart-2-line"></i> Insights</span>
+            <span class="pill"><i class="ri-customer-service-2-line"></i> Support</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick">
+        <div class="quick-h">
+          <div class="t"><i class="ri-flashlight-line"></i> 빠른 메뉴</div>
+          <div style="font-size:12px;color:var(--muted2)">바로 이동</div>
+        </div>
+        <div class="row">
+          <div class="qbtn" onclick="go('USDT')"><i class="ri-exchange-dollar-line"></i> USDT 주문</div>
+          <div class="qbtn alt" onclick="go('BTC')"><i class="ri-bit-coin-line"></i> BTC 서비스</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <b>안내:</b> 서비스 선택 후 주문 페이지로 이동합니다.
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<div class="card" onclick="location.href='ORDER_BTC.html'">
-  <div class="title">비트코인 (BTC)</div>
-  <div class="sub">비트코인 거래 서비스</div>
-</div>
+<script>
+  // 파일명만 맞추면 바로 동작
+  const ROUTES = {
+    USDT: "ORDER_USDT.html",
+    BTC:  "ORDER_BTC.html"
+  };
 
-</div>
+  function go(type){
+    const to = ROUTES[type] || "index.html";
+    location.href = to;
+  }
+</script>
+
 </body>
 </html>
