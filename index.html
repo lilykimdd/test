@@ -453,9 +453,9 @@
 
 <script>
   function go(type){
-    // location.href = type === "KRW" ? "order_krw.html" : "order_php.html";
-    alert(type === "KRW" ? "테더/원화 주문 화면(추가 예정)" : "테더/페소 주문 화면(추가 예정)");
+  location.href = type === "KRW" ? "order_krw.html" : "order_php.html";
   }
+
 
   function easeOutQuart(t){ return 1 - Math.pow(1 - t, 4); }
 
