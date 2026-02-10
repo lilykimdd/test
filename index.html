@@ -32,22 +32,14 @@
     content:""; position:absolute; inset:0; mix-blend-mode:screen; pointer-events:none;
     background: radial-gradient(circle at 82% 34%, rgba(110,231,216,.46) 0%, rgba(110,231,216,.46) 18%, rgba(110,231,216,.16) 36%, rgba(110,231,216,0) 62%);
   }
-  .banner::after{
-    content:""; position:absolute; inset:-30px; filter:blur(10px); opacity:.9; pointer-events:none;
-    background: radial-gradient(420px 260px at 20% 75%, rgba(139,92,246,.18), rgba(0,0,0,0) 72%);
-  }
   .banner-inner{position:relative;padding:18px 14px 16px;}
   .banner-h{ display:flex;align-items:center;gap:8px; font-size:16px;font-weight:990; margin-bottom:6px; }
   .banner-h i{color:var(--mint)}
   .banner-p{ font-size:12px;line-height:1.55;color:var(--muted); max-width:360px; }
 
-  /* ✅ 추가된 실시간 배너 문구 (원본 디자인 유지하며 하단에 살짝 추가) */
-  .live-status {
-    margin-top: 10px; padding: 6px 10px; background: rgba(0,0,0,0.2); border-radius: 10px;
-    display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 800; color: var(--mint);
-  }
-  .live-status i { animation: pulse 1.5s infinite; }
-  @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+  /* ✅ 추가: 배너 하단 은은한 문구 */
+  .live-status { margin-top:10px; font-size:10px; font-weight:900; color:var(--mint); display:flex; align-items:center; gap:6px; opacity:0.85; }
+  .live-status i { animation: blink 1.5s infinite; }
 
   .ticker{ margin-top:12px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); position:relative; }
   .ticker-track{ display:flex; gap:8px; white-space:nowrap; padding:10px 12px; animation:ticker 12s linear infinite; }
@@ -95,19 +87,17 @@
     <div class="banner-inner">
       <div class="banner-h"><i class="ri-exchange-2-line"></i> 실시간 테더(USDT) 환전</div>
       <div class="banner-p">실시간 시세 기반으로 환전 주문을 진행합니다.<br>통화를 선택한 뒤 주문을 접수해 주세요.</div>
-      <div class="live-status">
-        <i class="ri-flashlight-line"></i> 실시간 시세 / 다이렉트 테더 거래소
-      </div>
+      <div class="live-status"><i class="ri-flashlight-line"></i> 실시간 시세 / 다이렉트 테더 거래소</div>
     </div>
   </div>
   <div class="ticker">
     <div class="ticker-track">
-      <div class="tick">FX · KRW/USD <span class="val t-ku">—</span></div><div class="sep">•</div>
-      <div class="tick">FX · KRW/PHP <span class="val t-kp">—</span></div><div class="sep">•</div>
-      <div class="tick">FX · USD/PHP <span class="val t-up">—</span></div><div class="sep">•</div>
-      <div class="tick">FX · KRW/USD <span class="val t-ku">—</span></div><div class="sep">•</div>
-      <div class="tick">FX · KRW/PHP <span class="val t-kp">—</span></div><div class="sep">•</div>
-      <div class="tick">FX · USD/PHP <span class="val t-up">—</span></div>
+      <div class="tick">FX · KRW/USD <span class="val tick-krw-usd">—</span></div><div class="sep">•</div>
+      <div class="tick">FX · KRW/PHP <span class="val tick-krw-php">—</span></div><div class="sep">•</div>
+      <div class="tick">FX · USD/PHP <span class="val tick-usd-php">—</span></div><div class="sep">•</div>
+      <div class="tick">FX · KRW/USD <span class="val tick-krw-usd">—</span></div><div class="sep">•</div>
+      <div class="tick">FX · KRW/PHP <span class="val tick-krw-php">—</span></div><div class="sep">•</div>
+      <div class="tick">FX · USD/PHP <span class="val tick-usd-php">—</span></div>
     </div>
   </div>
   <div class="section-h">
@@ -118,12 +108,12 @@
     <div class="quote" id="cardUsd">
       <div class="quote-top"><div class="pair"><i class="ri-money-dollar-circle-line"></i> USDT / USD</div><div class="badge"><span class="spark"></span> REAL-TIME</div></div>
       <div class="price" id="usd">—</div>
-      <div class="subline"><span>CoinGecko</span><span id="t1">기준: --:--:--</span></div>
+      <div class="subline"><span>출처: CoinGecko</span><span id="t1">기준: --:--:--</span></div>
     </div>
     <div class="quote" id="cardPhp">
       <div class="quote-top"><div class="pair"><i class="ri-coins-line"></i> USDT / PHP</div><div class="badge"><span class="spark"></span> REAL-TIME</div></div>
       <div class="price" id="php">—</div>
-      <div class="subline"><span>CoinGecko</span><span id="t2">기준: --:--:--</span></div>
+      <div class="subline"><span>출처: CoinGecko</span><span id="t2">기준: --:--:--</span></div>
     </div>
   </div>
   <div class="choose">
@@ -142,35 +132,62 @@
 </div>
 
 <script>
-  async function fetchAll(){
+  function easeOutQuart(t){ return 1 - Math.pow(1 - t, 4); }
+  function animateNumber(el, from, to, duration, formatter){
+    const start = performance.now();
+    const diff = to - from;
+    function tick(now){
+      const t = Math.min(1, (now - start) / duration);
+      const eased = easeOutQuart(t);
+      el.textContent = formatter(from + diff * eased);
+      if(t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  let lastUSD=null, lastPHP=null;
+  const fmtUSD = v => v.toFixed(4) + " USD";
+  const fmtPHP = v => "₱ " + v.toFixed(2);
+
+  async function fetchPrices(){
     try{
-      const [pr, fr] = await Promise.all([
-        fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd,php"),
-        fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/krw.json")
-      ]);
-      const pd = await pr.json(); const fd = await fr.json();
-      document.getElementById("usd").textContent = pd.tether.usd.toFixed(4);
-      document.getElementById("php").textContent = "₱ " + pd.tether.php.toFixed(2);
-      const k_u = (1/fd.krw.usd).toFixed(2);
-      const k_p = (1/fd.krw.php).toFixed(2);
-      const u_p = (fd.krw.php/fd.krw.usd).toFixed(2);
-      document.querySelectorAll(".t-ku").forEach(e=>e.textContent=k_u);
-      document.querySelectorAll(".t-kp").forEach(e=>e.textContent=k_p);
-      document.querySelectorAll(".t-up").forEach(e=>e.textContent=u_p);
+      const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd,php");
+      const d = await r.json();
+      const usd = d.tether.usd, php = d.tether.php;
+      const uEl = document.getElementById("usd"), pEl = document.getElementById("php");
+      if(lastUSD===null) animateNumber(uEl, usd*0.98, usd, 2000, fmtUSD);
+      else animateNumber(uEl, lastUSD, usd, 1500, fmtUSD);
+      if(lastPHP===null) animateNumber(pEl, php*0.98, php, 2000, fmtPHP);
+      else animateNumber(pEl, lastPHP, php, 1500, fmtPHP);
+      lastUSD=usd; lastPHP=php;
       const now = new Date().toLocaleTimeString('ko-KR',{hour12:false});
-      document.getElementById("t1").textContent = "기준: "+now;
-      document.getElementById("t2").textContent = "기준: "+now;
+      document.getElementById("t1").textContent = document.getElementById("t2").textContent = "기준: "+now;
     } catch(e){}
   }
-  document.getElementById("btnRefresh").onclick = () => {
+
+  async function fetchFX(){
+    try{
+      const r = await fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/krw.json");
+      const d = await r.json();
+      const k_u = (1/d.krw.usd).toFixed(2), k_p = (1/d.krw.php).toFixed(2), u_p = (d.krw.php/d.krw.usd).toFixed(2);
+      document.querySelectorAll(".tick-krw-usd").forEach(e=>e.textContent=k_u);
+      document.querySelectorAll(".tick-krw-php").forEach(e=>e.textContent=k_p);
+      document.querySelectorAll(".tick-usd-php").forEach(e=>e.textContent=u_p);
+    } catch(e){}
+  }
+
+  document.getElementById("btnRefresh").onclick = async () => {
     document.getElementById("btnRefresh").classList.add("spin");
-    fetchAll().then(()=>setTimeout(()=>document.getElementById("btnRefresh").classList.remove("spin"),800));
+    await Promise.all([fetchPrices(), fetchFX()]);
+    setTimeout(()=>document.getElementById("btnRefresh").classList.remove("spin"), 800);
   };
+
   window.onload = () => {
-    setTimeout(()=>document.getElementById("cardUsd").classList.add("show"),140);
-    setTimeout(()=>document.getElementById("cardPhp").classList.add("show"),260);
-    fetchAll();
+    setTimeout(()=>document.getElementById("cardUsd").classList.add("show"), 140);
+    setTimeout(()=>document.getElementById("cardPhp").classList.add("show"), 260);
+    fetchPrices(); fetchFX();
   };
+  setInterval(fetchPrices, 15000); setInterval(fetchFX, 5000);
 </script>
 </body>
 </html>
