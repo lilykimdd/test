@@ -20,8 +20,8 @@
     padding:12px 14px 28px;
   }
   .top{ display:flex;align-items:center;justify-content:center; padding:12px 2px 10px; position:sticky; top:0; z-index:10; }
-  .brand .logo{ height:58px; width:auto; filter:drop-shadow(0 10px 24px rgba(0,0,0,.28)); }
-  
+  .brand .logo{ height:58px; width:auto; display:block; filter:drop-shadow(0 10px 24px rgba(0,0,0,.28)); }
+
   .banner{
     margin-top:6px; border-radius:22px; overflow:hidden; border:1px solid rgba(255,255,255,.08); box-shadow:0 14px 44px rgba(0,0,0,.40); position:relative;
     background: radial-gradient(520px 360px at 24% 34%, rgba(110,231,216,.28) 0%, rgba(110,231,216,.10) 44%, rgba(110,231,216,0) 78%),
@@ -32,49 +32,54 @@
     content:""; position:absolute; inset:0; mix-blend-mode:screen; pointer-events:none;
     background: radial-gradient(circle at 82% 34%, rgba(110,231,216,.46) 0%, rgba(110,231,216,.46) 18%, rgba(110,231,216,.16) 36%, rgba(110,231,216,0) 62%);
   }
+  .banner::after{
+    content:""; position:absolute; inset:-30px; filter:blur(10px); opacity:.9; pointer-events:none;
+    background: radial-gradient(420px 260px at 20% 75%, rgba(139,92,246,.18), rgba(0,0,0,0) 72%);
+  }
   .banner-inner{position:relative;padding:18px 14px 16px;}
   .banner-h{ display:flex;align-items:center;gap:8px; font-size:16px;font-weight:990; margin-bottom:6px; }
   .banner-h i{color:var(--mint)}
-  .banner-p{ font-size:12px;line-height:1.55;color:var(--muted); }
+  .banner-p{ font-size:12px;line-height:1.55;color:var(--muted); max-width:360px; }
 
   .ticker{ margin-top:12px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); position:relative; }
   .ticker-track{ display:flex; gap:8px; white-space:nowrap; padding:10px 12px; animation:ticker 12s linear infinite; }
   @keyframes ticker{ 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
   .tick{ display:inline-flex;align-items:center;gap:6px; color:rgba(255,255,255,.86); font-weight:950; font-size:12px; }
-  
+  .sep{opacity:.35;}
+  .tick .val{font-weight:990;color:rgba(255,255,255,.92)}
+
   .section-h{ margin-top:14px; display:flex;align-items:center;justify-content:space-between; padding:0 2px; }
   .section-h .t{ display:flex;align-items:center;gap:8px; font-weight:990;font-size:14px; }
   .section-h .t i{color:var(--mint);font-size:18px}
-  .refresh{ appearance:none;border:none;background:transparent; color:var(--muted); cursor:pointer; padding:6px; display:inline-flex; }
+  .refresh{ appearance:none;border:none;background:transparent; cursor:pointer; padding:6px; }
   .refresh.spin i{animation:spin .75s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
 
   .grid{ margin-top:10px; display:grid; grid-template-columns:1fr; gap:12px; }
-  .quote{
-    background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:14px 12px;
-    box-shadow:0 10px 26px rgba(0,0,0,.26); transform:translateY(10px); opacity:0; transition:all .55s ease;
-  }
-  .quote.show{transform:translateY(0);opacity:1;}
+  .quote{ background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:14px 12px; box-shadow:0 10px 26px rgba(0,0,0,.26); transform:translateY(10px); opacity:0; filter:blur(6px); transition:all .55s ease; }
+  .quote.show{transform:translateY(0);opacity:1;filter:blur(0);}
   .pair{ font-size:16px; color:var(--mint); font-weight:990; display:flex;align-items:center;gap:8px; }
   .badge{ font-size:11px;font-weight:950; padding:7px 10px;border-radius:999px; background:rgba(110,231,216,.10); border:1px solid rgba(110,231,216,.20); color:var(--mint); display:flex;align-items:center;gap:8px; }
-  .spark{ width:10px;height:10px;border-radius:50%; background:var(--mint); box-shadow: 0 0 10px var(--mint); animation:blink 0.85s infinite; }
-  @keyframes blink{ 0%,100%{opacity:.2;transform:scale(.8)} 50%{opacity:1;transform:scale(1.2)} }
-  .price{ font-size:32px; font-weight:860; margin-top:4px; }
+  .spark{ width:10px;height:10px;border-radius:50%; background:var(--mint); box-shadow:0 0 10px var(--mint); animation:blink 0.85s infinite; }
+  @keyframes blink{ 0%,100%{opacity:.28;transform:scale(.86)} 50%{opacity:1;transform:scale(1.22)} }
+  .price{ font-size:32px; font-weight:860; letter-spacing:.2px; line-height:1.12; }
   .subline{ margin-top:8px; display:flex;justify-content:space-between; color:var(--muted2); font-size:12px; }
 
   .choose{ margin-top:12px; }
-  .row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+  .row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   .pick{
-    border-radius:22px; padding:16px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06);
-    cursor:pointer; transition:all .12s ease; min-height:100px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+    border-radius:22px; padding:14px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06);
+    cursor:pointer; transition:all .12s ease; min-height:92px; display:flex; flex-direction:column; justify-content:space-between; align-items:center; text-align:center;
   }
-  .pick:active{transform:scale(.98)}
-  .pick i{ font-size:24px; margin-bottom:-4px; }
+  .pick .topline{ display:flex; align-items:center; justify-content:center; gap:10px; }
+  /* ✅ 아이콘 수정: 원화 / 페소 */
+  .pick.krw i{ font-size:22px; color:#fff; }
+  .pick.php i{ font-size:22px; color:#fff; }
   .pick .label{ font-size:14px; font-weight:990; }
-  .pick.krw{ background: linear-gradient(135deg, rgba(34,197,184,.22), rgba(15,23,42,.62)); border-color:rgba(110,231,216,.28); }
-  .pick.php{ background: linear-gradient(135deg, rgba(139,92,246,.20), rgba(15,23,42,.62)); border-color:rgba(199,179,255,.26); }
-  .cta{ font-size:11px; font-weight:950; padding:6px 12px; border-radius:999px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); }
-  .note{ margin-top:16px; font-size:10px; color:var(--muted2); text-align:center; }
+  .pick.krw{ background: radial-gradient(520px 220px at 22% 18%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%), linear-gradient(135deg, rgba(34,197,184,.22), rgba(15,23,42,.62)); border-color:rgba(110,231,216,.28); }
+  .pick.php{ background: radial-gradient(520px 220px at 82% 18%, rgba(139,92,246,.24) 0%, rgba(139,92,246,0) 62%), linear-gradient(135deg, rgba(139,92,246,.20), rgba(15,23,42,.62)); border-color:rgba(199,179,255,.26); }
+  .cta{ font-size:11px; font-weight:950; padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.16); }
+  .note{ margin-top:12px; font-size:10px; color:var(--muted2); text-align:right; }
 </style>
 </head>
 <body>
@@ -83,18 +88,17 @@
   <div class="banner">
     <div class="banner-inner">
       <div class="banner-h"><i class="ri-exchange-2-line"></i> 실시간 테더(USDT) 환전</div>
-      <div class="banner-p">시세 기반으로 환전 주문을 진행합니다. 통화를 선택해 주세요.</div>
+      <div class="banner-p">실시간 시세 기반으로 환전 주문을 진행합니다.<br>통화를 선택한 뒤 주문을 접수해 주세요.</div>
     </div>
   </div>
   <div class="ticker">
     <div class="ticker-track">
-      <div class="tick">FX · KRW/USD <span class="val" id="tk1">---</span></div><span>•</span>
-      <div class="tick">FX · KRW/PHP <span class="val" id="tk2">---</span></div><span>•</span>
-      <div class="tick">FX · USD/PHP <span class="val" id="tk3">---</span></div>
-      <span>•</span>
-      <div class="tick">FX · KRW/USD <span class="val">---</span></div><span>•</span>
-      <div class="tick">FX · KRW/PHP <span class="val">---</span></div><span>•</span>
-      <div class="tick">FX · USD/PHP <span class="val">---</span></div>
+      <div class="tick">FX · KRW/USD <span class="val t-ku">—</span></div><div class="sep">•</div>
+      <div class="tick">FX · KRW/PHP <span class="val t-kp">—</span></div><div class="sep">•</div>
+      <div class="tick">FX · USD/PHP <span class="val t-up">—</span></div><div class="sep">•</div>
+      <div class="tick">FX · KRW/USD <span class="val t-ku">—</span></div><div class="sep">•</div>
+      <div class="tick">FX · KRW/PHP <span class="val t-kp">—</span></div><div class="sep">•</div>
+      <div class="tick">FX · USD/PHP <span class="val t-up">—</span></div>
     </div>
   </div>
   <div class="section-h">
@@ -103,12 +107,12 @@
   </div>
   <div class="grid">
     <div class="quote" id="cardUsd">
-      <div class="quote-top"><div class="pair">USDT / USD</div><div class="badge"><span class="spark"></span> LIVE</div></div>
+      <div class="quote-top"><div class="pair"><i class="ri-money-dollar-circle-line"></i> USDT / USD</div><div class="badge"><span class="spark"></span> REAL-TIME</div></div>
       <div class="price" id="usd">—</div>
       <div class="subline"><span>CoinGecko</span><span id="t1">기준: --:--:--</span></div>
     </div>
     <div class="quote" id="cardPhp">
-      <div class="quote-top"><div class="pair">USDT / PHP</div><div class="badge"><span class="spark"></span> LIVE</div></div>
+      <div class="quote-top"><div class="pair"><i class="ri-coins-line"></i> USDT / PHP</div><div class="badge"><span class="spark"></span> REAL-TIME</div></div>
       <div class="price" id="php">—</div>
       <div class="subline"><span>CoinGecko</span><span id="t2">기준: --:--:--</span></div>
     </div>
@@ -116,59 +120,47 @@
   <div class="choose">
     <div class="row">
       <div class="pick krw" onclick="location.href='order_krw.html'">
-        <i class="ri-money-won-circle-line"></i>
-        <div class="label">테더 / 원화</div>
-        <div class="cta">주문하기</div>
+        <div class="topline"><i class="ri-money-won-circle-line"></i><div class="label">테더 / 원화</div></div>
+        <div class="cta"><i class="ri-arrow-right-up-line"></i> 주문하기</div>
       </div>
       <div class="pick php" onclick="location.href='order_php.html'">
-        <i class="ri-coins-line"></i>
-        <div class="label">테더 / 페소</div>
-        <div class="cta">주문하기</div>
+        <div class="topline"><i class="ri-coin-line"></i><div class="label">테더 / 페소</div></div>
+        <div class="cta"><i class="ri-arrow-right-up-line"></i> 주문하기</div>
       </div>
     </div>
   </div>
-  <div class="note">네트워크 환경에 따라 지연이 발생할 수 있습니다.</div>
+  <div class="note">안내: 네트워크 환경에 따라 업데이트가 지연될 수 있습니다.</div>
 </div>
 
 <script>
-  async function fetchPrices(){
+  async function fetchAll(){
     try{
-      const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd,php");
-      const d = await r.json();
-      document.getElementById("usd").textContent = d.tether.usd.toFixed(4);
-      document.getElementById("php").textContent = "₱ " + d.tether.php.toFixed(2);
-      const stamp = new Date().toLocaleTimeString('ko-KR', { hour12:false });
-      document.getElementById("t1").textContent = "기준: " + stamp;
-      document.getElementById("t2").textContent = "기준: " + stamp;
-    }catch(e){}
+      const [pr, fr] = await Promise.all([
+        fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd,php"),
+        fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/krw.json")
+      ]);
+      const pd = await pr.json(); const fd = await fr.json();
+      document.getElementById("usd").textContent = pd.tether.usd.toFixed(4);
+      document.getElementById("php").textContent = "₱ " + pd.tether.php.toFixed(2);
+      const k_u = (1/fd.krw.usd).toFixed(2);
+      const k_p = (1/fd.krw.php).toFixed(2);
+      const u_p = (fd.krw.php/fd.krw.usd).toFixed(2);
+      document.querySelectorAll(".t-ku").forEach(e=>e.textContent=k_u);
+      document.querySelectorAll(".t-kp").forEach(e=>e.textContent=k_p);
+      document.querySelectorAll(".t-up").forEach(e=>e.textContent=u_p);
+      const now = new Date().toLocaleTimeString('ko-KR',{hour12:false});
+      document.getElementById("t1").textContent = "기준: "+now;
+      document.getElementById("t2").textContent = "기준: "+now;
+    } catch(e){}
   }
-
-  async function fetchFX(){
-    try{
-      const r = await fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/krw.json");
-      const d = await r.json();
-      const k_u = (1 / d.krw.usd).toFixed(2);
-      const k_p = (1 / d.krw.php).toFixed(2);
-      const u_p = (d.krw.php / d.krw.usd).toFixed(2);
-      document.querySelectorAll(".val").forEach(el => {
-         if(el.id === "tk1") el.textContent = k_u;
-         if(el.id === "tk2") el.textContent = k_p;
-         if(el.id === "tk3") el.textContent = u_p;
-      });
-    }catch(e){}
-  }
-
   document.getElementById("btnRefresh").onclick = () => {
     document.getElementById("btnRefresh").classList.add("spin");
-    Promise.all([fetchPrices(), fetchFX()]).then(() => {
-      setTimeout(() => document.getElementById("btnRefresh").classList.remove("spin"), 800);
-    });
+    fetchAll().then(()=>setTimeout(()=>document.getElementById("btnRefresh").classList.remove("spin"),800));
   };
-
   window.onload = () => {
-    setTimeout(() => document.getElementById("cardUsd").classList.add("show"), 100);
-    setTimeout(() => document.getElementById("cardPhp").classList.add("show"), 200);
-    fetchPrices(); fetchFX();
+    setTimeout(()=>document.getElementById("cardUsd").classList.add("show"),140);
+    setTimeout(()=>document.getElementById("cardPhp").classList.add("show"),260);
+    fetchAll();
   };
 </script>
 </body>
