@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ZENBIT · PHP Order</title>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1220; --navy2:#111a2e; --card:rgba(15,23,42,.74); --line:rgba(255,255,255,.10);
+    --mint:#6ee7d8; --purple:#8b5cf6; --text:#ffffff; --muted:rgba(255,255,255,.72); --muted2:rgba(255,255,255,.55);
+  }
+  *{
+    box-sizing:border-box;margin:0;padding:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body{background:var(--navy);display:flex;justify-content:center;color:var(--text);}
+
+  .app{
+    width:100%; max-width:430px; min-height:100vh;
+    background: radial-gradient(900px 420px at 18% 6%, rgba(110,231,216,.10) 0%, rgba(110,231,216,0) 55%),
+                radial-gradient(900px 420px at 82% 10%, rgba(139,92,246,.10) 0%, rgba(139,92,246,0) 55%),
+                linear-gradient(180deg,var(--navy) 0%, var(--navy2) 100%);
+    padding:12px 14px 28px; opacity:0; transform:translateY(6px); transition:all .28s ease;
+  }
+  .app.ready{opacity:1; transform:translateY(0);}
+
+  .top{ display:flex;align-items:center;justify-content:space-between; padding:10px 2px 4px; position:sticky; top:0; z-index:10; }
+  .left{display:flex;align-items:center;gap:10px;}
+  .back{ width:38px;height:38px;border-radius:12px; display:flex;align-items:center;justify-content:center; border:1px solid var(--line); background:rgba(255,255,255,.04); cursor:pointer; }
+  .logo{ height:46px; width:auto; cursor:pointer; }
+  .pill{ display:flex;align-items:center;gap:8px; padding:8px 10px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.04); font-weight:950; font-size:12px; color:rgba(255,255,255,.85); }
+  .fxwon{ color:var(--mint); font-size:16px; font-weight:990; }
+
+  .card{ margin-top:6px; background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:22px; box-shadow:0 10px 26px rgba(0,0,0,.26); overflow:hidden; padding-bottom:20px; }
+  .card-h{ padding:12px 14px 8px; display:flex;align-items:center;justify-content:space-between; }
+  .card-h .t{ display:flex;align-items:center;gap:8px; font-weight:990; font-size:14px; }
+  .card-h .t i{color:var(--mint);font-size:18px}
+  .card-h .stamp{ font-size:12px; color:var(--muted2); }
+  .price-display{ text-align:center; margin-top:10px; }
+  .price-label{ font-size:12px; font-weight:900; color:var(--muted2); margin-bottom:4px; }
+  .price-val{ font-size:32px; font-weight:990; color:var(--mint); letter-spacing:.5px; }
+
+  .side{ margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .side-btn{
+    border-radius:18px; padding:14px 12px; border:1px solid var(--line); background:rgba(255,255,255,.05);
+    color:#fff; font-weight:990; font-size:14px; display:flex;align-items:center;justify-content:center;gap:10px;
+    cursor:pointer; transition:transform .12s ease;
+  }
+  .side-btn.active.buy{
+    background: radial-gradient(780px 260px at 22% 30%, rgba(110,231,216,.40) 0%, rgba(110,231,216,0) 62%),
+                linear-gradient(135deg, rgba(110,231,216,.26), rgba(15,23,42,.56));
+    border:1px solid rgba(110,231,216,.55); box-shadow:0 12px 30px rgba(110,231,216,.10);
+  }
+  .side-btn.active.sell{
+    background: radial-gradient(780px 260px at 78% 22%, rgba(139,92,246,.40) 0%, rgba(139,92,246,0) 62%),
+                linear-gradient(135deg, rgba(139,92,246,.26), rgba(15,23,42,.56));
+    border:1px solid rgba(139,92,246,.55); box-shadow:0 12px 30px rgba(139,92,246,.10);
+  }
+
+  .order{ margin-top:12px; background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:22px; padding:14px; }
+  .order-h{ display:flex;align-items:center;justify-content:space-between; margin-bottom:10px; }
+  .order-h .t{ display:flex;align-items:center;gap:8px; font-weight:990; font-size:14px; }
+  .order-h .t i{color:var(--mint); font-size:18px}
+  .order-id-badge{ font-size:10px; color:var(--mint); background:rgba(110,231,216,0.1); padding:2px 8px; border-radius:5px; border:1px solid rgba(110,231,216,0.2); }
+
+  .field{ border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.05); padding:12px; margin-bottom:10px;}
+  .label{ display:flex;align-items:center;justify-content:space-between; font-size:12px; color:rgba(255,255,255,.78); font-weight:900; margin-bottom:8px; }
+  input{ width:100%; border:none; outline:none; background:transparent; color:#fff; font-size:20px; font-weight:900; }
+
+  #liveTotalHint { color: var(--mint); font-weight: 900; }
+
+  .calc{ border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.05); padding:12px; }
+  .calc-row{ display:flex;align-items:center;justify-content:space-between; font-size:13px; color:rgba(255,255,255,.80); font-weight:900; padding:6px 0; }
+  .calc-row.total{ margin-top:6px; padding-top:10px; border-top:1px solid var(--line); color:#fff; }
+  #calcTotal{ color:var(--mint); font-weight:990; font-size:16px; }
+
+  .send{
+    margin-top:10px; width:100%; border:none; border-radius:18px; padding:16px; font-weight:990; font-size:15px; cursor:pointer; color:#fff;
+    background: radial-gradient(900px 240px at 22% 30%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%),
+                radial-gradient(900px 240px at 82% 30%, rgba(139,92,246,.20) 0%, rgba(139,92,246,0) 62%),
+                linear-gradient(135deg, rgba(110,231,216,.16), rgba(139,92,246,.16));
+    border:1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+<div class="app" id="appRoot">
+  <div class="top">
+    <div class="left">
+      <div class="back" id="btnBack"><i class="ri-arrow-left-line"></i></div>
+      <img class="logo" id="logoHome" src="logo.png" alt="ZENBIT">
+    </div>
+    <div class="pill"><span class="fxwon">₱</span> 테더/페소</div>
+  </div>
+
+  <div class="card">
+    <div class="card-h">
+      <div class="t"><i class="ri-line-chart-line"></i> 실시간 USDT 시세</div>
+      <div class="stamp" id="stampTop">기준: 로딩중..</div>
+    </div>
+    <div class="price-display">
+      <div class="price-label">USDT 현재 시세</div>
+      <div class="price-val" id="marketPrice">—</div>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="side-btn" id="sideBuy">매수(BUY)</div>
+    <div class="side-btn" id="sideSell">매도(SELL)</div>
+  </div>
+
+  <div class="order">
+    <div class="order-h">
+      <div class="t"><i class="ri-edit-2-line"></i> 주문신청 (페소)</div>
+      <div class="order-id-badge" id="dispID">ID: 생성중</div>
+    </div>
+    <div class="field">
+      <div class="label">
+        <span>주문 수량 (USDT)</span>
+        <span id="liveTotalHint">₱ 0</span>
+      </div>
+      <input id="usdt" type="number" inputmode="decimal" placeholder="1000" />
+    </div>
+    <div class="calc">
+      <div class="calc-row"><span>주문 가격</span><span id="calcMarket">—</span></div>
+      <div class="calc-row"><span>주문 금액</span><span id="calcPure">—</span></div>
+      <div class="calc-row"><span>수수료 (2%)</span><span id="calcFee">—</span></div>
+      <div class="calc-row total">
+        <span>최종 결제 합계</span>
+        <b id="calcTotal">—</b>
+      </div>
+    </div>
+    <button class="send" id="btnSend">주문 전송하기</button>
+  </div>
+</div>
+
+<script>
+  const FEE_RATE = 0.02;
+  let lastMarket = null;
+  let selectedSide = "BUY";
+  let currentOrderID = "";
+
+  function fmtPHP(n){ return "₱ " + n.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+
+  function generateID() {
+    const n = new Date();
+    const M = String(n.getMonth()+1).padStart(2,'0');
+    const D = String(n.getDate()).padStart(2,'0');
+    const h = String(n.getHours()).padStart(2,'0');
+    const m = String(n.getMinutes()).padStart(2,'0');
+    const r = Math.floor(1000 + Math.random() * 9000);
+    return `${M}${D}${h}${m}${r}`;
+  }
+
+  function render(){
+    if(!lastMarket) return;
+    const usdt = Number(document.getElementById("usdt").value || 0);
+    const pure = usdt * lastMarket;
+    const fee = pure * FEE_RATE;
+    const total = pure + fee;
+
+    document.getElementById("marketPrice").textContent = fmtPHP(lastMarket);
+    document.getElementById("calcMarket").textContent = fmtPHP(lastMarket);
+    document.getElementById("calcPure").textContent = fmtPHP(pure);
+    document.getElementById("calcFee").textContent = fmtPHP(fee);
+    document.getElementById("calcTotal").textContent = fmtPHP(total);
+    document.getElementById("liveTotalHint").textContent = fmtPHP(total);
+  }
+
+  async function fetchMarketPriceOnce(){
+    try {
+      // PHP 시세는 CoinGecko API 사용
+      const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=php");
+      const data = await response.json();
+      if(data && data.tether) {
+        lastMarket = data.tether.php;
+        const now = new Date();
+        const stamp = (now.getMonth() + 1) + "/" + now.getDate() + " " + 
+                      now.getHours().toString().padStart(2, '0') + ":" + 
+                      now.getMinutes().toString().padStart(2, '0');
+        document.getElementById("stampTop").textContent = "기준: " + stamp;
+        render();
+      }
+    } catch (e) {
+      document.getElementById("stampTop").textContent = "기준: 연결 실패";
+    }
+  }
+
+  document.getElementById("btnSend").onclick = () => {
+    const usdtVal = document.getElementById("usdt").value;
+    if(!usdtVal || usdtVal <= 0) { alert("수량을 입력해주세요."); return; }
+
+    const marketPriceStr = document.getElementById("calcMarket").textContent;
+    const pureStr = document.getElementById("calcPure").textContent;
+    const feeStr = document.getElementById("calcFee").textContent;
+    const totalStr = document.getElementById("calcTotal").textContent;
+    const sideText = selectedSide === "BUY" ? "매수" : "매도";
+
+    const n = new Date();
+    const timeStr = `${n.getMonth()+1}/${n.getDate()} ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+
+    const summary = `
+📌 ZENBIT 주문 신청 (페소)
+────────────────
+거래 ID: ${currentOrderID}
+구분: ${sideText}
+주문수량: ${usdtVal} USDT
+주문가격: ${marketPriceStr}
+주문금액: ${pureStr}
+수수료(2%): ${feeStr}
+최종 합계: ${totalStr}
+시간: ${timeStr}
+────────────────`.trim();
+    
+    const encodedMsg = encodeURIComponent(summary);
+    window.location.href = `https://t.me/lilykimdd?text=${encodedMsg}`;
+  };
+
+  function setSide(side){
+    selectedSide = side;
+    document.getElementById("sideBuy").className = "side-btn" + (side==="BUY"?" active buy":"");
+    document.getElementById("sideSell").className = "side-btn" + (side==="SELL"?" active sell":"");
+  }
+
+  document.getElementById("usdt").oninput = render;
+  document.getElementById("sideBuy").onclick = () => setSide("BUY");
+  document.getElementById("sideSell").onclick = () => setSide("SELL");
+  document.getElementById("btnBack").onclick = () => history.back();
+  document.getElementById("usdt").addEventListener("keydown", (e) => { if(e.key==="Enter") e.target.blur(); });
+  
+  window.onload = () => {
+    currentOrderID = generateID();
+    document.getElementById("dispID").textContent = "ID: " + currentOrderID;
+    fetchMarketPriceOnce();
+    setSide("BUY");
+    document.getElementById("appRoot").classList.add("ready");
+  };
+</script>
+</body>
+</html>
