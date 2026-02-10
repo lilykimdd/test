@@ -78,6 +78,9 @@
   .label{ display:flex;align-items:center;justify-content:space-between; font-size:12px; color:rgba(255,255,255,.78); font-weight:900; margin-bottom:8px; }
   input{ width:100%; border:none; outline:none; background:transparent; color:#fff; font-size:20px; font-weight:900; }
 
+  /* 실시간 예상 금액 표시 스타일 */
+  #liveTotalHint { color: var(--mint); font-weight: 900; }
+
   /* 계산서 영역 */
   .calc{ border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.05); padding:12px; }
   .calc-row{ display:flex;align-items:center;justify-content:space-between; font-size:13px; color:rgba(255,255,255,.80); font-weight:900; padding:6px 0; }
@@ -127,7 +130,10 @@
       <div class="t"><i class="ri-edit-2-line"></i> 주문 신청</div>
     </div>
     <div class="field">
-      <div class="label">주문 수량 (USDT)</div>
+      <div class="label">
+        <span>주문 수량 (USDT)</span>
+        <span id="liveTotalHint">₩ 0</span>
+      </div>
       <input id="usdt" type="number" inputmode="decimal" placeholder="1000" />
     </div>
     <div class="calc">
@@ -164,6 +170,7 @@
     document.getElementById("calcPure").textContent = fmtKRW(pure);
     document.getElementById("calcFee").textContent = fmtKRW(fee);
     document.getElementById("calcTotal").textContent = fmtKRW(total);
+    document.getElementById("liveTotalHint").textContent = fmtKRW(total); // 우측 상단 힌트 업데이트
     document.getElementById("stampTop").textContent = "기준: " + (fixedStampText || "—");
   }
 
@@ -173,27 +180,47 @@
     document.getElementById("sideSell").className = "side-btn" + (side==="SELL"?" active sell":"");
   }
 
-  // 페이지가 로드될 때 API에서 환율을 딱 한 번 가져옵니다.
   async function fetchMarketPriceOnce(){
     try {
       const response = await fetch("https://api.upbit.com/v1/ticker?markets=KRW-USDT");
       const data = await response.json();
-      
       if(data && data[0]) {
         lastMarket = data[0].trade_price;
-        
         const now = new Date();
         fixedStampText = (now.getMonth() + 1) + "/" + now.getDate() + " " + 
                          now.getHours().toString().padStart(2, '0') + ":" + 
                          now.getMinutes().toString().padStart(2, '0');
-        
         render();
       }
     } catch (e) {
-      console.error("Price fetch error:", e);
       document.getElementById("stampTop").textContent = "기준: 연결 실패";
     }
   }
+
+  // 키보드 내리기 및 엔터 처리
+  document.getElementById("usdt").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      this.blur(); // 포커스 해제하여 키보드 닫기
+    }
+  });
+
+  // 주문 전송 및 텔레그램 연결
+  document.getElementById("btnSend").onclick = () => {
+    const usdtVal = document.getElementById("usdt").value;
+    if(!usdtVal || usdtVal <= 0) {
+      alert("수량을 입력해주세요.");
+      return;
+    }
+
+    const totalStr = document.getElementById("calcTotal").textContent;
+    const sideText = selectedSide === "BUY" ? "매수(BUY)" : "매도(SELL)";
+    
+    const summary = `[ZENBIT 주문 요약]\n구분: ${sideText}\n수량: ${usdtVal} USDT\n최종 결제액: ${totalStr}\n시각: ${fixedStampText}`;
+    
+    // 텔레그램 링크로 메시지 전달 (웹 기반 전송 시도)
+    const encodedMsg = encodeURIComponent(summary);
+    window.location.href = `https://t.me/lilykimdd?text=${encodedMsg}`;
+  };
 
   document.getElementById("usdt").oninput = render;
   document.getElementById("sideBuy").onclick = () => setSide("BUY");
@@ -201,7 +228,7 @@
   document.getElementById("btnBack").onclick = () => history.back();
   
   window.onload = () => {
-    fetchMarketPriceOnce(); // 접속 순간 시세 가져오기
+    fetchMarketPriceOnce();
     setSide("BUY");
     document.getElementById("appRoot").classList.add("ready");
   };
