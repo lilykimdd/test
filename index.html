@@ -3,213 +3,324 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ZENBIT</title>
+<title>ZENBIT · Home</title>
 
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 
 <style>
-:root{
-  --bg:#0b1220;
-  --bg2:#111a2e;
-  --card:rgba(255,255,255,.05);
-  --line:rgba(255,255,255,.08);
-  --mint:#6ee7d8;
-  --purple:#8b5cf6;
-  --text:#ffffff;
-  --muted:rgba(255,255,255,.65);
-}
+  :root{
+    --navy:#0b1220;
+    --navy2:#111a2e;
+    --card:rgba(15,23,42,.75);
+    --line:rgba(255,255,255,.10);
+    --mint:#6ee7d8;
+    --purple:#8b5cf6;
+    --text:#ffffff;
+    --muted:rgba(255,255,255,.72);
+    --muted2:rgba(255,255,255,.55);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  body{background:var(--navy);display:flex;justify-content:center;color:var(--text);}
 
-/* ===== 기본 ===== */
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
-body{background:linear-gradient(180deg,var(--bg),var(--bg2));display:flex;justify-content:center;color:var(--text);}
-.app{width:100%;max-width:430px;min-height:100vh;padding:14px;}
+  .app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:
+      radial-gradient(900px 420px at 18% 6%, rgba(110,231,216,.10) 0%, rgba(110,231,216,0) 55%),
+      radial-gradient(900px 420px at 82% 10%, rgba(139,92,246,.10) 0%, rgba(139,92,246,0) 55%),
+      linear-gradient(180deg,var(--navy) 0%, var(--navy2) 100%);
+    padding:16px 14px 28px;
+  }
 
-/* ===== 헤더 ===== */
-.header{display:flex;justify-content:center;align-items:center;padding:12px 0 6px;}
-.header img{height:48px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.35));}
+  /* Header */
+  .top{
+    display:flex;align-items:center;justify-content:center;
+    padding:10px 2px 8px;
+    position:sticky; top:0;
+    background:linear-gradient(180deg, rgba(11,18,32,.98) 0%, rgba(11,18,32,.86) 70%, rgba(11,18,32,0) 100%);
+    backdrop-filter: blur(10px);
+    z-index:10;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+  }
+  .brand .name{
+    font-size:18px;font-weight:990;letter-spacing:.2px;
+    display:flex;align-items:center;gap:10px;
+    white-space:nowrap;
+  }
+  .brand .name i{color:var(--mint);font-size:20px}
 
-/* ===== 배너 ===== */
-.banner{
-  margin-top:10px;
-  border-radius:22px;
-  padding:18px 16px 20px;
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:0 18px 48px rgba(0,0,0,.45);
-  position:relative;
-  background:
-    radial-gradient(900px 240px at 18% 30%, rgba(110,231,216,.22), transparent 60%),
-    radial-gradient(900px 260px at 82% 20%, rgba(139,92,246,.20), transparent 58%),
-    linear-gradient(135deg,#1b2a4a,#2b1f52);
-}
-.banner::after{
-  content:"";
-  position:absolute;right:-80px;top:-70px;
-  width:280px;height:280px;border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,rgba(110,231,216,.55),rgba(139,92,246,.35),transparent);
-  opacity:.9;animation:drift 7s ease-in-out infinite;
-}
-@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(-12px,10px)}}
+  /* Hero */
+  .hero{
+    margin-top:12px;
+    border-radius:22px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 14px 44px rgba(0,0,0,.40);
+    background:
+      radial-gradient(900px 240px at 22% 30%, rgba(110,231,216,.18) 0%, rgba(110,231,216,0) 60%),
+      radial-gradient(800px 240px at 80% 20%, rgba(139,92,246,.18) 0%, rgba(139,92,246,0) 55%),
+      linear-gradient(135deg, rgba(27,42,74,.92), rgba(43,31,82,.92));
+    position:relative;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;right:-70px;top:-50px;
+    width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(110,231,216,.55), rgba(139,92,246,.35), rgba(0,0,0,0));
+    opacity:.95;
+  }
+  .hero-inner{position:relative;padding:18px 14px 14px;}
+  .hero-h{
+    font-size:17px;font-weight:990;letter-spacing:.2px;
+    display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  }
+  .hero-h i{color:var(--mint)}
+  .hero-p{
+    font-size:12px;line-height:1.55;color:var(--muted);
+    max-width:340px;
+  }
 
-.banner .sub{font-size:13px;color:var(--muted);}
-.banner .title{
-  margin-top:6px;
-  font-size:24px;
-  font-weight:700;
-  line-height:1.3;
-  text-shadow:0 14px 34px rgba(0,0,0,.45);
-}
+  /* Services */
+  .grid{
+    margin-top:12px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .svc{
+    background:var(--card);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:14px 12px;
+    box-shadow:0 10px 26px rgba(0,0,0,.26);
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    user-select:none;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .svc:active{ transform: scale(.992); }
 
-/* ===== 티커 ===== */
-.ticker{margin-top:12px;overflow:hidden;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03);}
-.track{
-  display:flex;gap:26px;padding:10px 14px;white-space:nowrap;
-  animation:flow 30s linear infinite;
-  font-size:13px;color:var(--muted);
-}
-.track b{color:var(--text);font-weight:600;}
-@keyframes flow{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .svc::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-40px;
+    width:170px; height:170px;
+    border-radius:50%;
+    opacity:.55;
+  }
+  .svc.usdt::after{
+    background:radial-gradient(circle at 30% 30%, rgba(110,231,216,.55), rgba(110,231,216,0));
+  }
+  .svc.btc::after{
+    background:radial-gradient(circle at 30% 30%, rgba(139,92,246,.55), rgba(139,92,246,0));
+  }
 
-/* ===== 섹션 헤더 ===== */
-.section-h{
-  margin-top:18px;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.section-h .t{
-  display:flex;align-items:center;gap:8px;
-  font-size:16px;font-weight:700;
-}
-.section-h .t i{color:var(--mint);font-size:20px;}
-.section-h .s{font-size:12px;color:var(--muted);}
+  .svc-top{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:10px;
+    position:relative;
+  }
+  .svc-title{
+    display:flex;align-items:center;gap:10px;
+    font-size:15px;font-weight:990;letter-spacing:.2px;
+  }
+  .svc-title .icon{
+    width:40px;height:40px;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .svc-title .icon i{font-size:20px;color:var(--mint)}
+  .svc.btc .svc-title .icon i{color:#c7b3ff}
 
-/* ===== 시세 카드 ===== */
-.price-card{
-  margin-top:12px;
-  border-radius:20px;
-  padding:16px;
-  background:var(--card);
-  border:1px solid var(--line);
-  box-shadow:0 12px 30px rgba(0,0,0,.35);
-}
-.pair{
-  font-size:18px;
-  font-weight:800;
-  color:var(--mint);
-  display:flex;align-items:center;gap:8px;
-}
-.price{
-  margin-top:6px;
-  font-size:36px;
-  font-weight:800;
-  letter-spacing:.3px;
-  text-shadow:0 12px 28px rgba(0,0,0,.35);
-}
-.subline{
-  margin-top:6px;
-  display:flex;justify-content:space-between;
-  font-size:12px;color:var(--muted);
-}
+  .arrow{
+    width:38px;height:38px;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .arrow i{ font-size:18px; color:rgba(255,255,255,.88); }
 
-/* ===== 통화 선택 ===== */
-.select-wrap{margin-top:20px;}
-.select-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .svc-sub{
+    font-size:12px;color:var(--muted);
+    position:relative;
+    line-height:1.55;
+  }
 
-.select-card{
-  position:relative;
-  border-radius:22px;
-  padding:16px 14px 18px;
-  cursor:pointer;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:0 16px 40px rgba(0,0,0,.35);
-  transition:.15s;
-}
-.select-card:hover{
-  transform:translateY(-3px);
-  border-color:rgba(110,231,216,.35);
-}
-.select-card::before{
-  content:"";
-  position:absolute;inset:-1px;border-radius:22px;
-  background:linear-gradient(135deg,rgba(110,231,216,.6),rgba(139,92,246,.6));
-  opacity:.15;
-}
-.select-name{margin-top:8px;font-size:15px;font-weight:700;}
-.select-desc{margin-top:4px;font-size:12px;color:var(--muted);}
+  .meta{
+    margin-top:12px;
+    display:flex;gap:8px;flex-wrap:wrap;
+  }
+  .pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 10px;border-radius:999px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    color:rgba(255,255,255,.90);
+    font-size:11px;
+    font-weight:950;
+    white-space:nowrap;
+  }
+  .pill .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--mint);
+    box-shadow:0 0 0 0 rgba(110,231,216,.45);
+    animation:pulse 1.25s infinite;
+  }
+  .svc.btc .pill .dot{
+    background:#c7b3ff;
+    box-shadow:0 0 0 0 rgba(139,92,246,.45);
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(110,231,216,.45)}
+    70%{box-shadow:0 0 0 10px rgba(110,231,216,0)}
+    100%{box-shadow:0 0 0 0 rgba(110,231,216,0)}
+  }
 
-/* ===== 안내 ===== */
-.notice{margin-top:14px;font-size:12px;color:var(--muted);line-height:1.5;}
+  /* Quick actions */
+  .quick{
+    margin-top:12px;
+    background:var(--card);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:14px 12px;
+    box-shadow:0 10px 26px rgba(0,0,0,.26);
+  }
+  .quick-h{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .quick-h .t{
+    font-weight:990;font-size:14px;letter-spacing:.2px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .quick-h .t i{color:var(--mint);font-size:18px}
+  .row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .qbtn{
+    border-radius:18px;
+    padding:14px 12px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#fff;
+    font-weight:980;
+    font-size:13px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .qbtn i{font-size:18px;color:var(--mint)}
+  .qbtn:active{transform:scale(.992)}
+  .qbtn.alt i{color:#c7b3ff}
+
+  .footer{
+    margin-top:14px;
+    padding:12px 12px;
+    border-radius:16px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.55;
+  }
+  .footer b{color:rgba(255,255,255,.92)}
 </style>
 </head>
 
 <body>
 <div class="app">
 
-  <!-- 헤더 -->
-  <div class="header">
-    <img src="logo.png" alt="ZENBIT">
-  </div>
-
-  <!-- 배너 -->
-  <div class="banner">
-    <div class="sub">실시간 환율</div>
-    <div class="title">테더(USDT) 환전</div>
-  </div>
-
-  <!-- 티커 -->
-  <div class="ticker">
-    <div class="track">
-      USD/KRW <b>₩1,345.2</b> • PHP/KRW <b>₩23.9</b> • KOSPI <b>2,615.3</b> • S&amp;P500 <b>5,120.7</b> •
-      USD/KRW <b>₩1,345.2</b> • PHP/KRW <b>₩23.9</b> • KOSPI <b>2,615.3</b> • S&amp;P500 <b>5,120.7</b> •
+  <div class="top">
+    <div class="brand">
+      <div class="name"><i class="ri-shield-check-line"></i> ZENBIT</div>
     </div>
   </div>
 
-  <!-- 시세 -->
-  <div class="section-h">
-    <div class="t"><i class="ri-bar-chart-2-line"></i> 테더 실시간 시세</div>
-    <div class="s" id="stamp">Updating...</div>
-  </div>
-
-  <div class="price-card">
-    <div class="pair"><i class="ri-money-dollar-circle-line"></i> USDT / USD</div>
-    <div class="price" id="usd">1.0002 USD</div>
-    <div class="subline"><span>Market</span><span id="t1">--:--</span></div>
-  </div>
-
-  <div class="price-card">
-    <div class="pair"><i class="ri-coins-line"></i> USDT / PHP</div>
-    <div class="price" id="php">₱ 56.21</div>
-    <div class="subline"><span>Market</span><span id="t2">--:--</span></div>
-  </div>
-
-  <!-- 통화 선택 -->
-  <div class="select-wrap">
-    <div class="select-grid">
-      <div class="select-card">
-        <div class="select-name">테더 / 원화</div>
-        <div class="select-desc">KRW 거래</div>
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-h"><i class="ri-compass-3-line"></i> 서비스 선택</div>
+      <div class="hero-p">
+        테더(USDT) 환전과 비트코인(BTC) 서비스를 제공합니다.<br>
+        원하시는 서비스를 선택해 주세요.
       </div>
-      <div class="select-card">
-        <div class="select-name">테더 / 페소</div>
-        <div class="select-desc">PHP 거래</div>
+
+      <div class="grid">
+        <!-- USDT -->
+        <div class="svc usdt" onclick="go('USDT')">
+          <div class="svc-top">
+            <div class="svc-title">
+              <div class="icon"><i class="ri-exchange-2-line"></i></div>
+              테더 환전 (USDT)
+            </div>
+            <div class="arrow"><i class="ri-arrow-right-line"></i></div>
+          </div>
+          <div class="svc-sub">
+            실시간 시세 기반 주문 접수 · BUY/SELL 요청
+          </div>
+          <div class="meta">
+            <span class="pill"><span class="dot"></span> REAL-TIME</span>
+            <span class="pill"><i class="ri-lock-2-line"></i> Secure</span>
+            <span class="pill"><i class="ri-time-line"></i> Fast</span>
+          </div>
+        </div>
+
+        <!-- BTC -->
+        <div class="svc btc" onclick="go('BTC')">
+          <div class="svc-top">
+            <div class="svc-title">
+              <div class="icon"><i class="ri-bit-coin-line"></i></div>
+              비트코인 (BTC)
+            </div>
+            <div class="arrow"><i class="ri-arrow-right-line"></i></div>
+          </div>
+          <div class="svc-sub">
+            비트코인 안내/주문/상담 등 확장형 서비스
+          </div>
+          <div class="meta">
+            <span class="pill"><span class="dot"></span> REAL-TIME</span>
+            <span class="pill"><i class="ri-bar-chart-2-line"></i> Insights</span>
+            <span class="pill"><i class="ri-customer-service-2-line"></i> Support</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick">
+        <div class="quick-h">
+          <div class="t"><i class="ri-flashlight-line"></i> 빠른 메뉴</div>
+          <div style="font-size:12px;color:var(--muted2)">바로 이동</div>
+        </div>
+        <div class="row">
+          <div class="qbtn" onclick="go('USDT')"><i class="ri-exchange-dollar-line"></i> USDT 주문</div>
+          <div class="qbtn alt" onclick="go('BTC')"><i class="ri-bit-coin-line"></i> BTC 서비스</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <b>안내:</b> 서비스 선택 후 주문 페이지로 이동합니다.
       </div>
     </div>
-  </div>
-
-  <div class="notice">
-    시세는 실시간으로 갱신되며 네트워크 상황에 따라 지연될 수 있습니다.
   </div>
 
 </div>
 
 <script>
-function updateTime(){
-  const t=new Date().toLocaleTimeString();
-  document.getElementById("stamp").textContent="Updated "+t;
-  document.getElementById("t1").textContent=t;
-  document.getElementById("t2").textContent=t;
-}
-updateTime();
-setInterval(updateTime,10000);
+  // 파일명만 맞추면 바로 동작
+  const ROUTES = {
+    USDT: "ORDER_USDT.html",
+    BTC:  "ORDER_BTC.html"
+  };
+
+  function go(type){
+    const to = ROUTES[type] || "index.html";
+    location.href = to;
+  }
 </script>
 
 </body>
