@@ -41,6 +41,14 @@
   .banner-h i{color:var(--mint)}
   .banner-p{ font-size:12px;line-height:1.55;color:var(--muted); max-width:360px; }
 
+  /* ✅ 추가된 실시간 배너 문구 (원본 디자인 유지하며 하단에 살짝 추가) */
+  .live-status {
+    margin-top: 10px; padding: 6px 10px; background: rgba(0,0,0,0.2); border-radius: 10px;
+    display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 800; color: var(--mint);
+  }
+  .live-status i { animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
   .ticker{ margin-top:12px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); position:relative; }
   .ticker-track{ display:flex; gap:8px; white-space:nowrap; padding:10px 12px; animation:ticker 12s linear infinite; }
   @keyframes ticker{ 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
@@ -72,9 +80,7 @@
     cursor:pointer; transition:all .12s ease; min-height:92px; display:flex; flex-direction:column; justify-content:space-between; align-items:center; text-align:center;
   }
   .pick .topline{ display:flex; align-items:center; justify-content:center; gap:10px; }
-  /* ✅ 아이콘 수정: 원화 / 페소 */
-  .pick.krw i{ font-size:22px; color:#fff; }
-  .pick.php i{ font-size:22px; color:#fff; }
+  .pick i{ font-size:22px; color:#fff; }
   .pick .label{ font-size:14px; font-weight:990; }
   .pick.krw{ background: radial-gradient(520px 220px at 22% 18%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%), linear-gradient(135deg, rgba(34,197,184,.22), rgba(15,23,42,.62)); border-color:rgba(110,231,216,.28); }
   .pick.php{ background: radial-gradient(520px 220px at 82% 18%, rgba(139,92,246,.24) 0%, rgba(139,92,246,0) 62%), linear-gradient(135deg, rgba(139,92,246,.20), rgba(15,23,42,.62)); border-color:rgba(199,179,255,.26); }
@@ -89,6 +95,9 @@
     <div class="banner-inner">
       <div class="banner-h"><i class="ri-exchange-2-line"></i> 실시간 테더(USDT) 환전</div>
       <div class="banner-p">실시간 시세 기반으로 환전 주문을 진행합니다.<br>통화를 선택한 뒤 주문을 접수해 주세요.</div>
+      <div class="live-status">
+        <i class="ri-flashlight-line"></i> 실시간 시세 / 다이렉트 테더 거래소
+      </div>
     </div>
   </div>
   <div class="ticker">
