@@ -37,10 +37,6 @@
   .banner-h i{color:var(--mint)}
   .banner-p{ font-size:12px;line-height:1.55;color:var(--muted); max-width:360px; }
 
-  /* ✅ 추가: 배너 하단 은은한 문구 */
-  .live-status { margin-top:10px; font-size:10px; font-weight:900; color:var(--mint); display:flex; align-items:center; gap:6px; opacity:0.85; }
-  .live-status i { animation: blink 1.5s infinite; }
-
   .ticker{ margin-top:12px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); position:relative; }
   .ticker-track{ display:flex; gap:8px; white-space:nowrap; padding:10px 12px; animation:ticker 12s linear infinite; }
   @keyframes ticker{ 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
@@ -58,6 +54,7 @@
   .grid{ margin-top:10px; display:grid; grid-template-columns:1fr; gap:12px; }
   .quote{ background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:14px 12px; box-shadow:0 10px 26px rgba(0,0,0,.26); transform:translateY(10px); opacity:0; filter:blur(6px); transition:all .55s ease; }
   .quote.show{transform:translateY(0);opacity:1;filter:blur(0);}
+  .quote-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
   .pair{ font-size:16px; color:var(--mint); font-weight:990; display:flex;align-items:center;gap:8px; }
   .badge{ font-size:11px;font-weight:950; padding:7px 10px;border-radius:999px; background:rgba(110,231,216,.10); border:1px solid rgba(110,231,216,.20); color:var(--mint); display:flex;align-items:center;gap:8px; }
   .spark{ width:10px;height:10px;border-radius:50%; background:var(--mint); box-shadow:0 0 10px var(--mint); animation:blink 0.85s infinite; }
@@ -87,7 +84,6 @@
     <div class="banner-inner">
       <div class="banner-h"><i class="ri-exchange-2-line"></i> 실시간 테더(USDT) 환전</div>
       <div class="banner-p">실시간 시세 기반으로 환전 주문을 진행합니다.<br>통화를 선택한 뒤 주문을 접수해 주세요.</div>
-      <div class="live-status"><i class="ri-flashlight-line"></i> 실시간 시세 / 다이렉트 테더 거래소</div>
     </div>
   </div>
   <div class="ticker">
@@ -155,10 +151,10 @@
       const d = await r.json();
       const usd = d.tether.usd, php = d.tether.php;
       const uEl = document.getElementById("usd"), pEl = document.getElementById("php");
-      if(lastUSD===null) animateNumber(uEl, usd*0.98, usd, 2000, fmtUSD);
-      else animateNumber(uEl, lastUSD, usd, 1500, fmtUSD);
-      if(lastPHP===null) animateNumber(pEl, php*0.98, php, 2000, fmtPHP);
-      else animateNumber(pEl, lastPHP, php, 1500, fmtPHP);
+      if(lastUSD===null) animateNumber(uEl, usd*0.985, usd, 2400, fmtUSD);
+      else animateNumber(uEl, lastUSD, usd, 1800, fmtUSD);
+      if(lastPHP===null) animateNumber(pEl, php*0.985, php, 2400, fmtPHP);
+      else animateNumber(pEl, lastPHP, php, 1800, fmtPHP);
       lastUSD=usd; lastPHP=php;
       const now = new Date().toLocaleTimeString('ko-KR',{hour12:false});
       document.getElementById("t1").textContent = document.getElementById("t2").textContent = "기준: "+now;
