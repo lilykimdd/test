@@ -36,14 +36,12 @@
   /* top */
   .top{
     display:flex;align-items:center;justify-content:space-between;
-    padding:10px 2px 4px; /* ✅ 아래 여백 줄임 (기존 8px) */
+    padding:10px 2px 4px;
     position:sticky; top:0;
     background:transparent;
     z-index:10;
   }
-  .left{
-    display:flex;align-items:center;gap:10px;
-  }
+  .left{display:flex;align-items:center;gap:10px;}
   .back{
     width:38px;height:38px;border-radius:12px;
     display:flex;align-items:center;justify-content:center;
@@ -53,10 +51,10 @@
   }
   .back i{font-size:18px;color:rgba(255,255,255,.92)}
 
-  /* ✅ 로고 20% 축소: 58px -> 46px */
   .logo{
     height:46px;width:auto;display:block;
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));
+    cursor:pointer; /* ✅ 로고 클릭 */
   }
 
   .pill{
@@ -67,12 +65,22 @@
     font-weight:950;
     font-size:12px;
     color:rgba(255,255,255,.85);
+    cursor:pointer; /* ✅ 통화 버튼 클릭 */
+    user-select:none;
   }
-  .pill i{color:var(--mint);font-size:16px}
+
+  /* ✅ \ 아이콘 */
+  .fxslash{
+    color:var(--mint);
+    font-size:16px;
+    font-weight:990;
+    line-height:1;
+    transform:translateY(-.5px);
+  }
 
   /* cards */
   .card{
-    margin-top:6px; /* ✅ 헤더~카드 간격 줄임 (기존 10px) */
+    margin-top:6px;
     background:var(--card);
     border:1px solid rgba(255,255,255,.08);
     border-radius:22px;
@@ -105,6 +113,7 @@
     font-weight:900;
     font-size:12px;
     letter-spacing:.2px;
+    line-height:1; /* ✅ 라벨 기준 높이 통일 */
   }
 
   .price{
@@ -125,17 +134,18 @@
   .fill-label{
     display:inline-flex;
     gap:6px;
-    align-items:baseline;
+    align-items:center; /* ✅ baseline -> center로 시각 간격 통일 */
     font-size:12px;
     font-weight:900;
     color:rgba(255,255,255,.78);
+    line-height:1; /* ✅ 라벨 기준 높이 통일 */
   }
   .fill-label .vat{
     color:rgba(255,255,255,.62);
     font-weight:900;
   }
   .fill-price{
-    margin-top:6px;
+    margin-top:6px; /* ✅ price와 동일 */
     font-size:42px;
     font-weight:990;
     letter-spacing:.2px;
@@ -224,6 +234,16 @@
     font-weight:400;
     font-size:12px;
   }
+
+  /* ✅ 입력 옆 실시간 예상금액 (민트) */
+  .label .live{
+    color:var(--mint);
+    font-weight:990;
+    font-size:12px;
+    letter-spacing:.2px;
+    white-space:nowrap;
+  }
+
   input{
     width:100%;
     border:none;
@@ -314,9 +334,11 @@
   <div class="top">
     <div class="left">
       <div class="back" onclick="history.back()" aria-label="back"><i class="ri-arrow-left-line"></i></div>
-      <img class="logo" src="logo.png" alt="ZENBIT">
+      <img class="logo" id="logoHome" src="logo.png" alt="ZENBIT">
     </div>
-    <div class="pill"><i class="ri-coin-line"></i> 테더 / 원화</div>
+    <div class="pill" id="pillSwitch">
+      <span class="fxslash">\</span> 테더 / 원화
+    </div>
   </div>
 
   <div class="card">
@@ -355,7 +377,7 @@
       <div class="field">
         <div class="label">
           <span>수량 (USDT)</span>
-          <span class="r">입력 후 자동 계산</span>
+          <span class="r live" id="liveTotal">—</span>
         </div>
         <input id="usdt" type="number" inputmode="decimal" enterkeyhint="done" placeholder="예: 1000" min="0" step="0.01" />
       </div>
@@ -394,6 +416,10 @@
 
   const TG_USERNAME = "lilykimdd";
 
+  // ✅ 이동 경로 (필요하면 파일명만 바꾸면 됨)
+  const HOME_URL = "index.html";
+  const PHP_ORDER_URL = "order_php.html";
+
   let lastMarket = null;
   let selectedSide = "BUY";
 
@@ -411,11 +437,17 @@
     return "₩ " + Math.round(v).toLocaleString("ko-KR");
   }
 
-  // ✅ 천단위 콤마 + 소수 2자리 고정 (기존 버그 수정)
   function fmtKRWPrecise(n){
     const v = Number(n);
     if(!Number.isFinite(v)) return "—";
     return "₩ " + v.toLocaleString("ko-KR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  // ✅ 라벨 옆 실시간 표시용: \500,222 형태
+  function fmtWonSlash(n){
+    const v = Number(n);
+    if(!Number.isFinite(v)) return "—";
+    return "\\ " + Math.round(v).toLocaleString("ko-KR");
   }
 
   function calcFillPrice(market){
@@ -461,11 +493,13 @@
     const cM = document.getElementById("calcMarket");
     const cF = document.getElementById("calcFill");
     const cT = document.getElementById("calcTotal");
+    const live = document.getElementById("liveTotal");
 
     if(lastMarket === null){
       cM.textContent = "—";
       cF.textContent = "—";
       cT.textContent = "—";
+      live.textContent = "—";
       return;
     }
 
@@ -475,7 +509,10 @@
 
     cM.textContent = fmtKRW(market);
     cF.textContent = fmtKRW(fill);
-    cT.textContent = fmtKRWPrecise(total);
+    cT.textContent = (usdt > 0 ? fmtKRWPrecise(total) : "—");
+
+    // ✅ 입력 중에도 바로 보이게
+    live.textContent = (usdt > 0 ? fmtWonSlash(total) : "—");
   }
 
   function closeKeyboard(){
@@ -565,6 +602,12 @@ USDT 시세: ${fmtKRW(market)}
   document.getElementById("sideSell").addEventListener("keydown", (e)=>{ if(e.key==="Enter") setSide("SELL"); });
 
   document.getElementById("btnSend").addEventListener("click", submitSelectedOrder);
+
+  // ✅ 로고 → 홈
+  document.getElementById("logoHome").addEventListener("click", ()=>{ location.href = HOME_URL; });
+
+  // ✅ 테더/원화 pill → 테더/페소 주문창
+  document.getElementById("pillSwitch").addEventListener("click", ()=>{ location.href = PHP_ORDER_URL; });
 
   updateSideUI();
   fetchMarket();
