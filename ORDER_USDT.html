@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USDT 주문</title>
+<style>
+body{
+  margin:0;
+  background:#0b1220;
+  color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  display:flex;
+  justify-content:center;
+}
+.wrap{
+  width:100%;
+  max-width:430px;
+  padding:20px 16px;
+}
+h2{margin-bottom:16px}
+input,button{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  margin-bottom:12px;
+  font-size:15px;
+}
+input{background:#111a2e;color:#fff}
+button{
+  background:linear-gradient(135deg,#6ee7d8,#8b5cf6);
+  font-weight:bold;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h2>USDT 주문</h2>
+
+<input id="amount" placeholder="수량 입력 (예: 1000)" />
+
+<button onclick="send()">텔레그램 주문 전송</button>
+
+<button onclick="location.href='index.html'">← 홈으로</button>
+
+</div>
+
+<script>
+function send(){
+  const a=document.getElementById("amount").value;
+  if(!a) return alert("수량 입력");
+
+  const msg=`[ZENBIT USDT ORDER]\nAmount: ${a} USDT`;
+  const url="https://t.me/share/url?text="+encodeURIComponent(msg);
+  window.open(url,"_blank");
+}
+</script>
+</body>
+</html>
