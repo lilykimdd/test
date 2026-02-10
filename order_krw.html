@@ -52,14 +52,10 @@
     cursor:pointer;
   }
   .back i{font-size:18px;color:rgba(255,255,255,.92)}
-
-  /* ✅ 로고 더 키움(레이아웃 안 깨지게 'height'만 조정) */
   .logo{
-    height:58px; /* 기존 34px -> 58px */
-    width:auto;display:block;
+    height:58px;width:auto;display:block;
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));
   }
-
   .pill{
     display:flex;align-items:center;gap:8px;
     padding:8px 10px;border-radius:999px;
@@ -80,23 +76,31 @@
     box-shadow:0 10px 26px rgba(0,0,0,.26);
     overflow:hidden;
   }
+  /* ✅ 박스 세로 길이 줄이기: 패딩 약간 축소 */
   .card-h{
-    padding:14px 14px 10px;
+    padding:12px 14px 8px;
     display:flex;align-items:center;justify-content:space-between;
   }
   .card-h .t{
     display:flex;align-items:center;gap:8px;
     font-weight:990;
     letter-spacing:.2px;
-    /* ✅ 타이틀은 주문이랑 동일하게(줄이지 않음) */
-    font-size:14px;
+    font-size:14px; /* 주문과 동일 */
   }
   .card-h .t i{color:var(--mint);font-size:18px}
-  .card-b{padding:0 14px 14px}
 
-  /* price block */
+  /* ✅ 기준 시간: 상단 오른쪽으로 */
+  .card-h .stamp{
+    font-size:12px;
+    color:var(--muted2);
+    white-space:nowrap;
+    margin-left:10px;
+  }
+
+  .card-b{padding:0 14px 12px}
+
   .pairline{
-    margin-top:6px;
+    margin-top:4px;
     text-align:center;
     color:rgba(255,255,255,.78);
     font-weight:900;
@@ -104,20 +108,21 @@
     letter-spacing:.2px;
   }
 
-  /* ✅ 메인 시세 숫자 민트 */
+  /* ✅ USDT 시세 숫자: 체결가(기존 fill-price) 느낌 + 화이트 */
   .price{
-    margin-top:8px;
+    margin-top:6px;
     text-align:center;
-    font-size:42px;
-    font-weight:920;
+    font-size:28px;
+    font-weight:990;
     letter-spacing:.2px;
     line-height:1.10;
     text-shadow:0 10px 26px rgba(0,0,0,.35);
-    color:var(--mint);
+    color:#fff;
   }
 
+  /* ✅ 체결가 숫자: 민트 + 더 크게 */
   .fill{
-    margin-top:12px;
+    margin-top:10px;
     text-align:center;
   }
   .fill-label{
@@ -134,18 +139,11 @@
   }
   .fill-price{
     margin-top:6px;
-    font-size:28px;
+    font-size:42px;
     font-weight:990;
     letter-spacing:.2px;
     text-shadow:0 10px 26px rgba(0,0,0,.35);
-  }
-
-  .meta{
-    margin-top:10px;
-    display:flex;
-    justify-content:flex-end;
-    font-size:12px;
-    color:var(--muted2);
+    color:var(--mint);
   }
 
   /* ✅ BUY/SELL 선택 박스 (시세 박스와 주문 박스 사이) */
@@ -159,7 +157,7 @@
     border-radius:18px;
     padding:14px 12px;
     border:1px solid rgba(255,255,255,.10);
-    background:rgba(255,255,255,.05); /* ✅ 안 눌림 = 수량 박스 톤 */
+    background:rgba(255,255,255,.05);
     color:#fff;
     font-weight:990;
     font-size:14px;
@@ -199,10 +197,12 @@
     font-weight:990;font-size:14px;letter-spacing:.2px;
   }
   .order-h .t i{color:var(--mint);font-size:18px}
+
+  /* ✅ 최소 100 USDT: 볼드 제거 */
   .min{
     font-size:12px;
     color:var(--muted2);
-    font-weight:900;
+    font-weight:400;
   }
 
   .form{
@@ -224,9 +224,10 @@
     font-weight:900;
     margin-bottom:8px;
   }
+  /* ✅ 입력후 자동계산: 볼드 취소 */
   .label .r{
     color:var(--muted2);
-    font-weight:900;
+    font-weight:400;
     font-size:12px;
   }
   input{
@@ -248,10 +249,12 @@
     background:rgba(255,255,255,.05);
     padding:12px;
   }
+
+  /* ✅ 현재가/체결가 글자 작음 해결: total과 동일 사이즈(13px)로 */
   .calc-row{
     display:flex;align-items:center;justify-content:space-between;
     gap:10px;
-    font-size:12px;
+    font-size:13px;
     color:rgba(255,255,255,.80);
     font-weight:900;
     padding:6px 0;
@@ -292,41 +295,6 @@
   .send:active{transform:scale(.992)}
   .send i{font-size:18px}
 
-  /* 기존 actions는 남겨두되(요청: 다른거 변경 X) 실제 주문은 전송버튼으로 */
-  .actions{
-    margin-top:12px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-  .btn{
-    border:none;
-    border-radius:18px;
-    padding:14px 12px;
-    font-weight:990;
-    font-size:14px;
-    cursor:pointer;
-    display:flex;align-items:center;justify-content:center;gap:10px;
-    box-shadow:0 12px 30px rgba(0,0,0,.28);
-    color:#fff;
-  }
-  .btn:active{transform:scale(.992)}
-  .btn i{font-size:18px}
-
-  /* 기존 BUY/SELL 버튼 색은 유지 */
-  .btn-buy{
-    background:
-      radial-gradient(700px 220px at 22% 30%, rgba(110,231,216,.28) 0%, rgba(110,231,216,0) 62%),
-      linear-gradient(135deg, rgba(110,231,216,.20), rgba(15,23,42,.62));
-    border:1px solid rgba(110,231,216,.42);
-  }
-  .btn-sell{
-    background:
-      radial-gradient(700px 220px at 78% 22%, rgba(139,92,246,.28) 0%, rgba(139,92,246,0) 62%),
-      linear-gradient(135deg, rgba(139,92,246,.20), rgba(15,23,42,.62));
-    border:1px solid rgba(139,92,246,.42);
-  }
-
   .note{
     margin-top:12px;
     font-size:10px;
@@ -364,6 +332,7 @@
   <div class="card">
     <div class="card-h">
       <div class="t"><i class="ri-line-chart-line"></i> 테더 실시간 시세</div>
+      <div class="stamp" id="stampTop">기준: —</div>
     </div>
 
     <div class="card-b">
@@ -374,18 +343,16 @@
         <span class="fill-label">체결가 <span class="vat">(VAT 2%)</span></span>
         <div class="fill-price" id="fillPrice">—</div>
       </div>
-
-      <div class="meta"><span id="stamp">기준: —</span></div>
     </div>
   </div>
 
-  <!-- ✅ 시세 박스와 주문 박스 사이: BUY/SELL 선택 -->
+  <!-- ✅ 기본값: 구입(왼쪽) 선택 상태 -->
   <div class="side" aria-label="side selection">
     <div class="side-btn" id="sideBuy" role="button" tabindex="0">
-      <i class="ri-shopping-bag-3-line"></i> BUY
+      <i class="ri-shopping-bag-3-line"></i> 구입
     </div>
     <div class="side-btn" id="sideSell" role="button" tabindex="0">
-      <i class="ri-funds-box-line"></i> SELL
+      <i class="ri-funds-box-line"></i> 판매
     </div>
   </div>
 
@@ -401,17 +368,16 @@
           <span>수량 (USDT)</span>
           <span class="r">입력 후 자동 계산</span>
         </div>
-        <!-- ✅ 키보드 이동/완료 누르면 내려가게: enterkeyhint 추가 -->
-        <input id="usdt" type="number" inputmode="decimal" enterkeyhint="done" placeholder="예: 500" min="0" step="0.01" />
+        <input id="usdt" type="number" inputmode="decimal" enterkeyhint="done" placeholder="예: 1000" min="0" step="0.01" />
       </div>
 
       <div class="calc" aria-label="calculation">
         <div class="calc-row">
-          <span>현재가</span>
+          <span>USDT 시세</span>
           <span class="v" id="calcMarket">—</span>
         </div>
         <div class="calc-row">
-          <span>체결가 (2%)</span>
+          <span>체결가</span>
           <span class="v" id="calcFill">—</span>
         </div>
         <div class="calc-row total">
@@ -420,20 +386,9 @@
         </div>
       </div>
 
-      <!-- ✅ 체결 예상금액 아래: 주문 전송하기 버튼 -->
       <button class="send" id="btnSend" type="button">
         <i class="ri-send-plane-2-line"></i> 주문 전송하기
       </button>
-
-      <!-- 기존 BUY/SELL 버튼은 유지(요청: 다른거 변경 X). 클릭 시 전송은 막고 안내만 -->
-      <div class="actions">
-        <button class="btn btn-buy" id="btnBuy" type="button">
-          <i class="ri-shopping-bag-3-line"></i> BUY
-        </button>
-        <button class="btn btn-sell" id="btnSell" type="button">
-          <i class="ri-funds-box-line"></i> SELL
-        </button>
-      </div>
     </div>
   </div>
 
@@ -444,14 +399,14 @@
 <div class="toast" id="toast">OK</div>
 
 <script>
-  const FEE_RATE = 0.02;   // BUY/SELL 동일 2%
-  const MIN_USDT = 100;    // 최소 100 USDT
+  const FEE_RATE = 0.02;
+  const MIN_USDT = 100;
   const REFRESH_MS = 15000;
 
   const TG_USERNAME = "lilykimdd";
 
   let lastMarket = null;
-  let selectedSide = null; // ✅ BUY/SELL 먼저 선택
+  let selectedSide = "BUY"; // ✅ 기본값: 구입
 
   function toast(msg){
     const t=document.getElementById("toast");
@@ -493,12 +448,12 @@
   function renderMarket(failed){
     const mp = document.getElementById("marketPrice");
     const fp = document.getElementById("fillPrice");
-    const stamp = document.getElementById("stamp");
+    const stampTop = document.getElementById("stampTop");
 
     if(lastMarket === null){
       mp.textContent = "—";
       fp.textContent = "—";
-      stamp.textContent = "기준: —";
+      stampTop.textContent = "기준: —";
       return;
     }
 
@@ -506,7 +461,7 @@
     fp.textContent = fmtKRW(calcFillPrice(lastMarket));
 
     const t = new Date().toLocaleTimeString();
-    stamp.textContent = "기준: " + t + (failed ? " (지연)" : "");
+    stampTop.textContent = "기준: " + t + (failed ? " (지연)" : "");
   }
 
   function renderCalc(){
@@ -565,11 +520,8 @@
     const s = document.getElementById("sideSell");
     b.classList.remove("active","buy");
     s.classList.remove("active","sell");
-    if(selectedSide === "BUY"){
-      b.classList.add("active","buy");
-    }else if(selectedSide === "SELL"){
-      s.classList.add("active","sell");
-    }
+    if(selectedSide === "BUY") b.classList.add("active","buy");
+    if(selectedSide === "SELL") s.classList.add("active","sell");
   }
 
   function setSide(side){
@@ -580,10 +532,6 @@
   function submitSelectedOrder(){
     closeKeyboard();
 
-    if(!selectedSide){
-      toast("BUY 또는 SELL을 먼저 선택해 주세요.");
-      return;
-    }
     if(!assertMin()) return;
     if(lastMarket === null){
       toast("시세 업데이트 후 다시 시도해 주세요.");
@@ -613,7 +561,7 @@ USDT 시세: ${fmtKRW(market)}
   const usdtInput = document.getElementById("usdt");
   usdtInput.addEventListener("input", renderCalc);
 
-  // ✅ 키보드의 이동/완료/엔터 누르면 키보드 내려가고 계산 갱신
+  // ✅ 키보드 '이동/완료/엔터' 누르면 키보드 내려가고 계산 갱신
   usdtInput.addEventListener("keydown", (e)=>{
     if(e.key === "Enter"){
       e.preventDefault();
@@ -625,21 +573,13 @@ USDT 시세: ${fmtKRW(market)}
   document.getElementById("sideBuy").addEventListener("click", ()=>setSide("BUY"));
   document.getElementById("sideSell").addEventListener("click", ()=>setSide("SELL"));
 
-  // 접근성: 엔터로도 선택 가능
   document.getElementById("sideBuy").addEventListener("keydown", (e)=>{ if(e.key==="Enter") setSide("BUY"); });
   document.getElementById("sideSell").addEventListener("keydown", (e)=>{ if(e.key==="Enter") setSide("SELL"); });
 
   document.getElementById("btnSend").addEventListener("click", submitSelectedOrder);
 
-  // 기존 BUY/SELL 버튼 클릭은 “선택”으로만 연결 (전송은 전송버튼)
-  document.getElementById("btnBuy").addEventListener("click", ()=>{
-    setSide("BUY");
-    toast("BUY 선택됨");
-  });
-  document.getElementById("btnSell").addEventListener("click", ()=>{
-    setSide("SELL");
-    toast("SELL 선택됨");
-  });
+  // ✅ 기본값(구입) 활성화
+  updateSideUI();
 
   fetchMarket();
   setInterval(fetchMarket, REFRESH_MS);
