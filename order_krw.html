@@ -8,384 +8,226 @@
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 
 <style>
-  :root{
-    --navy:#0b1220;
-    --navy2:#111a2e;
-    --card:rgba(15,23,42,.74);
-    --mint:#6ee7d8;
-    --text:#ffffff;
-    --muted2:rgba(255,255,255,.55);
-  }
-  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-  body{background:var(--navy);display:flex;justify-content:center;color:var(--text)}
-  .app{
-    width:100%;
-    max-width:430px;
-    min-height:100vh;
-    background:
-      radial-gradient(900px 420px at 18% 6%, rgba(110,231,216,.10) 0%, rgba(110,231,216,0) 55%),
-      radial-gradient(900px 420px at 82% 10%, rgba(139,92,246,.10) 0%, rgba(139,92,246,0) 55%),
-      linear-gradient(180deg,var(--navy) 0%, var(--navy2) 100%);
-    padding:12px 14px 28px;
-  }
+:root{
+  --navy:#0b1220;
+  --navy2:#111a2e;
+  --card:rgba(15,23,42,.74);
+  --mint:#6ee7d8;
+  --text:#ffffff;
+  --muted2:rgba(255,255,255,.55);
+}
 
-  .top{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:10px 2px 8px;
-    position:sticky; top:0;
-    background:transparent;
-    z-index:10;
-  }
-  .left{display:flex;align-items:center;gap:10px}
-  .back{
-    width:38px;height:38px;border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    border:1px solid rgba(255,255,255,.10);
-    background:rgba(255,255,255,.04);
-    cursor:pointer;
-  }
-  .back i{font-size:18px;color:rgba(255,255,255,.92)}
-  .logo{height:34px;width:auto;display:block;filter:drop-shadow(0 10px 24px rgba(0,0,0,.28))}
-  .pill{
-    display:flex;align-items:center;gap:8px;
-    padding:8px 10px;border-radius:999px;
-    border:1px solid rgba(255,255,255,.10);
-    background:rgba(255,255,255,.04);
-    font-weight:950;
-    font-size:12px;
-    color:rgba(255,255,255,.85);
-  }
-  .pill i{color:var(--mint);font-size:16px}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+body{background:var(--navy);display:flex;justify-content:center;color:var(--text)}
 
-  .card{
-    margin-top:10px;
-    background:var(--card);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:22px;
-    box-shadow:0 10px 26px rgba(0,0,0,.26);
-    overflow:hidden;
-  }
-  .card-h{padding:14px 14px 10px;display:flex;align-items:center;justify-content:space-between}
-  .card-h .t{display:flex;align-items:center;gap:8px;font-weight:990;font-size:14px}
-  .card-h .t i{color:var(--mint);font-size:18px}
-  .card-b{padding:0 14px 14px}
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  background:linear-gradient(180deg,var(--navy),var(--navy2));
+  padding:12px 14px 28px;
+}
 
-  .pairline{
-    margin-top:6px;
-    text-align:center;
-    color:rgba(255,255,255,.78);
-    font-weight:900;
-    font-size:12px;
-    letter-spacing:.2px;
-  }
-  .price{
-    margin-top:8px;
-    text-align:center;
-    font-size:42px;
-    font-weight:920;
-    letter-spacing:.2px;
-    line-height:1.10;
-    text-shadow:0 10px 26px rgba(0,0,0,.35);
-  }
-  .fill{
-    margin-top:10px;
-    text-align:center;
-    font-size:14px;
-    font-weight:900;
-    color:rgba(255,255,255,.86);
-  }
-  .meta{
-    margin-top:10px;
-    display:flex;
-    justify-content:flex-end;
-    font-size:12px;
-    color:var(--muted2);
-  }
+/* ===== 시세 카드 ===== */
 
-  .order{
-    margin-top:12px;
-    background:var(--card);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:22px;
-    padding:14px;
-    box-shadow:0 10px 26px rgba(0,0,0,.26);
-  }
-  .order-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-  .order-h .t{display:flex;align-items:center;gap:8px;font-weight:990;font-size:14px}
-  .order-h .t i{color:var(--mint);font-size:18px}
-  .min{font-size:12px;color:var(--muted2);font-weight:900}
+.card{
+  margin-top:10px;
+  background:var(--card);
+  border-radius:22px;
+  padding:16px;
+}
 
-  .field{
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.10);
-    background:rgba(255,255,255,.05);
-    padding:12px;
-  }
-  .label{
-    display:flex;align-items:center;justify-content:space-between;
-    font-size:12px;color:rgba(255,255,255,.78);
-    font-weight:900;margin-bottom:8px;
-  }
-  input{
-    width:100%;
-    border:none;
-    outline:none;
-    background:transparent;
-    color:#fff;
-    font-size:18px;
-    font-weight:900;
-    letter-spacing:.2px;
-  }
-  input::placeholder{color:rgba(255,255,255,.35);font-weight:900}
+/* 🔽 제목 70% 축소 */
+.card-title{
+  font-size:14px; /* 기존 20px급 → 약 70% */
+  font-weight:900;
+}
 
-  .calc{
-    margin-top:10px;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.10);
-    background:rgba(255,255,255,.05);
-    padding:12px;
-  }
-  .calc-row{
-    display:flex;align-items:center;justify-content:space-between;
-    gap:10px;
-    font-size:12px;
-    color:rgba(255,255,255,.80);
-    font-weight:900;
-    padding:6px 0;
-  }
-  .calc-row.total{
-    margin-top:6px;
-    padding-top:10px;
-    border-top:1px solid rgba(255,255,255,.10);
-    font-size:13px;
-  }
-  .calc-row b{color:#fff}
+/* 🔥 메인 시세 숫자 → 민트 */
+.price{
+  margin-top:8px;
+  text-align:center;
+  font-size:42px;
+  font-weight:900;
+  color:var(--mint);
+}
 
-  .actions{
-    margin-top:12px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-  .btn{
-    border:none;
-    border-radius:18px;
-    padding:14px 12px;
-    font-weight:990;
-    font-size:14px;
-    cursor:pointer;
-    display:flex;align-items:center;justify-content:center;gap:10px;
-    box-shadow:0 12px 30px rgba(0,0,0,.28);
-    color:#fff;
-  }
-  .btn:active{transform:scale(.992)}
-  .btn i{font-size:18px}
-  .btn-buy{background:linear-gradient(135deg,#16a34a,#22c55e)}
-  .btn-sell{background:linear-gradient(135deg,#dc2626,#ef4444)}
+/* 체결가 */
+.fill{
+  margin-top:10px;
+  text-align:center;
+  font-size:13px;
+}
 
-  .note{
-    margin-top:12px;
-    font-size:10px;
-    color:var(--muted2);
-    text-align:right;
-    padding:0 2px;
-  }
+.fill-price{
+  margin-top:6px;
+  font-size:28px;
+  font-weight:900;
+  color:var(--mint); /* 🔥 민트 포인트 */
+}
 
-  .toast{
-    position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
-    padding:10px 12px; border-radius:999px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.10);
-    color:rgba(255,255,255,.9);
-    font-size:12px; font-weight:950;
-    box-shadow:0 14px 40px rgba(0,0,0,.35);
-    opacity:0; pointer-events:none;
-    transition:opacity .2s ease, transform .2s ease;
-  }
-  .toast.show{opacity:1; transform:translateX(-50%) translateY(-4px)}
+.meta{
+  margin-top:8px;
+  text-align:right;
+  font-size:12px;
+  color:var(--muted2);
+}
+
+/* ===== 주문 영역 ===== */
+
+.order{
+  margin-top:14px;
+  background:var(--card);
+  border-radius:22px;
+  padding:14px;
+}
+
+input{
+  width:100%;
+  font-size:18px;
+  font-weight:900;
+  background:transparent;
+  border:none;
+  color:#fff;
+  margin-top:8px;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+
+.btn{
+  border:none;
+  border-radius:16px;
+  padding:14px;
+  font-weight:900;
+  color:#fff;
+  cursor:pointer;
+}
+
+/* 홈 화면과 동일 민트 / 퍼플 */
+.btn-buy{
+  background:linear-gradient(135deg,#6ee7d8,#22d3ee);
+}
+
+.btn-sell{
+  background:linear-gradient(135deg,#8b5cf6,#a78bfa);
+}
+
+.note{
+  margin-top:12px;
+  font-size:10px;
+  color:var(--muted2);
+  text-align:right;
+}
 </style>
 </head>
 
 <body>
 <div class="app">
 
-  <div class="top">
-    <div class="left">
-      <div class="back" onclick="history.back()" aria-label="back"><i class="ri-arrow-left-line"></i></div>
-      <img class="logo" src="logo.png" alt="ZENBIT">
-    </div>
-    <div class="pill"><i class="ri-coin-line"></i> 테더 / 원화</div>
+<!-- ===== 시세 ===== -->
+<div class="card">
+  <div class="card-title">테더 실시간 시세</div>
+
+  <div class="price" id="marketPrice">—</div>
+
+  <div class="fill">
+    체결가 (VAT 2%)
+    <div class="fill-price" id="fillPrice">—</div>
   </div>
 
-  <div class="card">
-    <div class="card-h">
-      <div class="t"><i class="ri-line-chart-line"></i> 테더 실시간 시세</div>
-    </div>
-
-    <div class="card-b">
-      <div class="pairline">USDT / KRW</div>
-      <div class="price" id="marketPrice">—</div>
-      <div class="fill" id="fillPrice">체결가 (수수료 2% 포함) —</div>
-      <div class="meta"><span id="stamp">기준: —</span></div>
-    </div>
-  </div>
-
-  <div class="order">
-    <div class="order-h">
-      <div class="t"><i class="ri-edit-2-line"></i> 주문</div>
-      <div class="min">최소 100 USDT</div>
-    </div>
-
-    <div class="field">
-      <div class="label"><span>수량 (USDT)</span><span>입력 후 자동 계산</span></div>
-      <input id="usdt" type="number" inputmode="decimal" placeholder="예: 100" min="0" step="0.01" />
-    </div>
-
-    <div class="calc">
-      <div class="calc-row"><span>현재가</span><span id="calcMarket">—</span></div>
-      <div class="calc-row"><span>체결가 (2%)</span><span id="calcFill">—</span></div>
-      <div class="calc-row total"><span>체결 예상금액 (KRW)</span><span><b id="calcTotal">—</b></span></div>
-    </div>
-
-    <div class="actions">
-      <button class="btn btn-buy" id="btnBuy" type="button"><i class="ri-shopping-bag-3-line"></i> BUY</button>
-      <button class="btn btn-sell" id="btnSell" type="button"><i class="ri-funds-box-line"></i> SELL</button>
-    </div>
-  </div>
-
-  <div class="note">안내: 네트워크 환경에 따라 업데이트가 지연될 수 있습니다.</div>
+  <div class="meta" id="stamp">기준: —</div>
 </div>
 
-<div class="toast" id="toast">OK</div>
+<!-- ===== 주문 ===== -->
+<div class="order">
+
+  <div style="font-size:12px;color:var(--muted2)">최소 100 USDT</div>
+
+  <input id="usdt" type="number" placeholder="USDT 수량 입력 (예: 500)" />
+
+  <div class="actions">
+    <button class="btn btn-buy" onclick="submitOrder('BUY')">BUY</button>
+    <button class="btn btn-sell" onclick="submitOrder('SELL')">SELL</button>
+  </div>
+</div>
+
+<div class="note">안내: 네트워크 환경에 따라 업데이트가 지연될 수 있습니다.</div>
+
+</div>
 
 <script>
-  /* ====== SETTINGS ====== */
-  const FEE_RATE = 0.02;   // BUY/SELL 동일 2%
-  const MIN_USDT = 100;    // 최소 100 USDT
-  const REFRESH_MS = 15000;
+const FEE_RATE = 0.02;
+const MIN_USDT = 100;
 
-  // ✅ 텔레그램으로 “작성창”을 열 대상 (유저네임)
-  const TG_USERNAME = "lilykimdd"; // t.me/lilykimdd
+let market = 0;
 
-  let lastMarket = null;
+/* ===== 시세 ===== */
+async function fetchMarket(){
+  const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=krw");
+  const d = await r.json();
 
-  function toast(msg){
-    const t=document.getElementById("toast");
-    t.textContent=msg;
-    t.classList.add("show");
-    clearTimeout(window.__toastT);
-    window.__toastT=setTimeout(()=>t.classList.remove("show"), 1200);
+  market = d.tether.krw;
+
+  document.getElementById("marketPrice").textContent =
+    "₩ " + Math.round(market).toLocaleString();
+
+  const fill = market * (1 + FEE_RATE);
+
+  document.getElementById("fillPrice").textContent =
+    "₩ " + Math.round(fill).toLocaleString();
+
+  document.getElementById("stamp").textContent =
+    "기준: " + new Date().toLocaleTimeString();
+}
+
+fetchMarket();
+setInterval(fetchMarket,15000);
+
+/* ===== 키보드 자동 내림 ===== */
+function closeKeyboard(){
+  const el=document.getElementById("usdt");
+  if(el) el.blur();
+}
+
+/* ===== 텔레그램 작성창 열기 ===== */
+const TG_USERNAME="lilykimdd";
+
+function openTelegramDraft(message){
+  const text=encodeURIComponent(message);
+  window.location.href=`tg://resolve?domain=${TG_USERNAME}&text=${text}`;
+  setTimeout(()=>window.open(`https://t.me/${TG_USERNAME}?text=${text}`,"_blank"),400);
+}
+
+/* ===== 주문 ===== */
+function submitOrder(side){
+
+  closeKeyboard();
+
+  const usdt=Number(document.getElementById("usdt").value);
+
+  if(usdt < MIN_USDT){
+    alert("최소 주문은 100 USDT입니다.");
+    return;
   }
 
-  function fmtKRW(n){
-    const v = Number(n);
-    if(!Number.isFinite(v)) return "—";
-    return "₩ " + Math.round(v).toLocaleString("ko-KR");
-  }
-  function fmtKRWPrecise(n){
-    const v = Number(n);
-    if(!Number.isFinite(v)) return "—";
-    return "₩ " + v.toFixed(2).toLocaleString("ko-KR");
-  }
-  function calcFillPrice(market){ return Number(market) * (1 + FEE_RATE); }
+  const fill = market * (1 + FEE_RATE);
+  const total = usdt * fill;
 
-  async function fetchMarket(){
-    try{
-      const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=krw", {cache:"no-store"});
-      const d = await r.json();
-      const m = Number(d?.tether?.krw);
-      if(!Number.isFinite(m)) throw new Error("bad market");
-      lastMarket = m;
-      renderMarket(false);
-      renderCalc();
-    }catch(e){
-      renderMarket(true);
-    }
-  }
-
-  function renderMarket(failed){
-    const mp = document.getElementById("marketPrice");
-    const fp = document.getElementById("fillPrice");
-    const stamp = document.getElementById("stamp");
-
-    if(lastMarket === null){
-      mp.textContent = "—";
-      fp.textContent = "체결가 (수수료 2% 포함) —";
-      stamp.textContent = "기준: —";
-      return;
-    }
-
-    mp.textContent = fmtKRW(lastMarket);
-    fp.textContent = "체결가 (수수료 2% 포함) " + fmtKRW(calcFillPrice(lastMarket));
-
-    const t = new Date().toLocaleTimeString();
-    stamp.textContent = "기준: " + t + (failed ? " (지연)" : "");
-  }
-
-  function renderCalc(){
-    const usdt = Number(document.getElementById("usdt").value || 0);
-    if(lastMarket === null){
-      document.getElementById("calcMarket").textContent = "—";
-      document.getElementById("calcFill").textContent = "—";
-      document.getElementById("calcTotal").textContent = "—";
-      return;
-    }
-    const fill = calcFillPrice(lastMarket);
-    document.getElementById("calcMarket").textContent = fmtKRW(lastMarket);
-    document.getElementById("calcFill").textContent = fmtKRW(fill);
-    document.getElementById("calcTotal").textContent = fmtKRWPrecise(usdt * fill);
-  }
-
-  function assertMin(){
-    const v = Number(document.getElementById("usdt").value);
-    if(!Number.isFinite(v) || v <= 0){ toast("수량을 입력해 주세요."); return false; }
-    if(v < MIN_USDT){ toast("최소 주문은 100 USDT입니다."); return false; }
-    return true;
-  }
-
-  // ✅ 텔레그램 “작성창” 열기: 사용자는 전송만 누르면 됨
-  function openTelegramDraft(message){
-    const text = encodeURIComponent(message);
-
-    // 1) 모바일/앱 우선: tg://
-    const tgApp = `tg://resolve?domain=${TG_USERNAME}&text=${text}`;
-
-    // 2) 안 되면 웹 버전으로 fallback
-    const tgWeb = `https://t.me/${TG_USERNAME}?text=${text}`;
-
-    // 앱 시도 → 실패해도 웹이 열리도록
-    window.location.href = tgApp;
-    setTimeout(()=>{ window.open(tgWeb, "_blank"); }, 450);
-  }
-
-  function submitOrder(side){
-    if(!assertMin()) return;
-    if(lastMarket === null){ toast("시세 업데이트 후 다시 시도해 주세요."); return; }
-
-    const usdt = Number(document.getElementById("usdt").value);
-    const fill = calcFillPrice(lastMarket);
-    const total = usdt * fill;
-
-    const msg =
-`📌 ZENBIT 원화 주문 접수
-────────────────
+  const msg =
+`📌 ZENBIT 원화 주문
 구분: ${side}
-USDT: ${usdt}
-현재가: ${fmtKRW(lastMarket)}
-체결가(2%): ${fmtKRW(fill)}
-총액: ${fmtKRWPrecise(total)}
-시간: ${new Date().toLocaleString()}
-────────────────`;
+수량: ${usdt} USDT
+체결가: ₩ ${Math.round(fill).toLocaleString()}
+총액: ₩ ${Math.round(total).toLocaleString()}
+시간: ${new Date().toLocaleString()}`;
 
-    openTelegramDraft(msg);
-  }
-
-  document.getElementById("usdt").addEventListener("input", renderCalc);
-  document.getElementById("btnBuy").addEventListener("click", ()=>submitOrder("BUY"));
-  document.getElementById("btnSell").addEventListener("click", ()=>submitOrder("SELL"));
-
-  fetchMarket();
-  setInterval(fetchMarket, REFRESH_MS);
+  openTelegramDraft(msg);
+}
 </script>
 </body>
 </html>
