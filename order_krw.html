@@ -8,157 +8,351 @@
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 
 <style>
-/* ⚠️ CSS 원본 그대로 — 절대 수정 안 함 */
-:root{
-  --navy:#0b1220;
-  --navy2:#111a2e;
-  --card:rgba(15,23,42,.74);
-  --line:rgba(255,255,255,.10);
-  --mint:#6ee7d8;
-  --purple:#8b5cf6;
-  --text:#ffffff;
-  --muted:rgba(255,255,255,.72);
-  --muted2:rgba(255,255,255,.55);
-}
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color: transparent;}
-body{background:var(--navy);display:flex;justify-content:center;color:var(--text);}
+  :root{
+    --navy:#0b1220;
+    --navy2:#111a2e;
+    --card:rgba(15,23,42,.74);
+    --line:rgba(255,255,255,.10);
+    --mint:#6ee7d8;
+    --purple:#8b5cf6;
+    --text:#ffffff;
+    --muted:rgba(255,255,255,.72);
+    --muted2:rgba(255,255,255,.55);
+  }
+  *{
+    box-sizing:border-box;margin:0;padding:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body{background:var(--navy);display:flex;justify-content:center;color:var(--text);}
 
-/* 이하 CSS 전부 원본 그대로 */
-.app{width:100%;max-width:430px;min-height:100vh;background:
-radial-gradient(900px 420px at 18% 6%, rgba(110,231,216,.10) 0%, rgba(110,231,216,0) 55%),
-radial-gradient(900px 420px at 82% 10%, rgba(139,92,246,.10) 0%, rgba(139,92,246,0) 55%),
-linear-gradient(180deg,var(--navy) 0%, var(--navy2) 100%);
-padding:12px 14px 28px;opacity:0;transform:translateY(6px);transition:opacity .28s ease, transform .28s ease;}
-.app.ready{opacity:1; transform:translateY(0);}
-.app.leaving{opacity:0; transform:translateY(8px);}
+  .app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:
+      radial-gradient(900px 420px at 18% 6%, rgba(110,231,216,.10) 0%, rgba(110,231,216,0) 55%),
+      radial-gradient(900px 420px at 82% 10%, rgba(139,92,246,.10) 0%, rgba(139,92,246,0) 55%),
+      linear-gradient(180deg,var(--navy) 0%, var(--navy2) 100%);
+    padding:12px 14px 28px;
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity .28s ease, transform .28s ease;
+  }
+  .app.ready{opacity:1; transform:translateY(0);}
+  .app.leaving{opacity:0; transform:translateY(8px);}
 
-.top{display:flex;align-items:center;justify-content:space-between;padding:10px 2px 4px;position:sticky; top:0;background:transparent;z-index:10;}
-.left{display:flex;align-items:center;gap:10px;}
-.back{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);cursor:pointer;}
-.back i{font-size:18px;color:rgba(255,255,255,.92)}
+  .top{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 2px 4px;
+    position:sticky; top:0;
+    background:transparent;
+    z-index:10;
+  }
+  .left{display:flex;align-items:center;gap:10px;}
+  .back{
+    width:38px;height:38px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.04);
+    cursor:pointer;
+  }
+  .back i{font-size:18px;color:rgba(255,255,255,.92)}
 
-.logo{height:46px;width:auto;display:block;filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));cursor:pointer;}
+  .logo{ height:46px;width:auto;cursor:pointer; }
 
-.pill{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);font-weight:950;font-size:12px;color:rgba(255,255,255,.85);cursor:pointer;}
-.fxwon{color:var(--mint);font-size:16px;font-weight:990;}
+  .pill{
+    display:flex;align-items:center;gap:8px;
+    padding:8px 10px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.04);
+    font-weight:950; font-size:12px;
+    color:rgba(255,255,255,.85);
+    cursor:pointer;
+  }
+  .fxwon{ color:var(--mint); font-size:16px; font-weight:990; }
 
-.card{margin-top:6px;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:22px;box-shadow:0 10px 26px rgba(0,0,0,.26);overflow:hidden;}
-.card-h{padding:12px 14px 8px;display:flex;align-items:center;justify-content:space-between;}
-.card-h .t{display:flex;align-items:center;gap:8px;font-weight:990;font-size:14px;}
-.card-h .t i{color:var(--mint);font-size:18px}
-.card-h .stamp{font-size:12px;color:var(--muted2);}
-.card-b{padding:0 14px 12px}
+  .card{
+    margin-top:6px;
+    background:var(--card);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:22px;
+    box-shadow:0 10px 26px rgba(0,0,0,.26);
+    overflow:hidden;
+    padding-bottom:18px;
+  }
+  .card-h{
+    padding:12px 14px 8px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .card-h .t{
+    display:flex;align-items:center;gap:8px;
+    font-weight:990; font-size:14px;
+  }
+  .card-h .t i{color:var(--mint);font-size:18px}
+  .card-h .stamp{ font-size:11px; color:var(--muted2); }
 
-.price{margin-top:6px;text-align:center;font-size:28px;font-weight:990;color:var(--mint);}
+  .price-box{
+    margin-top:10px;
+    text-align:center;
+  }
+  .price-label{
+    font-size:12px; font-weight:900; color:var(--muted2);
+    margin-bottom:4px;
+  }
+  .price-val{
+    font-size:38px; font-weight:990; color:var(--mint);
+    letter-spacing:-0.5px;
+    text-shadow: 0 0 20px rgba(110,231,216, 0.2);
+  }
 
-.side{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.side-btn{border-radius:18px;padding:14px 12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#fff;font-weight:990;font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;}
-.side-btn.active.buy{background:linear-gradient(135deg, rgba(110,231,216,.26), rgba(15,23,42,.56));border:1px solid rgba(110,231,216,.55);}
-.side-btn.active.sell{background:linear-gradient(135deg, rgba(139,92,246,.26), rgba(15,23,42,.56));border:1px solid rgba(139,92,246,.55);}
+  .side{
+    margin-top:12px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .side-btn{
+    border-radius:18px;
+    padding:14px 12px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.05);
+    color:#fff;
+    font-weight:990;
+    font-size:15px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    cursor:pointer;
+    transition:transform .12s ease;
+  }
+  .side-btn:active{transform:scale(.98)}
+  .side-btn.active.buy{
+    background: linear-gradient(135deg, rgba(110,231,216,.26), rgba(15,23,42,.56));
+    border:1px solid var(--mint);
+    color: var(--mint);
+  }
+  .side-btn.active.sell{
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(15,23,42,.56));
+    border:1px solid #ef4444;
+    color: #ef4444;
+  }
 
-.order{margin-top:12px;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px;}
-.field{border-radius:18px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);padding:12px 12px;}
-.label{font-size:12px;color:rgba(255,255,255,.78);font-weight:900;margin-bottom:8px;}
-input{width:100%;border:none;outline:none;background:transparent;color:#fff;font-size:20px;font-weight:900;}
+  .order{
+    margin-top:12px;
+    background:var(--card);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:22px;
+    padding:14px;
+  }
+  .order-h{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .order-h .t{ display:flex;align-items:center;gap:8px; font-weight:990;font-size:14px; }
+  .order-h .t i{color:var(--mint);font-size:18px}
+  .min{font-size:11px;color:var(--muted2);}
 
-.calc{margin-top:8px;border-radius:18px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);padding:12px;}
-.calc-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:900;padding:6px 0;}
-.calc-row.total{margin-top:6px;padding-top:10px;border-top:1px solid rgba(255,255,255,.10);font-size:14px;}
-#calcTotal{color:var(--mint);font-weight:990;}
+  .field{
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.05);
+    padding:14px;
+    margin-bottom:12px;
+  }
+  .label{
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:12px; color:rgba(255,255,255,.78); font-weight:900; margin-bottom:8px;
+  }
+  .label .live{ color:var(--mint); font-weight:990; }
 
-.send{margin-top:10px;width:100%;border:none;border-radius:18px;padding:16px;font-weight:990;font-size:15px;color:#fff;background:linear-gradient(135deg, rgba(110,231,216,.16), rgba(139,92,246,.16));}
+  input{
+    width:100%; border:none; outline:none; background:transparent;
+    color:#fff; font-size:24px; font-weight:990;
+  }
+  input::placeholder{color:rgba(255,255,255,.2)}
 
-.note{margin-top:12px;font-size:10px;color:var(--muted2);text-align:right;}
+  .calc{
+    background:rgba(255,255,255,.03);
+    border-radius:18px;
+    padding:16px;
+    border:1px dashed rgba(255,255,255,.12);
+  }
+  .calc-row{
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:13px; color:var(--muted); font-weight:800; padding:5px 0;
+  }
+  .calc-row.total{
+    margin-top:10px; padding-top:12px;
+    border-top:1px solid rgba(255,255,255,.1);
+    font-size:15px; color:#fff;
+  }
+  #calcTotal{ color:var(--mint); font-size:18px; font-weight:990; }
 
-.toast{position:fixed; left:50%; top:48%;transform:translate(-50%,-50%);padding:10px 12px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:950;opacity:0;}
-.toast.show{opacity:1;}
+  .send{
+    margin-top:14px;
+    width:100%; border:none; border-radius:18px; padding:18px;
+    font-weight:990; font-size:16px; cursor:pointer; color:#fff;
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+  }
+  .send:active{transform:scale(.98)}
+
+  .note{ margin-top:12px; font-size:11px; color:var(--muted2); text-align:center; }
+  .toast{
+    position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
+    padding:12px 24px; border-radius:999px; background:rgba(0,0,0,.8);
+    color:#fff; font-size:13px; font-weight:900; opacity:0; transition:all .3s;
+  }
+  .toast.show{ opacity:1; }
 </style>
 </head>
 
 <body>
-<div class="app ready">
+<div class="app" id="appRoot">
 
-<!-- 시세 -->
-<div class="card">
-  <div class="card-h">
-    <div class="t"><i class="ri-line-chart-line"></i> 테더 실시간 시세</div>
-  </div>
-  <div class="card-b">
-    <div class="price" id="marketPrice">—</div>
-  </div>
-</div>
-
-<!-- 매수/매도 -->
-<div class="side">
-  <div class="side-btn active buy" id="sideBuy">
-    <i class="ri-shopping-bag-3-line"></i> 매수(BUY)
-  </div>
-  <div class="side-btn sell" id="sideSell">
-    <i class="ri-funds-box-line"></i> 매도(SELL)
-  </div>
-</div>
-
-<!-- 주문 -->
-<div class="order">
-
-  <div class="field">
-    <div class="label">주문 수량 (USDT)</div>
-    <input id="usdt" type="number" placeholder="예: 1000">
-  </div>
-
-  <div class="calc">
-    <div class="calc-row">
-      <span>주문 가격</span>
-      <span id="calcMarket">—</span>
+  <div class="top">
+    <div class="left">
+      <div class="back" id="btnBack"><i class="ri-arrow-left-line"></i></div>
+      <img class="logo" id="logoHome" src="logo.png" alt="ZENBIT">
     </div>
-
-    <div class="calc-row">
-      <span>주문 금액</span>
-      <span id="calcAmount">—</span>
-    </div>
-
-    <div class="calc-row">
-      <span>수수료 (VAT 2%)</span>
-      <span id="calcFee">—</span>
-    </div>
-
-    <!-- 🔥 추천 명칭 적용 -->
-    <div class="calc-row total">
-      <span>최종 결제금액 (VAT 포함)</span>
-      <span id="calcTotal">—</span>
+    <div class="pill" id="pillSwitch">
+      <span class="fxwon">₩</span> 테더/원화
     </div>
   </div>
 
-  <button class="send" id="btnSend">
-    <i class="ri-send-plane-2-line"></i> 주문 전송하기
-  </button>
+  <div class="card">
+    <div class="card-h">
+      <div class="t"><i class="ri-flashlight-line"></i> 실시간 USDT 시세</div>
+      <div class="stamp" id="stampTop">—</div>
+    </div>
+    <div class="price-box">
+      <div class="price-label">현재 1 USDT 가격</div>
+      <div class="price-val" id="marketPrice">—</div>
+    </div>
+  </div>
 
+  <div class="side">
+    <div class="side-btn" id="sideBuy">매수</div>
+    <div class="side-btn" id="sideSell">매도</div>
+  </div>
+
+  <div class="order">
+    <div class="order-h">
+      <div class="t"><i class="ri-shopping-cart-2-line"></i> 주문하기</div>
+      <div class="min">최소 100 USDT</div>
+    </div>
+
+    <div class="field">
+      <div class="label">
+        <span>주문 수량 (USDT)</span>
+        <span class="live" id="liveTotal">—</span>
+      </div>
+      <input id="usdt" type="number" inputmode="decimal" placeholder="0.00" />
+    </div>
+
+    <div class="calc">
+      <div class="calc-row">
+        <span>주문 가격</span>
+        <span id="calcMarket">—</span>
+      </div>
+      <div class="calc-row">
+        <span>주문 금액</span>
+        <span id="calcPure">—</span>
+      </div>
+      <div class="calc-row">
+        <span>수수료 (VAT 2%)</span>
+        <span id="calcFee">—</span>
+      </div>
+      <div class="calc-row total">
+        <span>최종 합계 금액</span>
+        <span id="calcTotal">—</span>
+      </div>
+    </div>
+
+    <button class="send" id="btnSend">주문 전송하기</button>
+  </div>
+
+  <div class="note">시세는 실시간으로 변동될 수 있습니다.</div>
 </div>
-</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-const FEE_RATE = 0.02;
-let lastMarket = 1500; // 테스트용
+  const FEE_RATE = 0.02;
+  const MIN_USDT = 100;
+  const TG_USERNAME = "lilykimdd";
 
-function fmt(n){ return "₩ " + Math.round(n).toLocaleString("ko-KR"); }
+  let lastMarket = null;
+  let fixedStampText = null;
+  let selectedSide = "BUY";
 
-function render(){
-  const usdt = Number(document.getElementById("usdt").value || 0);
+  function toast(msg){
+    const t=document.getElementById("toast");
+    t.textContent=msg; t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"), 1500);
+  }
 
-  document.getElementById("marketPrice").textContent = "USDT 시세 " + fmt(lastMarket);
+  function fmtKRW(n){
+    return "₩" + Math.round(n).toLocaleString();
+  }
 
-  const amount = usdt * lastMarket;
-  const fee = amount * FEE_RATE;
-  const total = amount + fee;
+  function renderMarket(){
+    const mp = document.getElementById("marketPrice");
+    const st = document.getElementById("stampTop");
+    if(!lastMarket) return;
+    mp.textContent = fmtKRW(lastMarket);
+    st.textContent = fixedStampText || "";
+  }
 
-  document.getElementById("calcMarket").textContent = fmt(lastMarket);
-  document.getElementById("calcAmount").textContent = usdt ? fmt(amount) : "—";
-  document.getElementById("calcFee").textContent = usdt ? fmt(fee) : "—";
-  document.getElementById("calcTotal").textContent = usdt ? fmt(total) : "—";
-}
+  function renderCalc(){
+    const usdt = Number(document.getElementById("usdt").value || 0);
+    if(!lastMarket) return;
 
-document.getElementById("usdt").addEventListener("input", render);
-render();
+    const market = lastMarket;
+    const pure = usdt * market;
+    const fee = pure * FEE_RATE;
+    const total = pure + fee;
+
+    document.getElementById("calcMarket").textContent = fmtKRW(market);
+    document.getElementById("calcPure").textContent = fmtKRW(pure);
+    document.getElementById("calcFee").textContent = "+ " + fmtKRW(fee);
+    document.getElementById("calcTotal").textContent = fmtKRW(total);
+    document.getElementById("liveTotal").textContent = usdt > 0 ? fmtKRW(total) : "—";
+  }
+
+  function setSide(side){
+    selectedSide = side;
+    document.getElementById("sideBuy").className = "side-btn" + (side==="BUY"?" active buy":"");
+    document.getElementById("sideSell").className = "side-btn" + (side==="SELL"?" active sell":"");
+  }
+
+  document.getElementById("btnSend").onclick = () => {
+    const usdt = Number(document.getElementById("usdt").value);
+    if(usdt < MIN_USDT){ toast("최소 100 USDT 이상 주문 가능합니다."); return; }
+    
+    const pure = usdt * lastMarket;
+    const fee = pure * FEE_RATE;
+    const total = pure + fee;
+
+    const msg = `📌 ZENBIT 주문 신청\n────────────────\n구분: ${selectedSide === "BUY" ? "매수" : "매도"}\n주문수량: ${usdt} USDT\n주문가격: ${fmtKRW(lastMarket)}\n주문금액: ${fmtKRW(pure)}\n수수료(2%): ${fmtKRW(fee)}\n최종 합계: ${fmtKRW(total)}\n기준: ${fixedStampText}\n────────────────`;
+    
+    const encoded = encodeURIComponent(msg);
+    window.location.href = `tg://resolve?domain=${TG_USERNAME}&text=${encoded}`;
+  };
+
+  document.getElementById("usdt").oninput = renderCalc;
+  document.getElementById("sideBuy").onclick = () => setSide("BUY");
+  document.getElementById("sideSell").onclick = () => setSide("SELL");
+  document.getElementById("btnBack").onclick = () => history.back();
+
+  // 초기화 (임시 데이터 또는 세션 로드)
+  window.onload = () => {
+    lastMarket = Number(sessionStorage.getItem("ZENBIT_KRW_MARKET")) || 1350;
+    fixedStampText = sessionStorage.getItem("ZENBIT_KRW_STAMP") || "실시간";
+    setSide("BUY");
+    renderMarket();
+    renderCalc();
+    document.getElementById("appRoot").classList.add("ready");
+  };
 </script>
 </body>
 </html>
