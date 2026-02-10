@@ -51,7 +51,7 @@
   .price-label{ font-size:12px; font-weight:900; color:var(--muted2); margin-bottom:4px; }
   .price-val{ font-size:32px; font-weight:990; color:var(--mint); letter-spacing:.5px; }
 
-  /* 매수/매도 버튼 (기존 스타일 복구) */
+  /* 매수/매도 버튼 */
   .side{ margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .side-btn{
     border-radius:18px; padding:14px 12px; border:1px solid var(--line); background:rgba(255,255,255,.05);
@@ -84,7 +84,7 @@
   .calc-row.total{ margin-top:6px; padding-top:10px; border-top:1px solid var(--line); color:#fff; }
   #calcTotal{ color:var(--mint); font-weight:990; font-size:16px; }
 
-  /* 전송 버튼 (기존 스타일 복구) */
+  /* 전송 버튼 */
   .send{
     margin-top:10px; width:100%; border:none; border-radius:18px; padding:16px; font-weight:990; font-size:15px; cursor:pointer; color:#fff;
     background: radial-gradient(900px 240px at 22% 30%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%),
@@ -109,7 +109,7 @@
   <div class="card">
     <div class="card-h">
       <div class="t"><i class="ri-line-chart-line"></i> 실시간 USDT 시세</div>
-      <div class="stamp" id="stampTop">기준: —</div>
+      <div class="stamp" id="stampTop">기준: 로딩중..</div>
     </div>
     <div class="price-display">
       <div class="price-label">USDT 현재 시세</div>
@@ -173,11 +173,26 @@
     document.getElementById("sideSell").className = "side-btn" + (side==="SELL"?" active sell":"");
   }
 
-  // 홈에서 저장한 데이터 불러오기
-  function loadData(){
-    lastMarket = Number(sessionStorage.getItem("ZENBIT_KRW_MARKET")) || 0;
-    fixedStampText = sessionStorage.getItem("ZENBIT_KRW_STAMP");
-    render();
+  // 페이지가 로드될 때 API에서 환율을 딱 한 번 가져옵니다.
+  async function fetchMarketPriceOnce(){
+    try {
+      const response = await fetch("https://api.upbit.com/v1/ticker?markets=KRW-USDT");
+      const data = await response.json();
+      
+      if(data && data[0]) {
+        lastMarket = data[0].trade_price;
+        
+        const now = new Date();
+        fixedStampText = (now.getMonth() + 1) + "/" + now.getDate() + " " + 
+                         now.getHours().toString().padStart(2, '0') + ":" + 
+                         now.getMinutes().toString().padStart(2, '0');
+        
+        render();
+      }
+    } catch (e) {
+      console.error("Price fetch error:", e);
+      document.getElementById("stampTop").textContent = "기준: 연결 실패";
+    }
   }
 
   document.getElementById("usdt").oninput = render;
@@ -186,7 +201,7 @@
   document.getElementById("btnBack").onclick = () => history.back();
   
   window.onload = () => {
-    loadData();
+    fetchMarketPriceOnce(); // 접속 순간 시세 가져오기
     setSide("BUY");
     document.getElementById("appRoot").classList.add("ready");
   };
