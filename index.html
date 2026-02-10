@@ -52,7 +52,7 @@
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));
   }
 
-  /* ✅ 배너: "원형처럼 티" 나되 경계선은 흐릿한 그라데이션 오브 */
+  /* ✅ 배너: 퍼지는 동그라미(확실히 보이게) */
   .banner{
     margin-top:6px;
     border-radius:22px;
@@ -61,9 +61,20 @@
     box-shadow:0 14px 44px rgba(0,0,0,.40);
     position:relative;
     background:
-      radial-gradient(420px 260px at 22% 28%, rgba(110,231,216,.22) 0%, rgba(110,231,216,.08) 38%, rgba(110,231,216,0) 70%),
-      radial-gradient(420px 280px at 82% 22%, rgba(139,92,246,.22) 0%, rgba(139,92,246,.08) 40%, rgba(139,92,246,0) 72%),
+      radial-gradient(520px 360px at 24% 34%, rgba(110,231,216,.36) 0%, rgba(110,231,216,.14) 42%, rgba(110,231,216,0) 78%),
+      radial-gradient(560px 380px at 86% 22%, rgba(139,92,246,.34) 0%, rgba(139,92,246,.14) 44%, rgba(139,92,246,0) 80%),
       linear-gradient(135deg, rgba(24,38,70,.92), rgba(36,28,74,.92));
+  }
+  /* ✅ “퍼지는 동그라미”를 한 번 더 올려서 확실히 보이게 */
+  .banner::before{
+    content:"";
+    position:absolute; inset:-60px;
+    background:
+      radial-gradient(420px 420px at 70% 18%, rgba(110,231,216,.26) 0%, rgba(110,231,216,.10) 38%, rgba(110,231,216,0) 74%),
+      radial-gradient(520px 520px at 28% 78%, rgba(139,92,246,.20) 0%, rgba(139,92,246,.08) 40%, rgba(139,92,246,0) 76%);
+    filter:blur(14px);
+    opacity:1;
+    pointer-events:none;
   }
   .banner::after{
     content:"";
@@ -86,7 +97,7 @@
     max-width:360px;
   }
 
-  /* ✅ 티커 */
+  /* ✅ 티커 (간격 줄임) */
   .ticker{
     margin-top:12px;
     border-radius:16px;
@@ -104,11 +115,11 @@
   }
   .ticker-track{
     display:flex;
-    gap:26px;
+    gap:14px;                /* ✅ 26px → 14px */
     white-space:nowrap;
     padding:10px 12px;
     will-change:transform;
-    animation:ticker 18s linear infinite;
+    animation:ticker 14s linear infinite;  /* ✅ 템포도 살짝 빠르게 */
   }
   @keyframes ticker{
     0%{transform:translateX(0)}
@@ -122,7 +133,7 @@
     letter-spacing:.2px;
   }
   .tick i{color:var(--mint)}
-  .sep{opacity:.35;}
+  .sep{opacity:.35; margin:0 2px;}  /* ✅ 점 구분자 좌우 여백 줄임 */
   .tick .val{font-weight:990;color:rgba(255,255,255,.92)}
 
   /* 섹션 타이틀 */
@@ -204,7 +215,7 @@
     font-size:12px;
   }
 
-  /* ✅ 통화 선택: 아이콘 옆 텍스트 + 아래 '주문하기' (REAL-TIME 배지와 높이/볼륨 동일) */
+  /* ✅ 통화 선택 */
   .choose{ margin-top:12px; }
   .choose-h{
     display:flex;align-items:center;justify-content:flex-start;
@@ -240,14 +251,15 @@
     flex-direction:column;
     justify-content:space-between;
     gap:10px;
+    align-items:center; /* ✅ 중앙정렬 유지 */
+    text-align:center;
   }
   .pick:active{transform:scale(.992)}
 
-  /* ✅✅✅ 여기만 수정: 버튼 내용 중앙정렬 */
   .pick .topline{
     display:flex;
     align-items:center;
-    justify-content:center;   /* 추가 */
+    justify-content:center;
     gap:10px;
   }
   .pick .topline i{
@@ -262,14 +274,13 @@
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
-    text-align:center;        /* 추가 */
+    text-align:center;
   }
 
   .pick .ctaRow{
     display:flex;
     justify-content:center;
   }
-  /* ✅ 배지와 동일 스케일 */
   .pick .cta{
     font-size:11px;font-weight:950;
     padding:7px 10px;border-radius:999px;
@@ -280,8 +291,6 @@
     transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
     box-shadow:0 10px 22px rgba(0,0,0,.18);
   }
-  .pick:hover .cta{transform:translateY(-1px)}
-  .pick:active .cta{transform:translateY(0)}
 
   .pick.krw{
     background:
@@ -295,16 +304,7 @@
       linear-gradient(135deg, rgba(139,92,246,.20), rgba(15,23,42,.62));
     border-color:rgba(199,179,255,.26);
   }
-  .pick.krw .cta{
-    border-color:rgba(110,231,216,.20);
-    box-shadow:0 0 14px rgba(110,231,216,.18), 0 12px 26px rgba(0,0,0,.18);
-  }
-  .pick.php .cta{
-    border-color:rgba(199,179,255,.18);
-    box-shadow:0 0 14px rgba(139,92,246,.16), 0 12px 26px rgba(0,0,0,.18);
-  }
 
-  /* ✅ 맨 아래 안내 */
   .note{
     margin-top:12px;
     font-size:10px;
@@ -325,14 +325,12 @@
 <body>
 <div class="app">
 
-  <!-- ✅ 투명 헤더 (logo.png) -->
   <div class="top">
     <div class="brand">
       <img class="logo" src="logo.png" alt="ZENBIT logo">
     </div>
   </div>
 
-  <!-- ✅ 와이드 배너 -->
   <div class="banner" aria-label="wide banner">
     <div class="banner-inner">
       <div class="banner-h"><i class="ri-exchange-2-line"></i> 실시간 테더(USDT) 환전</div>
@@ -343,18 +341,38 @@
     </div>
   </div>
 
-  <!-- ✅ 티커: 코스피 제거 + 문구 변경 -->
+  <!-- ✅ 티커: 간격 줄임 + 아이콘 변경(원화/달러/페소) -->
   <div class="ticker" aria-label="flowing ticker">
     <div class="ticker-track" id="tickerTrack">
-      <div class="tick"><i class="ri-exchange-dollar-line"></i> 원화&gt;달러환율 <span class="val" id="tickKrwUsd">—</span></div><div class="sep">•</div>
-      <div class="tick"><i class="ri-exchange-2-line"></i> 원화&gt;페소 환율 <span class="val" id="tickKrwPhp">—</span></div><div class="sep">•</div>
+      <!-- KRW -> USD -->
+      <div class="tick">
+        <i class="ri-coin-line"></i> 원화&gt;달러환율
+        <span class="val" id="tickKrwUsd">—</span>
+        <i class="ri-money-dollar-circle-line"></i>
+      </div><div class="sep">•</div>
 
-      <div class="tick"><i class="ri-exchange-dollar-line"></i> 원화&gt;달러환율 <span class="val" id="tickKrwUsd2">—</span></div><div class="sep">•</div>
-      <div class="tick"><i class="ri-exchange-2-line"></i> 원화&gt;페소 환율 <span class="val" id="tickKrwPhp2">—</span></div><div class="sep">•</div>
+      <!-- KRW -> PHP -->
+      <div class="tick">
+        <i class="ri-coin-line"></i> 원화&gt;페소 환율
+        <span class="val" id="tickKrwPhp">—</span>
+        <i class="ri-coins-line"></i>
+      </div><div class="sep">•</div>
+
+      <!-- repeat -->
+      <div class="tick">
+        <i class="ri-coin-line"></i> 원화&gt;달러환율
+        <span class="val" id="tickKrwUsd2">—</span>
+        <i class="ri-money-dollar-circle-line"></i>
+      </div><div class="sep">•</div>
+
+      <div class="tick">
+        <i class="ri-coin-line"></i> 원화&gt;페소 환율
+        <span class="val" id="tickKrwPhp2">—</span>
+        <i class="ri-coins-line"></i>
+      </div><div class="sep">•</div>
     </div>
   </div>
 
-  <!-- 시세 -->
   <div class="section-h">
     <div class="t"><i class="ri-line-chart-line"></i> 테더 실시간 시세</div>
   </div>
@@ -385,7 +403,6 @@
     </div>
   </div>
 
-  <!-- ✅ 통화 선택 -->
   <div class="choose">
     <div class="choose-h">
       <div class="t"><i class="ri-cursor-line"></i> 통화 선택</div>
@@ -420,7 +437,6 @@
 
 <script>
   function go(type){
-    // location.href = type === "KRW" ? "order_krw.html" : "order_php.html";
     alert(type === "KRW" ? "테더/원화 주문 화면(추가 예정)" : "테더/페소 주문 화면(추가 예정)");
   }
 
@@ -452,7 +468,6 @@
     requestAnimationFrame(tick);
   }
 
-  /* ---------- USDT Prices (CoinGecko) ---------- */
   let lastUSD=null, lastPHP=null;
   function fmtUSD(v){ return v.toFixed(4) + " USD"; }
   function fmtPHP(v){ return "₱ " + v.toFixed(2); }
@@ -492,7 +507,6 @@
     if(b) b.textContent = text;
   }
 
-  /* ---------- FX ticker (5초 갱신) ---------- */
   async function fetchFX(){
     try{
       const r = await fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/krw.json", {cache:"no-store"});
@@ -500,15 +514,14 @@
       const krw_to_usd = Number(d?.krw?.usd);
       const krw_to_php = Number(d?.krw?.php);
 
-      const usdkrw = krw_to_usd ? (1 / krw_to_usd) : NaN;     // ₩ per $
-      const krwperphp = krw_to_php ? (1 / krw_to_php) : NaN;  // ₩ per ₱
+      const usdkrw = krw_to_usd ? (1 / krw_to_usd) : NaN;
+      const krwperphp = krw_to_php ? (1 / krw_to_php) : NaN;
 
       if(Number.isFinite(usdkrw)) setTickerText("tickKrwUsd","tickKrwUsd2", usdkrw.toFixed(2));
       if(Number.isFinite(krwperphp)) setTickerText("tickKrwPhp","tickKrwPhp2", krwperphp.toFixed(2));
     }catch(e){}
   }
 
-  /* ---------- Entry animation ---------- */
   function showCards(){
     const c1 = document.getElementById("cardUsd");
     const c2 = document.getElementById("cardPhp");
