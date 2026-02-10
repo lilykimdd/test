@@ -19,9 +19,14 @@
     --muted:rgba(255,255,255,.72);
     --muted2:rgba(255,255,255,.55);
   }
-  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  *{
+    box-sizing:border-box;margin:0;padding:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    -webkit-tap-highlight-color: transparent; /* ✅ 번쩍거림(탭 하이라이트) 제거 */
+  }
   body{background:var(--navy);display:flex;justify-content:center;color:var(--text);}
 
+  /* ✅ 페이지 트랜지션 (과하지 않게) */
   .app{
     width:100%;
     max-width:430px;
@@ -31,7 +36,13 @@
       radial-gradient(900px 420px at 82% 10%, rgba(139,92,246,.10) 0%, rgba(139,92,246,0) 55%),
       linear-gradient(180deg,var(--navy) 0%, var(--navy2) 100%);
     padding:12px 14px 28px;
+
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity .28s ease, transform .28s ease;
   }
+  .app.ready{opacity:1; transform:translateY(0);}
+  .app.leaving{opacity:0; transform:translateY(8px);}
 
   /* top */
   .top{
@@ -48,6 +59,7 @@
     border:1px solid rgba(255,255,255,.10);
     background:rgba(255,255,255,.04);
     cursor:pointer;
+    touch-action:manipulation;
   }
   .back i{font-size:18px;color:rgba(255,255,255,.92)}
 
@@ -55,6 +67,7 @@
     height:46px;width:auto;display:block;
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));
     cursor:pointer;
+    touch-action:manipulation;
   }
 
   .pill{
@@ -67,6 +80,7 @@
     color:rgba(255,255,255,.85);
     cursor:pointer;
     user-select:none;
+    touch-action:manipulation;
   }
   .fxwon{
     color:var(--mint);
@@ -161,7 +175,11 @@
     display:flex;align-items:center;justify-content:center;gap:10px;
     cursor:pointer;
     user-select:none;
+    touch-action:manipulation;
+    outline:none;
+    transition:transform .12s ease;
   }
+  .side-btn:active{transform:scale(.992)} /* ✅ 번쩍 대신 눌림만 */
   .side-btn i{font-size:18px}
   .side-btn.active.buy{
     background:
@@ -282,6 +300,7 @@
       radial-gradient(900px 240px at 82% 30%, rgba(139,92,246,.20) 0%, rgba(139,92,246,0) 62%),
       linear-gradient(135deg, rgba(110,231,216,.16), rgba(139,92,246,.16));
     border:1px solid rgba(255,255,255,.10);
+    touch-action:manipulation;
   }
   .send:active{transform:scale(.992)}
   .send i{font-size:18px}
@@ -294,31 +313,34 @@
     padding:0 2px;
   }
 
+  /* ✅ 토스트 위치: 중간쯤 */
   .toast{
-    position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+    position:fixed; left:50%; top:48%;
+    transform:translate(-50%,-50%);
     padding:10px 12px; border-radius:999px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.10);
-    color:rgba(255,255,255,.9);
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.12);
+    color:rgba(255,255,255,.92);
     font-size:12px; font-weight:950;
     box-shadow:0 14px 40px rgba(0,0,0,.35);
     opacity:0; pointer-events:none;
     transition:opacity .2s ease, transform .2s ease;
   }
-  .toast.show{opacity:1; transform:translateX(-50%) translateY(-4px)}
+  .toast.show{opacity:1; transform:translate(-50%,-54%)}
 </style>
 </head>
 
 <body>
-<div class="app">
+<div class="app" id="appRoot">
 
   <div class="top">
     <div class="left">
-      <div class="back" onclick="history.back()" aria-label="back"><i class="ri-arrow-left-line"></i></div>
+      <div class="back" id="btnBack" aria-label="back"><i class="ri-arrow-left-line"></i></div>
       <img class="logo" id="logoHome" src="logo.png" alt="ZENBIT">
     </div>
+    <!-- ✅ 뒤에 (\) 삭제 / 앞 민트만 -->
     <div class="pill" id="pillSwitch">
-      <span class="fxwon">₩</span> 테더/원화(₩)
+      <span class="fxwon">₩</span> 테더/원화
     </div>
   </div>
 
@@ -399,13 +421,17 @@
   const HOME_URL = "index.html";
   const PHP_ORDER_URL = "order_php.html";
 
-  // ✅ 홈에서 넘어온 값만 씀 (여기서 fetch/갱신 없음)
+  // 홈에서 넘어온 값만 사용
   const KEY_KRW = "ZENBIT_KRW_MARKET";
   const KEY_STAMP = "ZENBIT_KRW_STAMP";
 
   let lastMarket = null;
   let fixedStampText = null;
   let selectedSide = "BUY";
+
+  // ✅ 애니메이션을 위한 이전 값
+  let prevMarket = null;
+  let prevFill = null;
 
   function toast(msg){
     const t=document.getElementById("toast");
@@ -435,6 +461,32 @@
     return Number(market) * (1 + FEE_RATE);
   }
 
+  /* ✅ 시세 숫자 차라락 애니메이션 */
+  function easeOutQuart(t){ return 1 - Math.pow(1 - t, 4); }
+  function animateNumber(el, from, to, duration, formatter){
+    const start = performance.now();
+    const diff = to - from;
+
+    el.style.transition = "filter .25s ease, text-shadow .25s ease";
+    el.style.filter = "brightness(1.06)";
+    el.style.textShadow = "0 12px 30px rgba(110,231,216,.10)";
+
+    function tick(now){
+      const t = Math.min(1, (now - start) / duration);
+      const eased = easeOutQuart(t);
+      const value = from + diff * eased;
+      el.textContent = formatter(value);
+      if(t < 1) requestAnimationFrame(tick);
+      else{
+        setTimeout(()=>{
+          el.style.filter = "brightness(1)";
+          el.style.textShadow = "none";
+        }, 180);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
   function renderMarket(){
     const mp = document.getElementById("marketPrice");
     const fp = document.getElementById("fillPrice");
@@ -447,8 +499,24 @@
       return;
     }
 
-    mp.textContent = fmtKRW(lastMarket);
-    fp.textContent = fmtKRW(calcFillPrice(lastMarket));
+    const fill = calcFillPrice(lastMarket);
+
+    // ✅ 첫 로딩: 98.5%에서 시작 / 그 외: prev에서 to로
+    if(prevMarket === null){
+      animateNumber(mp, lastMarket * 0.985, lastMarket, 1400, (v)=>fmtKRW(v));
+    }else{
+      animateNumber(mp, prevMarket, lastMarket, 900, (v)=>fmtKRW(v));
+    }
+
+    if(prevFill === null){
+      animateNumber(fp, fill * 0.985, fill, 1400, (v)=>fmtKRW(v));
+    }else{
+      animateNumber(fp, prevFill, fill, 900, (v)=>fmtKRW(v));
+    }
+
+    prevMarket = lastMarket;
+    prevFill = fill;
+
     stampTop.textContent = fixedStampText ? ("기준: " + fixedStampText) : "기준: —";
   }
 
@@ -548,11 +616,9 @@ USDT 시세: ${fmtKRW(market)}
   }
 
   function loadFixedFromHome(){
-    // 1) sessionStorage (권장)
     const m1 = sessionStorage.getItem(KEY_KRW);
     const s1 = sessionStorage.getItem(KEY_STAMP);
 
-    // 2) query param fallback ?m=...&stamp=...
     const url = new URL(location.href);
     const m2 = url.searchParams.get("m");
     const s2 = url.searchParams.get("stamp");
@@ -565,6 +631,18 @@ USDT 시세: ${fmtKRW(market)}
 
     renderMarket();
     renderCalc();
+  }
+
+  /* ✅ 페이지 이동 트랜지션 */
+  function navigateTo(url){
+    const app = document.getElementById("appRoot");
+    app.classList.add("leaving");
+    setTimeout(()=>{ location.href = url; }, 220);
+  }
+  function goBack(){
+    const app = document.getElementById("appRoot");
+    app.classList.add("leaving");
+    setTimeout(()=>{ history.back(); }, 220);
   }
 
   // events
@@ -585,11 +663,14 @@ USDT 시세: ${fmtKRW(market)}
 
   document.getElementById("btnSend").addEventListener("click", submitSelectedOrder);
 
-  document.getElementById("logoHome").addEventListener("click", ()=>{ location.href = HOME_URL; });
-  document.getElementById("pillSwitch").addEventListener("click", ()=>{ location.href = PHP_ORDER_URL; });
+  document.getElementById("logoHome").addEventListener("click", ()=>navigateTo(HOME_URL));
+  document.getElementById("pillSwitch").addEventListener("click", ()=>navigateTo(PHP_ORDER_URL));
+  document.getElementById("btnBack").addEventListener("click", goBack);
 
+  // init
   updateSideUI();
-  loadFixedFromHome(); // ✅ 여기서 끝. 더 갱신 없음.
+  loadFixedFromHome();
+  requestAnimationFrame(()=> document.getElementById("appRoot").classList.add("ready"));
 </script>
 </body>
 </html>
