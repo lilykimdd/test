@@ -345,15 +345,15 @@
   <!-- ✅ 티커: 아이콘 다 빼고(요청대로) 반복 세트 여러 번 -->
   <div class="ticker" aria-label="flowing ticker">
     <div class="ticker-track" id="tickerTrack">
-      <div class="tick">원화&gt;달러환율 <span class="val" id="tickKrwUsd">—</span></div><div class="sep">•</div>
+      <div class="tick">원화&gt;달러 환율 <span class="val" id="tickKrwUsd">—</span></div><div class="sep">•</div>
       <div class="tick">원화&gt;페소 환율 <span class="val" id="tickKrwPhp">—</span></div><div class="sep">•</div>
-      <div class="tick">원화&gt;달러환율 <span class="val" id="tickKrwUsd2">—</span></div><div class="sep">•</div>
+      <div class="tick">원화&gt;달러 환율 <span class="val" id="tickKrwUsd2">—</span></div><div class="sep">•</div>
       <div class="tick">원화&gt;페소 환율 <span class="val" id="tickKrwPhp2">—</span></div><div class="sep">•</div>
 
       <!-- ✅ 추가 반복 (끊김 방지) -->
-      <div class="tick">원화&gt;달러환율 <span class="val" id="tickKrwUsd3">—</span></div><div class="sep">•</div>
+      <div class="tick">원화&gt;달러 환율 <span class="val" id="tickKrwUsd3">—</span></div><div class="sep">•</div>
       <div class="tick">원화&gt;페소 환율 <span class="val" id="tickKrwPhp3">—</span></div><div class="sep">•</div>
-      <div class="tick">원화&gt;달러환율 <span class="val" id="tickKrwUsd4">—</span></div><div class="sep">•</div>
+      <div class="tick">원화&gt;달러 환율 <span class="val" id="tickKrwUsd4">—</span></div><div class="sep">•</div>
       <div class="tick">원화&gt;페소 환율 <span class="val" id="tickKrwPhp4">—</span></div><div class="sep">•</div>
     </div>
   </div>
@@ -370,8 +370,8 @@
       </div>
       <div class="price" id="usd">—</div>
       <div class="subline">
-        <span>기준: Market price</span>
-        <span id="t1">—</span>
+        <span>출처: CoinGecko</span>
+        <span id="t2">기준: --:--:--</span>
       </div>
     </div>
 
@@ -382,8 +382,8 @@
       </div>
       <div class="price" id="php">—</div>
       <div class="subline">
-        <span>기준: Market price</span>
-        <span id="t2">—</span>
+        <span>출처: CoinGecko</span>
+        <span id="t1">기준: --:--:--</span>
       </div>
     </div>
   </div>
@@ -478,9 +478,9 @@
 
       lastUSD=usd; lastPHP=php;
 
-      const stamp = new Date().toLocaleTimeString();
-      document.getElementById("t1").textContent = stamp;
-      document.getElementById("t2").textContent = stamp;
+      const stamp = new Date().toLocaleTimeString('ko-KR', { hour12:false });
+      document.getElementById("t1").textContent = "기준: " + stamp;
+      document.getElementById("t2").textContent = "기준: " + stamp;
     }catch(e){
       document.getElementById("t1").textContent = "Update failed";
       document.getElementById("t2").textContent = "Update failed";
@@ -526,3 +526,4 @@
 </script>
 </body>
 </html>
+
