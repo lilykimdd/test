@@ -17,138 +17,127 @@
     background: linear-gradient(180deg,var(--navy) 0%, var(--navy2) 100%);
     padding:12px 14px 28px;
   }
-  .top{ display:flex;align-items:center;justify-content:space-between; padding:12px 2px 20px; }
-  .back-btn{ color:var(--text); text-decoration:none; font-size:24px; }
   
-  .section-h{ margin-top:10px; display:flex;align-items:center;justify-content:space-between; padding:0 2px; margin-bottom:15px; }
-  .section-h .t{ display:flex;align-items:center;gap:8px; font-weight:990;font-size:18px; }
-  .section-h .t i{color:var(--mint);}
-  .order-id-badge{ font-size:11px; background:rgba(110,231,216,0.15); color:var(--mint); padding:4px 10px; border-radius:6px; border:1px solid rgba(110,231,216,0.3); font-family:monospace; }
+  /* 애니메이션 설정 */
+  .fade-item { opacity:0; transform:translateY(10px); transition:all .5s ease; }
+  .fade-item.show { opacity:1; transform:translateY(0); }
 
-  /* 입력 폼 스타일 */
-  .form-group{ background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px; margin-bottom:12px; }
-  .form-label{ font-size:12px; color:var(--muted); margin-bottom:8px; display:block; }
-  .form-input{ background:transparent; border:none; width:100%; color:var(--text); font-size:20px; font-weight:700; outline:none; }
-  .form-input::placeholder{ color:rgba(255,255,255,0.2); }
+  .top{ display:flex;align-items:center;justify-content:center; padding:12px 2px 20px; position:relative; }
+  .back-btn{ position:absolute; left:0; color:var(--text); text-decoration:none; font-size:24px; }
+  .logo-text{ font-weight:900; letter-spacing:1px; font-size:18px; }
 
-  /* 주문 내역 미리보기 */
-  .summary-card{ background:rgba(255,255,255,0.03); border-radius:18px; padding:20px; border:1px dashed var(--line); margin-top:20px; }
-  .summary-row{ display:flex; justify-content:space-between; margin-bottom:10px; font-size:14px; }
-  .summary-row.total{ margin-top:15px; padding-top:15px; border-top:1px solid var(--line); font-weight:900; color:var(--mint); font-size:17px; }
+  .section-h{ margin-top:14px; display:flex;align-items:center;justify-content:space-between; padding:0 2px; }
+  .section-h .t{ display:flex;align-items:center;gap:8px; font-weight:990;font-size:16px; }
+  .section-h .t i{color:var(--mint);font-size:18px}
+  .order-id{ font-size:11px; font-weight:950; padding:5px 10px; border-radius:999px; background:rgba(110,231,216,.10); border:1px solid rgba(110,231,216,.20); color:var(--mint); }
 
-  .submit-btn{
-    width:100%; background:var(--mint); color:var(--navy); border:none; border-radius:15px; padding:18px;
-    font-size:16px; font-weight:990; margin-top:24px; cursor:pointer; transition: 0.2s;
-  }
-  .submit-btn:active{ transform: scale(0.98); opacity: 0.8; }
+  .form-card{ background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:20px; margin-top:12px; box-shadow:0 10px 26px rgba(0,0,0,.26); }
+  .input-label{ font-size:12px; color:var(--muted2); margin-bottom:8px; display:block; font-weight:700; }
+  .input-field{ background:transparent; border:none; width:100%; color:var(--text); font-size:24px; font-weight:860; outline:none; margin-bottom:15px; border-bottom:1px solid var(--line); padding-bottom:10px; }
+  .input-field::placeholder{ color:rgba(255,255,255,.15); }
+
+  .summary{ margin-top:15px; padding:15px; background:rgba(255,255,255,.03); border-radius:15px; }
+  .s-row{ display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px; color:var(--muted); }
+  .s-row b{ color:var(--text); }
+  .s-row.total{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); font-size:15px; }
+  .s-row.total b{ color:var(--mint); font-size:18px; }
+
+  .btn-submit{ width:100%; background:var(--mint); color:var(--navy); border:none; border-radius:15px; padding:18px; font-size:16px; font-weight:990; margin-top:20px; cursor:pointer; }
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="top">
+  <div class="top fade-item">
     <a href="index.html" class="back-btn"><i class="ri-arrow-left-s-line"></i></a>
-    <div class="brand" style="font-weight:900; letter-spacing:1px;">ZENBIT</div>
-    <div style="width:24px;"></div>
+    <span class="logo-text">ZENBIT</span>
   </div>
 
-  <div class="section-h">
+  <div class="section-h fade-item">
     <div class="t"><i class="ri-edit-box-line"></i> 주문신청 (원화)</div>
-    <div class="order-id-badge" id="displayOrderID">ID 생성 중...</div>
+    <div class="order-id" id="dispID">ID 생성중</div>
   </div>
 
-  <div class="form-group">
-    <span class="form-label">주문 수량 (USDT)</span>
-    <input type="number" id="inputQty" class="form-input" placeholder="0.00" oninput="calculate()">
-  </div>
+  <div class="form-card fade-item">
+    <span class="input-label">주문 수량 (USDT)</span>
+    <input type="number" id="qty" class="input-field" placeholder="0" oninput="calc()">
+    
+    <span class="input-label">적용 환율 (1 USDT 당)</span>
+    <input type="number" id="rate" class="input-field" value="1350" oninput="calc()">
 
-  <div class="form-group">
-    <span class="form-label">적용 환율 (KRW)</span>
-    <input type="number" id="inputPrice" class="form-input" value="1350" oninput="calculate()">
+    <div class="summary">
+      <div class="s-row"><span>구분</span><b>매수</b></div>
+      <div class="s-row"><span>주문금액</span><b id="amt">₩ 0</b></div>
+      <div class="s-row"><span>수수료 (2%)</span><b id="fee">₩ 0</b></div>
+      <div class="s-row total"><span>최종 합계</span><b id="total">₩ 0</b></div>
+    </div>
+    
+    <button class="btn-submit" onclick="send()">주문 전송하기</button>
   </div>
-
-  <div class="summary-card">
-    <div class="summary-row"><span>구분</span><span style="color:#ff5a5a; font-weight:900;">매수</span></div>
-    <div class="summary-row"><span>주문금액</span><span id="resAmount">₩0</span></div>
-    <div class="summary-row"><span>수수료 (2%)</span><span id="resFee">₩0</span></div>
-    <div class="summary-row total"><span>최종 합계</span><span id="resTotal">₩0</span></div>
-  </div>
-
-  <button class="submit-btn" onclick="sendToTelegram()">주문 전송하기</button>
 </div>
 
 <script>
-  let currentOrderID = "";
+  let orderID = "";
 
-  // 1. 거래 ID 생성 (월일시분 + 랜덤4자리)
-  function generateOrderID() {
-    const now = new Date();
-    const M = String(now.getMonth() + 1).padStart(2, '0');
-    const D = String(now.getDate()).padStart(2, '0');
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const rand = Math.floor(1000 + Math.random() * 9000);
-    return `${M}${D}${h}${m}${rand}`;
+  function getID() {
+    const n = new Date();
+    const M = String(n.getMonth()+1).padStart(2,'0');
+    const D = String(n.getDate()).padStart(2,'0');
+    const h = String(n.getHours()).padStart(2,'0');
+    const m = String(n.getMinutes()).padStart(2,'0');
+    const r = Math.floor(1000 + Math.random() * 9000);
+    return `${M}${D}${h}${m}${r}`;
   }
 
-  // 2. 금액 계산 로직
-  function calculate() {
-    const qty = parseFloat(document.getElementById('inputQty').value) || 0;
-    const price = parseFloat(document.getElementById('inputPrice').value) || 0;
-    
-    const amount = qty * price;
-    const fee = amount * 0.02;
-    const total = amount + fee;
-
-    document.getElementById('resAmount').textContent = '₩' + amount.toLocaleString();
-    document.getElementById('resFee').textContent = '₩' + fee.toLocaleString();
-    document.getElementById('resTotal').textContent = '₩' + total.toLocaleString();
-    
-    return { qty, price, amount, fee, total };
+  function calc() {
+    const q = parseFloat(document.getElementById('qty').value) || 0;
+    const r = parseFloat(document.getElementById('rate').value) || 0;
+    const a = q * r;
+    const f = a * 0.02;
+    const t = a + f;
+    document.getElementById('amt').innerText = "₩ " + a.toLocaleString();
+    document.getElementById('fee').innerText = "₩ " + f.toLocaleString();
+    document.getElementById('total').innerText = "₩ " + t.toLocaleString();
+    return {q, r, a, f, t};
   }
 
-  // 3. 텔레그램 전송
-  async function sendToTelegram() {
-    const data = calculate();
-    if(data.qty <= 0) return alert("수량을 입력해주세요.");
-
-    const nowTime = new Date().toLocaleString('ko-KR', { hour12: false });
+  async function send() {
+    const d = calc();
+    if(d.q <= 0) return alert("수량을 입력해");
     
-    const message = `
+    const n = new Date();
+    const timeStr = `${n.getMonth()+1}/${n.getDate()} ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+
+    const msg = `
 📌 ZENBIT 주문 신청 (원화)
 ────────────────
-거래 ID: ${currentOrderID}
+거래 ID: ${orderID}
 구분: 매수
-주문수량: ${data.qty.toLocaleString()} USDT
-주문가격: ₩${data.price.toLocaleString()}
-주문금액: ₩${data.amount.toLocaleString()}
-수수료(2%): ₩${data.fee.toLocaleString()}
-최종 합계: ₩${data.total.toLocaleString()}
-시간: ${nowTime}
+주문수량: ${d.q.toLocaleString()} USDT
+주문가격: ₩ ${d.r.toLocaleString()}
+주문금액: ₩ ${d.a.toLocaleString()}
+수수료(2%): ₩ ${d.f.toLocaleString()}
+최종 합계: ₩ ${d.total.toLocaleString()}
+시간: ${timeStr}
 ────────────────`.trim();
 
-    // ⚠️ 여기에 본인의 봇 토큰과 채팅 ID를 넣으세요
     const token = "YOUR_BOT_TOKEN"; 
-    const chatId = "YOUR_CHAT_ID";
-    const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+    const chat = "YOUR_CHAT_ID";
+    const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat}&text=${encodeURIComponent(msg)}`;
 
     try {
-      const res = await fetch(url);
-      if(res.ok) {
-        alert(`주문이 완료되었습니다!\n거래 ID: ${currentOrderID}`);
-        location.href = "index.html"; // 완료 후 메인으로
-      } else {
-        alert("전송 실패. 설정을 확인하세요.");
-      }
-    } catch(e) {
-      alert("네트워크 오류가 발생했습니다.");
-    }
+      await fetch(url);
+      alert("주문완료! ID: " + orderID);
+      location.href="index.html";
+    } catch(e) { alert("오류발생"); }
   }
 
-  // 초기화
   window.onload = () => {
-    currentOrderID = generateOrderID();
-    document.getElementById('displayOrderID').textContent = "ID: " + currentOrderID;
-  };
+    orderID = getID();
+    document.getElementById('dispID').innerText = "ID: " + orderID;
+    document.querySelectorAll('.fade-item').forEach((el, i) => {
+      setTimeout(() => el.classList.add('show'), i * 150);
+    });
+  }
 </script>
 </body>
 </html>
