@@ -52,7 +52,7 @@
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));
   }
 
-  /* ✅ 와이드 배너 (동그라미/경계선 느낌 제거 → 자연스러운 그라데이션) */
+  /* ✅ 배너 (자연스러운 그라데이션) */
   .banner{
     margin-top:6px;
     border-radius:22px;
@@ -65,8 +65,7 @@
       radial-gradient(1200px 420px at 86% 18%, rgba(139,92,246,.14) 0%, rgba(139,92,246,0) 58%),
       linear-gradient(135deg, rgba(24,38,70,.92), rgba(36,28,74,.92));
   }
-  .banner::after{ content:none; } /* ✅ 기존 밝은 동그라미 완전 제거 */
-
+  .banner::after{ content:none; }
   .banner-inner{position:relative;padding:18px 14px 16px;}
   .banner-h{
     display:flex;align-items:center;gap:8px;
@@ -174,7 +173,6 @@
     color:var(--mint);
     display:flex;align-items:center;gap:8px;
   }
-  /* ✅ REAL-TIME 반짝임 존재감 */
   .spark{
     width:10px;height:10px;border-radius:50%;
     background:var(--mint);
@@ -188,10 +186,9 @@
     0%,100%{opacity:.28;transform:scale(.86)}
     50%{opacity:1;transform:scale(1.22)}
   }
-
   .price{
     font-size:32px;
-    font-weight:860; /* ✅ 너무 굵지 않게 */
+    font-weight:860;
     letter-spacing:.2px;
     line-height:1.12;
     text-shadow:0 10px 26px rgba(0,0,0,.35);
@@ -203,7 +200,7 @@
     font-size:12px;
   }
 
-  /* ✅ 통화 선택 (버튼 2개: 거의 정사각형 / CTA를 아래로) */
+  /* ✅ 통화 선택 (중앙정렬 + 정사각형 느낌 + "주문하기") */
   .choose{ margin-top:12px; }
   .choose-h{
     display:flex;align-items:center;justify-content:flex-start;
@@ -224,7 +221,7 @@
 
   .pick{
     border-radius:22px;
-    padding:16px 14px;
+    padding:18px 14px 16px;
     border:1px solid rgba(255,255,255,.14);
     background:rgba(255,255,255,.06);
     color:#fff;
@@ -235,36 +232,39 @@
     overflow:hidden;
     box-shadow:0 12px 30px rgba(0,0,0,.28);
     transition:transform .12s ease, border-color .12s ease, filter .12s ease;
-    min-height:112px; /* ✅ 세로 길이 늘림 (거의 정사각형 느낌) */
+    min-height:132px;                 /* ✅ 더 정사각형 느낌 */
     display:flex;
     flex-direction:column;
-    justify-content:space-between; /* ✅ CTA가 아래로 내려감 */
+    align-items:center;               /* ✅ 전체 중앙 */
+    justify-content:center;           /* ✅ 전체 중앙 */
+    gap:14px;                         /* ✅ 위/아래 간격 */
+    text-align:center;
   }
   .pick:active{transform:scale(.992)}
 
   .pick .topline{
-    display:flex;align-items:center;gap:10px;
-    min-width:0;
+    display:flex;
+    flex-direction:column;            /* ✅ 아이콘 위, 텍스트 아래 */
+    align-items:center;
+    gap:10px;
   }
-  .pick .topline i{font-size:22px;color:#fff}
+  .pick .topline i{
+    font-size:26px;
+    color:#fff;
+    filter:drop-shadow(0 10px 18px rgba(0,0,0,.22));
+  }
   .pick .topline .label{
-    white-space:nowrap; /* ✅ 줄바꿈 방지 */
-    overflow:hidden;
-    text-overflow:ellipsis;
     font-size:14px;
-    letter-spacing:.1px;
+    letter-spacing:.15px;
+    white-space:nowrap;               /* ✅ 줄바꿈 금지 */
   }
 
-  .pick .ctaRow{
-    display:flex;
-    justify-content:flex-end; /* ✅ 아래 우측 */
-  }
   .pick .cta{
     font-size:12px;font-weight:990;
-    padding:10px 12px;border-radius:999px;
+    padding:11px 14px;border-radius:999px;
     background:rgba(255,255,255,.12);
     border:1px solid rgba(255,255,255,.16);
-    display:inline-flex;align-items:center;gap:6px;
+    display:inline-flex;align-items:center;gap:8px;
     letter-spacing:.2px;
     transition:transform .12s ease;
   }
@@ -273,27 +273,27 @@
 
   .pick.krw{
     background:
-      radial-gradient(700px 220px at 22% 28%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%),
+      radial-gradient(700px 260px at 50% 25%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%),
       linear-gradient(135deg, rgba(34,197,184,.24), rgba(15,23,42,.62));
     border-color:rgba(110,231,216,.28);
   }
   .pick.php{
     background:
-      radial-gradient(700px 220px at 78% 22%, rgba(139,92,246,.24) 0%, rgba(139,92,246,0) 62%),
+      radial-gradient(700px 260px at 50% 25%, rgba(139,92,246,.24) 0%, rgba(139,92,246,0) 62%),
       linear-gradient(135deg, rgba(139,92,246,.22), rgba(15,23,42,.62));
     border-color:rgba(199,179,255,.26);
   }
 
   .pick.krw .cta{
     border-color:rgba(110,231,216,.28);
-    box-shadow:0 0 16px rgba(110,231,216,.22), 0 14px 34px rgba(0,0,0,.22);
+    box-shadow:0 0 18px rgba(110,231,216,.22), 0 14px 34px rgba(0,0,0,.22);
   }
   .pick.php .cta{
     border-color:rgba(199,179,255,.26);
-    box-shadow:0 0 16px rgba(139,92,246,.20), 0 14px 34px rgba(0,0,0,.22);
+    box-shadow:0 0 18px rgba(139,92,246,.20), 0 14px 34px rgba(0,0,0,.22);
   }
 
-  /* ✅ 맨 아래 안내: 박스 제거 + 아주 작은 글씨 + 우측정렬 */
+  /* ✅ 맨 아래 안내 */
   .note{
     margin-top:12px;
     font-size:10px;
@@ -306,6 +306,7 @@
     .ticker-track{animation:none}
     .spark{animation:none}
     .quote{transition:none; opacity:1; transform:none; filter:none}
+    .pick,.pick .cta{transition:none}
   }
 </style>
 </head>
@@ -322,9 +323,7 @@
 
   <!-- ✅ 와이드 배너 -->
   <div class="banner" aria-label="wide banner">
-    <!-- <img class="banner-img" src="YOUR_BANNER.jpg" alt="banner"> -->
     <div class="banner-mask"></div>
-
     <div class="banner-inner">
       <div class="banner-h"><i class="ri-exchange-2-line"></i> 실시간 테더(USDT) 환전</div>
       <div class="banner-p">
@@ -334,15 +333,13 @@
     </div>
   </div>
 
-  <!-- ✅ 티커: 3개만 + 상승/하강 표시 제거 -->
+  <!-- ✅ 티커: 3개만 -->
   <div class="ticker" aria-label="flowing ticker">
     <div class="ticker-track" id="tickerTrack">
-      <!-- 1회차 -->
       <div class="tick"><i class="ri-exchange-dollar-line"></i> 원화 달러환율 <span class="val" id="tickKrwUsd">—</span></div><div class="sep">•</div>
       <div class="tick"><i class="ri-exchange-2-line"></i> 원화 페소환율 <span class="val" id="tickKrwPhp">—</span></div><div class="sep">•</div>
       <div class="tick"><i class="ri-line-chart-line"></i> 코스피지수 <span class="val" id="tickKospi">—</span></div><div class="sep">•</div>
 
-      <!-- 2회차(끊김 없이 동일 반복) -->
       <div class="tick"><i class="ri-exchange-dollar-line"></i> 원화 달러환율 <span class="val" id="tickKrwUsd2">—</span></div><div class="sep">•</div>
       <div class="tick"><i class="ri-exchange-2-line"></i> 원화 페소환율 <span class="val" id="tickKrwPhp2">—</span></div><div class="sep">•</div>
       <div class="tick"><i class="ri-line-chart-line"></i> 코스피지수 <span class="val" id="tickKospi2">—</span></div><div class="sep">•</div>
@@ -380,7 +377,7 @@
     </div>
   </div>
 
-  <!-- ✅ 통화 선택: 버튼 2개 (거의 정사각형 + CTA 아래) -->
+  <!-- ✅ 통화 선택: 중앙정렬 카드 버튼 2개 + "주문하기" -->
   <div class="choose">
     <div class="choose-h">
       <div class="t"><i class="ri-cursor-line"></i> 통화 선택</div>
@@ -392,9 +389,7 @@
           <i class="ri-coin-line"></i>
           <div class="label">테더 / 원화</div>
         </div>
-        <div class="ctaRow">
-          <div class="cta"><i class="ri-arrow-right-up-line"></i> 주문</div>
-        </div>
+        <div class="cta"><i class="ri-arrow-right-up-line"></i> 주문하기</div>
       </div>
 
       <div class="pick php" onclick="go('PHP')">
@@ -402,9 +397,7 @@
           <i class="ri-wallet-3-line"></i>
           <div class="label">테더 / 페소</div>
         </div>
-        <div class="ctaRow">
-          <div class="cta"><i class="ri-arrow-right-up-line"></i> 주문</div>
-        </div>
+        <div class="cta"><i class="ri-arrow-right-up-line"></i> 주문하기</div>
       </div>
     </div>
   </div>
@@ -414,13 +407,11 @@
 </div>
 
 <script>
-  /* ---------- Navigation (placeholder) ---------- */
   function go(type){
     // location.href = type === "KRW" ? "order_krw.html" : "order_php.html";
     alert(type === "KRW" ? "테더/원화 주문 화면(추가 예정)" : "테더/페소 주문 화면(추가 예정)");
   }
 
-  /* ---------- Elegant number animation ---------- */
   function easeOutQuart(t){ return 1 - Math.pow(1 - t, 4); }
 
   function animateNumber(el, from, to, duration, formatter){
@@ -449,7 +440,6 @@
     requestAnimationFrame(tick);
   }
 
-  /* ---------- USDT Prices (CoinGecko) ---------- */
   let lastUSD=null, lastPHP=null;
   function fmtUSD(v){ return v.toFixed(4) + " USD"; }
   function fmtPHP(v){ return "₱ " + v.toFixed(2); }
@@ -482,7 +472,6 @@
     }
   }
 
-  /* ---------- Ticker values (5초 갱신) ---------- */
   function setTickerText(id1, id2, text){
     const a=document.getElementById(id1);
     const b=document.getElementById(id2);
@@ -517,7 +506,6 @@
     }catch(e){}
   }
 
-  /* ---------- Entry animation for cards ---------- */
   function showCards(){
     const c1 = document.getElementById("cardUsd");
     const c2 = document.getElementById("cardPhp");
