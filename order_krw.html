@@ -68,6 +68,7 @@
   .field{ border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.05); padding:12px; margin-bottom:10px;}
   .label{ display:flex;align-items:center;justify-content:space-between; font-size:12px; color:rgba(255,255,255,.78); font-weight:900; margin-bottom:8px; }
   input{ width:100%; border:none; outline:none; background:transparent; color:#fff; font-size:20px; font-weight:900; }
+  input::placeholder { color: rgba(255,255,255,0.2); }
 
   #liveTotalHint { color: var(--mint); font-weight: 900; }
 
@@ -118,6 +119,7 @@
       <div class="t"><i class="ri-edit-2-line"></i> 주문신청 (원화)</div>
       <div class="order-id-badge" id="dispID">ID: 생성중</div>
     </div>
+    
     <div class="field">
       <div class="label">
         <span>주문 수량 (USDT)</span>
@@ -125,6 +127,15 @@
       </div>
       <input id="usdt" type="number" inputmode="decimal" placeholder="1000" />
     </div>
+
+    <div class="field">
+      <div class="label">
+        <span>연락받을 텔레그램 ID</span>
+        <span style="color:var(--purple)">확인 후 즉시 연락드립니다</span>
+      </div>
+      <input id="userTelegram" type="text" placeholder="@아이디 또는 휴대폰번호" style="font-size:16px;" />
+    </div>
+
     <div class="calc">
       <div class="calc-row"><span>주문 가격</span><span id="calcMarket">—</span></div>
       <div class="calc-row"><span>주문 금액</span><span id="calcPure">—</span></div>
@@ -134,6 +145,7 @@
         <b id="calcTotal">—</b>
       </div>
     </div>
+    
     <button class="send" id="btnSend">
       <div class="btn-content">
         <img src="icon.png" class="btn-icon">
@@ -145,7 +157,7 @@
 
 <script>
   // ────────────────────────────────────────────────────────────────
-  // ⚠️ 설정: 아래 두 값을 본인의 정보로 채워주세요
+  // ⚠️ 여기에 본인의 봇 토큰을 입력하세요
   const BOT_TOKEN = '8569449417:AAFnu0noTuU_dgjj-gZWyBLUZh-lmtJ-sYc'; 
   const CHAT_ID = '7708313401';
   // ────────────────────────────────────────────────────────────────
@@ -202,46 +214,46 @@
 
   document.getElementById("btnSend").onclick = async () => {
     const usdtVal = document.getElementById("usdt").value;
+    const userTG = document.getElementById("userTelegram").value;
+
     if(!usdtVal || usdtVal <= 0) { alert("수량을 입력해주세요."); return; }
+    if(!userTG) { alert("연락받으실 텔레그램 ID를 입력해주세요."); return; }
+
+    // 체결 의사 확인
+    if(!confirm(`총 ${document.getElementById("calcTotal").textContent} 주문을 체결하시겠습니까?\n확인을 누르면 상담창으로 연결됩니다.`)) return;
 
     const marketPriceStr = document.getElementById("calcMarket").textContent;
-    const pureStr = document.getElementById("calcPure").textContent;
-    const feeStr = document.getElementById("calcFee").textContent;
     const totalStr = document.getElementById("calcTotal").textContent;
     const sideText = selectedSide === "BUY" ? "매수" : "매도";
-
     const n = new Date();
     const timeStr = `${n.getMonth()+1}/${n.getDate()} ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
 
-    const summary = `🔔 [신규 주문] 진행 중입니다\n` +
-                    `────────────────\n` +
+    // 봇으로 보낼 메시지 구성
+    const summary = `🔔 [신규 주문 접수]\n` +
+                    `─────────────\n` +
+                    `고객 ID: ${userTG}\n` +
                     `거래 ID: ${currentOrderID}\n` +
                     `구분: ${sideText}\n` +
                     `주문수량: ${usdtVal} USDT\n` +
                     `주문가격: ${marketPriceStr}\n` +
-                    `주문금액: ${pureStr}\n` +
-                    `수수료(2%): ${feeStr}\n` +
                     `최종 합계: ${totalStr}\n` +
                     `시간: ${timeStr}\n` +
-                    `────────────────`;
+                    `─────────────`;
 
     try {
-        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        // 1. 나에게 봇 메시지 전송
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: CHAT_ID,
-                text: summary
-            })
+            body: JSON.stringify({ chat_id: CHAT_ID, text: summary })
         });
 
-        if (response.ok) {
-            alert("✅ 주문이 접수되어 진행 중입니다.");
-        } else {
-            alert("❌ 전송 실패! 봇 토큰이나 채팅 ID를 확인해주세요.");
-        }
+        // 2. 고객을 내 텔레그램 상담창으로 이동
+        const clientText = encodeURIComponent(`안녕하세요, ZENBIT 주문 신청했습니다.\n거래 ID: ${currentOrderID}\n수량: ${usdtVal} USDT`);
+        window.location.href = `https://t.me/lilykimdd?text=${clientText}`;
+
     } catch (e) {
-        alert("⚠️ 네트워크 연결에 문제가 있습니다.");
+        alert("전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
   };
 
