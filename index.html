@@ -49,7 +49,13 @@
     padding:0;
     background:transparent;
   }
-  .brand i{color:var(--mint);font-size:20px}
+  /* ✅ 로고 추가 + 더 크게 */
+  .brand .logo{
+    height:40px; /* 더 크게 */
+    width:auto;
+    display:block;
+    filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));
+  }
   .brand .name{
     font-size:18px;font-weight:990;letter-spacing:.2px;
     white-space:nowrap;
@@ -86,18 +92,17 @@
     font-size:12px;line-height:1.55;color:var(--muted);
     max-width:360px;
   }
-  /* 나중에 이미지 넣을 때: background-image로 교체하거나 아래 img 사용 */
   .banner-img{
     position:absolute; inset:0;
     width:100%; height:100%;
     object-fit:cover;
-    opacity:0; /* 지금은 미리보기용: 0 */
+    opacity:0;
     pointer-events:none;
   }
   .banner-mask{
     position:absolute; inset:0;
     background:linear-gradient(180deg, rgba(11,18,32,.20), rgba(11,18,32,.65));
-    opacity:.0; /* 이미지 쓰면 1로 올리면 됨 */
+    opacity:.0;
     pointer-events:none;
   }
 
@@ -137,9 +142,7 @@
     letter-spacing:.2px;
   }
   .tick i{color:var(--mint)}
-  .sep{
-    opacity:.35;
-  }
+  .sep{opacity:.35;}
 
   /* 섹션 타이틀 */
   .section-h{
@@ -209,9 +212,10 @@
     50%{opacity:1}
   }
 
+  /* ✅ 숫자 굵기 조금 줄임 */
   .price{
     font-size:32px;
-    font-weight:990;
+    font-weight:860; /* 기존 990 -> 860 */
     letter-spacing:.2px;
     line-height:1.12;
     text-shadow:0 10px 26px rgba(0,0,0,.35);
@@ -222,29 +226,15 @@
     color:var(--muted2);
     font-size:12px;
   }
-  .hint{
-    margin-top:10px;
-    padding:12px 12px;
-    border-radius:16px;
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.08);
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.55;
-  }
 
-  /* ✅ 통화 선택(진입) */
+  /* ✅ 통화 선택(각각 독립 카드로) */
   .choose{
     margin-top:12px;
-    background:var(--card);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:22px;
-    padding:14px 12px;
-    box-shadow:0 10px 26px rgba(0,0,0,.26);
   }
   .choose-h{
     display:flex;align-items:center;justify-content:space-between;
     margin-bottom:10px;
+    padding:0 2px;
   }
   .choose-h .t{
     display:flex;align-items:center;gap:8px;
@@ -255,33 +245,64 @@
 
   .row{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+    grid-template-columns:1fr; /* ✅ 한 장씩 독립 */
+    gap:12px;
   }
   .pick{
-    border-radius:18px;
-    padding:14px 12px;
-    border:1px solid rgba(255,255,255,.12);
+    border-radius:22px;
+    padding:16px 14px;
+    border:1px solid rgba(255,255,255,.14);
     background:rgba(255,255,255,.06);
     color:#fff;
     font-weight:990;
-    font-size:13px;
-    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-size:14px;
+    display:flex;align-items:center;justify-content:space-between;
     cursor:pointer;
     user-select:none;
     position:relative;
     overflow:hidden;
-    transition:transform .12s ease, border-color .12s ease;
+    box-shadow:0 12px 30px rgba(0,0,0,.28);
+    transition:transform .12s ease, border-color .12s ease, filter .12s ease;
   }
   .pick:active{transform:scale(.992)}
-  .pick i{font-size:18px;color:var(--mint)}
-  .pick.alt i{color:#c7b3ff}
+  .pick .l{display:flex;align-items:center;gap:10px}
+  .pick i{font-size:20px;color:#fff}
+  .pick .cta{
+    font-size:12px;font-weight:990;
+    padding:8px 10px;border-radius:999px;
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.16);
+  }
+
+  /* ✅ 더 튀게(바로 주문 버튼 느낌) */
+  .pick.krw{
+    background:
+      radial-gradient(700px 220px at 22% 30%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%),
+      linear-gradient(135deg, rgba(34,197,184,.26), rgba(15,23,42,.62));
+    border-color:rgba(110,231,216,.28);
+  }
+  .pick.php{
+    background:
+      radial-gradient(700px 220px at 78% 22%, rgba(139,92,246,.24) 0%, rgba(139,92,246,0) 62%),
+      linear-gradient(135deg, rgba(139,92,246,.22), rgba(15,23,42,.62));
+    border-color:rgba(199,179,255,.26);
+  }
 
   .fineprint{
     margin-top:10px;
     color:var(--muted2);
     font-size:12px;
     line-height:1.55;
+    padding:0 2px;
+  }
+
+  /* ✅ 맨 아래 안내: 박스 제거 + 아주 작게 + 우측정렬 */
+  .note{
+    margin-top:12px;
+    font-size:10px;
+    color:var(--muted2);
+    text-align:right;
+    padding:0 2px;
   }
 
   /* 모션 줄이기 */
@@ -296,17 +317,17 @@
 <body>
 <div class="app">
 
-  <!-- ✅ 투명 헤더 -->
+  <!-- ✅ 투명 헤더 (logo.png) -->
   <div class="top">
     <div class="brand">
-      <i class="ri-shield-check-line"></i>
+      <img class="logo" src="logo.png" alt="ZENBIT logo">
+      <!-- 원하면 텍스트도 유지 -->
       <div class="name">ZENBIT</div>
     </div>
   </div>
 
   <!-- ✅ 와이드 배너 -->
   <div class="banner" aria-label="wide banner">
-    <!-- 나중에 이미지 넣을 때 아래 주석 해제 후 src 교체 -->
     <!-- <img class="banner-img" src="YOUR_BANNER.jpg" alt="banner"> -->
     <div class="banner-mask"></div>
 
@@ -319,7 +340,7 @@
     </div>
   </div>
 
-  <!-- ✅ 흐르는 텍스트 -->
+  <!-- ✅ 흐르는 텍스트 (디자인 그대로 + 항목 추가) -->
   <div class="ticker" aria-label="flowing ticker">
     <div class="ticker-track" id="tickerTrack">
       <!-- 두 번 반복(끊김 없이) -->
@@ -327,22 +348,36 @@
       <div class="tick"><i class="ri-shield-check-line"></i> ZENBIT EXCHANGE</div><div class="sep">•</div>
       <div class="tick"><i class="ri-time-line"></i> FAST CONFIRM</div><div class="sep">•</div>
       <div class="tick"><i class="ri-lock-2-line"></i> SECURE PROCESS</div><div class="sep">•</div>
+
       <div class="tick"><i class="ri-bar-chart-2-line"></i> USDT / USD <span id="tickUsd">—</span></div><div class="sep">•</div>
       <div class="tick"><i class="ri-coins-line"></i> USDT / PHP <span id="tickPhp">—</span></div><div class="sep">•</div>
+
+      <!-- ✅ 추가: 원화 환율 + 코스피 -->
+      <div class="tick"><i class="ri-exchange-dollar-line"></i> KRW / USD <span id="tickKrwUsd">—</span></div><div class="sep">•</div>
+      <div class="tick"><i class="ri-exchange-2-line"></i> KRW / PHP <span id="tickKrwPhp">—</span></div><div class="sep">•</div>
+      <div class="tick"><i class="ri-line-chart-line"></i> KOSPI <span id="tickKospi">—</span></div><div class="sep">•</div>
 
       <div class="tick"><i class="ri-flashlight-line"></i> REAL-TIME MARKET</div><div class="sep">•</div>
       <div class="tick"><i class="ri-shield-check-line"></i> ZENBIT EXCHANGE</div><div class="sep">•</div>
       <div class="tick"><i class="ri-time-line"></i> FAST CONFIRM</div><div class="sep">•</div>
       <div class="tick"><i class="ri-lock-2-line"></i> SECURE PROCESS</div><div class="sep">•</div>
+
       <div class="tick"><i class="ri-bar-chart-2-line"></i> USDT / USD <span id="tickUsd2">—</span></div><div class="sep">•</div>
       <div class="tick"><i class="ri-coins-line"></i> USDT / PHP <span id="tickPhp2">—</span></div><div class="sep">•</div>
+
+      <!-- ✅ 반복(끊김 없이) -->
+      <div class="tick"><i class="ri-exchange-dollar-line"></i> KRW / USD <span id="tickKrwUsd2">—</span></div><div class="sep">•</div>
+      <div class="tick"><i class="ri-exchange-2-line"></i> KRW / PHP <span id="tickKrwPhp2">—</span></div><div class="sep">•</div>
+      <div class="tick"><i class="ri-line-chart-line"></i> KOSPI <span id="tickKospi2">—</span></div><div class="sep">•</div>
     </div>
   </div>
 
   <!-- 시세 -->
   <div class="section-h">
-    <div class="t"><i class="ri-line-chart-line"></i> 테더 실시간 현재가</div>
-    <div class="s" id="stamp">Updating...</div>
+    <!-- ✅ 텍스트 변경: 테더 실시간 시세 -->
+    <div class="t"><i class="ri-line-chart-line"></i> 테더 실시간 시세</div>
+    <!-- ✅ 오른쪽 시간 제거(이 줄 자체 삭제) -->
+    <!-- <div class="s" id="stamp">Updating...</div> -->
   </div>
 
   <div class="grid">
@@ -354,6 +389,7 @@
       <div class="price" id="usd">—</div>
       <div class="subline">
         <span>기준: Market price</span>
+        <!-- ✅ 이 시간은 그대로 유지 -->
         <span id="t1">—</span>
       </div>
     </div>
@@ -366,12 +402,13 @@
       <div class="price" id="php">—</div>
       <div class="subline">
         <span>기준: Market price</span>
+        <!-- ✅ 이 시간은 그대로 유지 -->
         <span id="t2">—</span>
       </div>
     </div>
   </div>
 
-  <!-- 통화 선택 -->
+  <!-- ✅ 통화 선택: 버튼 2개를 각각 독립 카드로 -->
   <div class="choose">
     <div class="choose-h">
       <div class="t"><i class="ri-cursor-line"></i> 통화 선택</div>
@@ -379,9 +416,15 @@
     </div>
 
     <div class="row">
-      <!-- 링크는 나중에 order_krw.html / order_php.html로 교체 -->
-      <div class="pick" onclick="go('KRW')"><i class="ri-coin-line"></i> 테더 / 원화 (KRW)</div>
-      <div class="pick alt" onclick="go('PHP')"><i class="ri-wallet-3-line"></i> 테더 / 페소 (PHP)</div>
+      <div class="pick krw" onclick="go('KRW')">
+        <div class="l"><i class="ri-coin-line"></i> 테더 / 원화 (KRW)</div>
+        <div class="cta">바로 주문</div>
+      </div>
+
+      <div class="pick php" onclick="go('PHP')">
+        <div class="l"><i class="ri-wallet-3-line"></i> 테더 / 페소 (PHP)</div>
+        <div class="cta">바로 주문</div>
+      </div>
     </div>
 
     <div class="fineprint">
@@ -389,9 +432,8 @@
     </div>
   </div>
 
-  <div class="hint">
-    <b>안내:</b> 시세는 실시간으로 갱신되며, 네트워크 환경에 따라 업데이트가 지연될 수 있습니다.
-  </div>
+  <!-- ✅ 맨 아래 안내: 박스 없애고, 아주 작은 글씨 + 우측정렬 -->
+  <div class="note">안내: 네트워크 환경에 따라 업데이트가 지연될 수 있습니다.</div>
 
 </div>
 
@@ -447,6 +489,27 @@
     document.getElementById("tickPhp2").textContent = b;
   }
 
+  function setTickerFX(krwUsd, krwPhp){
+    const a = ` ${krwUsd.toFixed(6)}`;  // KRW/USD는 아주 작은 값이라 소수 좀 더
+    const b = ` ${krwPhp.toFixed(4)}`;
+    const el1=document.getElementById("tickKrwUsd");
+    const el2=document.getElementById("tickKrwUsd2");
+    const el3=document.getElementById("tickKrwPhp");
+    const el4=document.getElementById("tickKrwPhp2");
+    if(el1) el1.textContent=a;
+    if(el2) el2.textContent=a;
+    if(el3) el3.textContent=b;
+    if(el4) el4.textContent=b;
+  }
+
+  function setTickerKospi(v){
+    const s = ` ${Number(v).toFixed(2)}`;
+    const a=document.getElementById("tickKospi");
+    const b=document.getElementById("tickKospi2");
+    if(a) a.textContent=s;
+    if(b) b.textContent=s;
+  }
+
   /* ---------- Price fetch (CoinGecko) ---------- */
   async function fetchPrices(){
     try{
@@ -476,28 +539,56 @@
       setTicker(usd, php);
 
       const stamp = new Date().toLocaleTimeString();
-      document.getElementById("stamp").textContent = "Updated " + stamp;
+      // ✅ 오른쪽 상단 stamp는 삭제했으니 여기서도 건드리지 않음
       document.getElementById("t1").textContent = stamp;
       document.getElementById("t2").textContent = stamp;
     }catch(e){
-      document.getElementById("stamp").textContent = "Update failed";
       document.getElementById("t1").textContent = "Update failed";
       document.getElementById("t2").textContent = "Update failed";
     }
+  }
+
+  /* ---------- FX (KRW/USD, KRW/PHP) ---------- */
+  async function fetchFX(){
+    try{
+      // Frankfurter (무료 / 키 없음). 일부 환경에서 CORS가 막히면 — 유지.
+      const r = await fetch("https://api.frankfurter.app/latest?from=KRW&to=USD,PHP", {cache:"no-store"});
+      const d = await r.json();
+      const krwUsd = Number(d.rates.USD);
+      const krwPhp = Number(d.rates.PHP);
+      if(Number.isFinite(krwUsd) && Number.isFinite(krwPhp)){
+        setTickerFX(krwUsd, krwPhp);
+      }
+    }catch(e){}
+  }
+
+  /* ---------- KOSPI (Stooq) ---------- */
+  async function fetchKospi(){
+    try{
+      const r = await fetch("https://stooq.com/q/l/?s=^kospi&f=sd2t2ohlcv&h&e=json", {cache:"no-store"});
+      const d = await r.json();
+      const close = Number(d?.data?.[0]?.close);
+      if(Number.isFinite(close)){
+        setTickerKospi(close);
+      }
+    }catch(e){}
   }
 
   /* ---------- Entry animation for cards ---------- */
   function showCards(){
     const c1 = document.getElementById("cardUsd");
     const c2 = document.getElementById("cardPhp");
-    // 차라락(절제된 딜레이)
     setTimeout(()=>c1.classList.add("show"), 140);
     setTimeout(()=>c2.classList.add("show"), 260);
   }
 
   showCards();
   fetchPrices();
-  setInterval(fetchPrices, 15000); // ✅ 너무 빠르지 않게 15초
+  fetchFX();
+  fetchKospi();
+  setInterval(fetchPrices, 15000);
+  setInterval(fetchFX, 30000);
+  setInterval(fetchKospi, 30000);
 </script>
 </body>
 </html>
