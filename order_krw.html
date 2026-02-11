@@ -250,7 +250,7 @@
 
         // 2. 고객을 내 텔레그램 상담창으로 이동
         const clientText = encodeURIComponent(`안녕하세요, ZENBIT 주문 신청했습니다.\n거래 ID: ${currentOrderID}\n수량: ${usdtVal} USDT`);
-        window.location.href = `https://t.me/lilykimdd?text=${clientText}`;
+        window.location.href = `https://t.me/zenbit_cs?text=${clientText}`;
 
     } catch (e) {
         alert("전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
@@ -279,3 +279,4 @@
 </script>
 </body>
 </html>
+
