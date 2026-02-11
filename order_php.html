@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>ZENBIT · PHP Order</title>
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 <style>
@@ -16,10 +16,10 @@
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none; user-select: none;
   }
-  input, textarea, .order-id-badge { -webkit-user-select: text; user-select: text; }
+  input, textarea { -webkit-user-select: text; user-select: text; }
   body{background:var(--navy);display:flex;justify-content:center;color:var(--text);}
 
-  /* 숫자 화살표 제거 및 자동완성 흰색박스 방지 */
+  /* 숫자 화살표 제거 */
   input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   input[type=number] { -moz-appearance: textfield; }
   input:-webkit-autofill {
@@ -28,13 +28,13 @@
     transition: background-color 5000s ease-in-out 0s;
   }
 
-  /* 민트색 토스트 팝업 스타일 */
+  /* 민트색 토스트 팝업 (위치 조정하여 겹침 방지) */
   #toast {
-    position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: rgba(110, 231, 216, 0.95); color: #000; padding: 12px 24px;
-    border-radius: 999px; font-size: 13px; font-weight: 900; z-index: 3000;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); opacity: 0; pointer-events: none;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: #6ee7d8; color: #000; padding: 12px 28px;
+    border-radius: 999px; font-size: 14px; font-weight: 950; z-index: 10000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5); opacity: 0; pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -85,7 +85,12 @@
   .order-h{ display:flex;align-items:center;justify-content:space-between; margin-bottom:12px; }
   .order-h .t{ display:flex;align-items:center;gap:8px; font-weight:990; font-size:14px; }
   .order-h .t i{color:var(--mint); font-size:18px}
-  .order-id-badge{ font-size:10px; color:var(--mint); background:rgba(110,231,216,0.1); padding:2px 8px; border-radius:5px; border:1px solid rgba(110,231,216,0.2); cursor:pointer; }
+  
+  /* 거래ID 뱃지: 복사 검색바 방지 처리 */
+  .order-id-badge{ 
+    font-size:10px; color:var(--mint); background:rgba(110,231,216,0.1); padding:2px 8px; border-radius:5px; border:1px solid rgba(110,231,216,0.2); cursor:pointer; 
+    -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important;
+  }
 
   .field{ border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.05); padding:12px; margin-bottom:10px;}
   .label{ display:flex;align-items:center;justify-content:space-between; font-size:12px; color:rgba(255,255,255,.78); font-weight:900; margin-bottom:8px; }
@@ -209,7 +214,6 @@
   
   function fmtPHP(n){ return "₱ " + n.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
   
-  /* 거래 ID 생성 방식 수정 (YYMMDDHHMM + 4자리 랜덤) */
   function generateID() {
     const n = new Date();
     const y = String(n.getFullYear()).slice(-2);
@@ -217,18 +221,31 @@
     const d = String(n.getDate()).padStart(2,'0');
     const h = String(n.getHours()).padStart(2,'0');
     const i = String(n.getMinutes()).padStart(2,'0');
-    const r = Math.floor(1000 + Math.random() * 9000); // 4자리 랜덤
+    const r = Math.floor(1000 + Math.random() * 9000);
     return `${y}${m}${d}${h}${i}${r}`;
   }
 
   function showToast() {
     const t = document.getElementById("toast");
     t.classList.add("show");
-    setTimeout(() => t.classList.remove("show"), 2000);
+    setTimeout(() => { t.classList.remove("show"); }, 2000);
   }
 
   function copyOrderID() {
-    navigator.clipboard.writeText(currentOrderID).then(() => showToast());
+    const textToCopy = currentOrderID;
+    const textArea = document.createElement("textarea");
+    textArea.value = textToCopy;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+    textArea.style.top = "0";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      showToast();
+    } catch (err) {}
+    document.body.removeChild(textArea);
   }
 
   function render(){
@@ -278,7 +295,6 @@
     const now = new Date();
     const timeStr = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-    /* 요청하신 텔레그램 전송 양식 100% 일치하도록 수정 */
     const summary = `💠ZENBIT 주문 완료\n─────────────\n고객 ID: ${userTG}\n거래 ID: ${currentOrderID}\n거래 구분: ${sideText}\n주문 수량: ${usdtVal} USDT\n주문 통화: 필리핀 페소 (PHP)\n주문 합계: ${document.getElementById("calcTotal").textContent}\n주문 시간: ${timeStr}\n─────────────`;
     
     try {
@@ -317,4 +333,3 @@
 </script>
 </body>
 </html>
-
