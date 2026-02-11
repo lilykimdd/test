@@ -19,7 +19,7 @@
                 linear-gradient(180deg,var(--navy) 0%, var(--navy2) 100%);
     padding:12px 14px 28px;
   }
-  .top{ display:flex;align-items:center;justify-content:center; padding:12px 2px 10px; position:sticky; top:0; background:transparent !important; z-index:10; }
+  .top{ display:flex;align-items:center;justify-content:center; padding:7px 2px 5px; position:sticky; top:0; background:transparent !important; z-index:10; }
   .brand .logo{ height:58px; width:auto; display:block; filter:drop-shadow(0 10px 24px rgba(0,0,0,.28)); }
 
   .banner{
@@ -47,7 +47,9 @@
   .section-h{ margin-top:14px; display:flex;align-items:center;justify-content:space-between; padding:0 2px; }
   .section-h .t{ display:flex;align-items:center;gap:8px; font-weight:990;font-size:14px; }
   .section-h .t i{color:var(--mint);font-size:18px}
-  .refresh{ appearance:none;border:none;background:transparent; cursor:pointer; padding:6px; border-radius:10px; display:inline-flex; align-items:center; }
+  
+  .refresh{ appearance:none;border:none;background:transparent; cursor:pointer; padding:6px; border-radius:10px; display:inline-flex; align-items:center; color:#ffffff; transition: opacity 0.2s ease; }
+  .refresh:active{ opacity: 0.5; }
   .refresh.spin i{animation:spin .75s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -78,10 +80,9 @@
   .pick .cta{ font-size:11px; font-weight:950; min-width:82px; justify-content:center; padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.16); display:inline-flex; align-items:center; gap:8px; }
   .pick.krw{ background: radial-gradient(520px 220px at 22% 18%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%), linear-gradient(135deg, rgba(34,197,184,.22), rgba(15,23,42,.62)); border-color:rgba(110,231,216,.28); }
   .pick.php{ background: radial-gradient(520px 220px at 82% 18%, rgba(139,92,246,.24) 0%, rgba(139,92,246,0) 62%), linear-gradient(135deg, rgba(139,92,246,.20), rgba(15,23,42,.62)); border-color:rgba(199,179,255,.26); }
-  .note{ margin-top:12px; font-size:10px; color:var(--muted2); text-align:right; }
 
-  /* 푸터 스타일 */
-  .footer { margin-top:32px; padding:24px 10px 10px; border-top:1px solid rgba(255,255,255,0.08); text-align:center; }
+  /* 푸터 및 구분선 간격 미세 조정 */
+  .footer { margin-top:28px; padding:20px 10px 10px; border-top:1px solid rgba(255,255,255,0.08); text-align:center; }
   .footer-info { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
   .footer-item { display:flex; align-items:center; justify-content:center; gap:8px; font-size:12px; color:var(--muted); text-decoration:none; }
   .footer-item i { font-size:16px; color:var(--mint); }
@@ -142,7 +143,6 @@
       </div>
     </div>
   </div>
-  <div class="note">안내: 네트워크 환경에 따라 업데이트가 지연될 수 있습니다.</div>
 
   <footer class="footer">
     <div class="footer-info">
