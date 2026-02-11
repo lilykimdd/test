@@ -10,7 +10,21 @@
     --navy:#0b1220; --navy2:#111a2e; --card:rgba(15,23,42,.74); --line:rgba(255,255,255,.10);
     --mint:#6ee7d8; --purple:#8b5cf6; --text:#ffffff; --muted:rgba(255,255,255,.72); --muted2:rgba(255,255,255,.55);
   }
-  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  *{
+    box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    /* --- 텍스트 복사 방지 기능 추가 --- */
+    -webkit-user-select: none;  /* Safari */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Standard */
+    -webkit-tap-highlight-color: transparent; /* 모바일 터치 하이라이트 제거 */
+  }
+
+  /* 입력창 등 예외 요소는 복사가 가능하도록 설정 (필요시) */
+  input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
   body{background:var(--navy);display:flex;justify-content:center;color:var(--text);}
   .app{
     width:100%; max-width:430px; min-height:100vh;
@@ -74,7 +88,6 @@
   .choose{ margin-top:20px; }
   .row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   
-  /* 은은하게 계속 순환하는 광택 효과 */
   .pick{
     border-radius:22px; padding:16px 14px 14px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06);
     cursor:pointer; transition:transform .12s ease; min-height:100px; display:flex; flex-direction:column; justify-content:space-between; align-items:center; text-align:center;
@@ -122,7 +135,7 @@
   .copyright { font-size:10px; color:var(--muted2); letter-spacing:0.5px; opacity:0.6; }
 </style>
 </head>
-<body>
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 <div class="app">
   <div class="top"><div class="brand"><img class="logo" src="./logo.png"></div></div>
   
@@ -203,7 +216,6 @@
 </div>
 
 <script>
-  /* JS remains identical as per instructions to only touch specific requested areas */
   function easeOutQuart(t){ return 1 - Math.pow(1 - t, 4); }
   function animateNumber(el, from, to, duration, formatter){
     const start = performance.now();
