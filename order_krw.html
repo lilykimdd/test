@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>ZENBIT · KRW Order</title>
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 <style>
@@ -14,20 +14,28 @@
     box-sizing:border-box;margin:0;padding:0;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     -webkit-tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    user-select: none;
+    -webkit-user-select: none; user-select: none;
   }
-  input, textarea, .order-id-badge {
-    -webkit-user-select: text;
-    user-select: text;
-  }
+  input, textarea { -webkit-user-select: text; user-select: text; }
   body{background:var(--navy);display:flex;justify-content:center;color:var(--text);}
 
+  input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; }
   input:-webkit-autofill {
     -webkit-text-fill-color: #ffffff !important;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
     transition: background-color 5000s ease-in-out 0s;
   }
+
+  /* 민트색 토스트 팝업 (로직 동일) */
+  #toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: #6ee7d8; color: #000; padding: 12px 28px;
+    border-radius: 999px; font-size: 14px; font-weight: 950; z-index: 10000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5); opacity: 0; pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   .app{
     width:100%; max-width:430px; min-height:100vh;
@@ -56,26 +64,15 @@
   .price-label{ font-size:12px; font-weight:900; color:var(--muted2); margin-bottom:4px; }
   .price-val{ font-size:32px; font-weight:990; color:var(--mint); letter-spacing:.5px; }
 
-  /* 파일 탭 스타일 결합 구간 */
   .side{ margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:0; position: relative; z-index: 2; }
   .side-btn{
     padding:16px 12px; border:1px solid var(--line); background:rgba(255,255,255,.03);
     color:var(--muted2); font-weight:990; font-size:14px; display:flex;align-items:center;justify-content:center;gap:10px;
     cursor:pointer; transition:all .2s ease; border-radius: 18px 18px 0 0;
   }
-  
-  /* 매수 탭 활성화 */
-  .mode-buy #sideBuy {
-    background: var(--card); color: var(--mint); 
-    border-color: var(--mint); border-bottom: none; z-index: 3;
-  }
-  /* 매도 탭 활성화 */
-  .mode-sell #sideSell {
-    background: var(--card); color: var(--purple); 
-    border-color: var(--purple); border-bottom: none; z-index: 3;
-  }
+  .mode-buy #sideBuy { background: var(--card); color: var(--mint); border-color: var(--mint); border-bottom: none; z-index: 3; }
+  .mode-sell #sideSell { background: var(--card); color: var(--purple); border-color: var(--purple); border-bottom: none; z-index: 3; }
 
-  /* 하단 주문 박스 일체형 */
   .order{ 
     margin-top:-1px; background:var(--card); border:1px solid var(--line); 
     border-radius:0 22px 22px 22px; padding:18px 14px 14px; position: relative; z-index: 1;
@@ -87,7 +84,11 @@
   .order-h{ display:flex;align-items:center;justify-content:space-between; margin-bottom:12px; }
   .order-h .t{ display:flex;align-items:center;gap:8px; font-weight:990; font-size:14px; }
   .order-h .t i{color:var(--mint); font-size:18px}
-  .order-id-badge{ font-size:10px; color:var(--mint); background:rgba(110,231,216,0.1); padding:2px 8px; border-radius:5px; border:1px solid rgba(110,231,216,0.2); cursor:pointer; }
+  
+  .order-id-badge{ 
+    font-size:10px; color:var(--mint); background:rgba(110,231,216,0.1); padding:2px 8px; border-radius:5px; border:1px solid rgba(110,231,216,0.2); cursor:pointer; 
+    -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important;
+  }
 
   .field{ border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.05); padding:12px; margin-bottom:10px;}
   .label{ display:flex;align-items:center;justify-content:space-between; font-size:12px; color:rgba(255,255,255,.78); font-weight:900; margin-bottom:8px; }
@@ -115,7 +116,6 @@
   @keyframes flow { 0% { background-position: 200% 0; } 100% { background-position: -100% 0; } }
   .btn-content{ display:flex; align-items:center; justify-content:center; gap:8px; position:relative; z-index:1; }
 
-  /* 커스텀 모달 */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
     display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
@@ -130,18 +130,20 @@
 </head>
 <body>
 
+<div id="toast">거래 ID가 복사되었습니다</div>
+
 <div class="app" id="appRoot">
   <div class="top">
     <div class="left">
       <div class="back" id="btnBack"><i class="ri-arrow-left-line"></i></div>
       <img class="logo" id="logoHome" src="logo.png" alt="ZENBIT" onclick="location.href='index.html'">
     </div>
-    <div class="pill" onclick="location.href='order_php.html'"><span class="fxwon">₩</span> 테더/원화</div>
+    <div class="pill" onclick="location.href='order_php.html'"><span class="fxwon">₱</span> 테더/페소</div>
   </div>
 
   <div class="card">
     <div class="card-h">
-      <div class="t"><i class="ri-line-chart-line"></i> 실시간 USDT 시세</div>
+      <div class="t"><i class="ri-line-chart-line"></i> 실시간 USDT 시세 (KRW)</div>
       <div class="stamp" id="stampTop">기준: 로딩중..</div>
     </div>
     <div class="price-display">
@@ -207,13 +209,42 @@
     }
     requestAnimationFrame(tick);
   }
-  function fmtKRW(n){ return "₩ " + Math.round(n).toLocaleString(); }
+  
+  // 통화 표시 KRW로 변경
+  function fmtKRW(n){ return "₩ " + Math.floor(n).toLocaleString(); }
+  
   function generateID() {
     const n = new Date();
-    return `${String(n.getMonth()+1).padStart(2,'0')}${String(n.getDate()).padStart(2,'0')}${String(n.getHours()).padStart(2,'0')}${String(n.getMinutes()).padStart(2,'0')}${Math.floor(1000 + Math.random() * 9000)}`;
+    const y = String(n.getFullYear()).slice(-2);
+    const m = String(n.getMonth()+1).padStart(2,'0');
+    const d = String(n.getDate()).padStart(2,'0');
+    const h = String(n.getHours()).padStart(2,'0');
+    const i = String(n.getMinutes()).padStart(2,'0');
+    const r = Math.floor(1000 + Math.random() * 9000);
+    return `${y}${m}${d}${h}${i}${r}`;
   }
+
+  function showToast() {
+    const t = document.getElementById("toast");
+    t.classList.add("show");
+    setTimeout(() => { t.classList.remove("show"); }, 2000);
+  }
+
   function copyOrderID() {
-    navigator.clipboard.writeText(currentOrderID).then(() => alert("거래ID가 복사되었습니다: " + currentOrderID));
+    const textToCopy = currentOrderID;
+    const textArea = document.createElement("textarea");
+    textArea.value = textToCopy;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+    textArea.style.top = "0";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      showToast();
+    } catch (err) {}
+    document.body.removeChild(textArea);
   }
 
   function render(){
@@ -229,10 +260,11 @@
 
   async function fetchMarketPriceOnce(){
     try {
-      const response = await fetch("https://api.upbit.com/v1/ticker?markets=KRW-USDT");
+      // KRW 시세 가져오기
+      const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=krw");
       const data = await response.json();
-      if(data && data[0]) {
-        lastMarket = data[0].trade_price;
+      if(data && data.tether) {
+        lastMarket = data.tether.krw;
         animateNumber(document.getElementById("marketPrice"), lastMarket * 0.95, lastMarket, 2400, fmtKRW);
         const now = new Date();
         document.getElementById("stampTop").textContent = `기준: ${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
@@ -263,15 +295,15 @@
     const now = new Date();
     const timeStr = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-    const summary = `🔔 [신규 주문 접수]\n─────────────\n고객 ID: ${userTG}\n거래 ID: ${currentOrderID}\n구분: ${sideText}\n주문수량: ${usdtVal} USDT\n최종 합계: ${document.getElementById("calcTotal").textContent}\n시간: ${timeStr}\n─────────────`;
+    // 요청하신 양식 100% 동일, 통화만 KRW
+    const summary = `💠ZENBIT 주문 완료\n─────────────\n고객 ID: ${userTG}\n거래 ID: ${currentOrderID}\n거래 구분: ${sideText}\n주문 수량: ${usdtVal} USDT\n주문 통화: 대한민국 원화 (KRW)\n주문 합계: ${document.getElementById("calcTotal").textContent}\n주문 시간: ${timeStr}\n─────────────`;
     
     try {
       await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chat_id: CHAT_ID, text: summary })
       });
-      const detailMessage = `안녕하세요, ZENBIT 주문 신청합니다.\n─────────────\n● 고객 ID: ${userTG}\n● 거래ID: ${currentOrderID}\n● 거래구분: ${sideText}\n● 주문수량: ${usdtVal} USDT\n● 주문시간: ${timeStr}\n─────────────`;
-      window.location.href = `https://t.me/zenbit_cs?text=${encodeURIComponent(detailMessage)}`;
+      window.location.href = `https://t.me/zenbit_cs?text=${encodeURIComponent(summary)}`;
     } catch (e) { alert("오류 발생"); }
   };
 
@@ -287,8 +319,10 @@
   document.getElementById("sideBuy").onclick = () => setSide("BUY");
   document.getElementById("sideSell").onclick = () => setSide("SELL");
   document.getElementById("btnBack").onclick = () => history.back();
-  document.getElementById("usdt").onkeydown = (e) => { if(e.key==="Enter") e.target.blur(); };
-  document.getElementById("userTelegram").onkeydown = (e) => { if(e.key==="Enter") e.target.blur(); };
+
+  const hideKbd = (e) => { if(e.key === "Enter") e.target.blur(); };
+  document.getElementById("usdt").onkeydown = hideKbd;
+  document.getElementById("userTelegram").onkeydown = hideKbd;
 
   window.onload = () => {
     currentOrderID = generateID();
