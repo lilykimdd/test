@@ -14,17 +14,21 @@
     box-sizing:border-box;margin:0;padding:0;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  input, textarea, .order-id-badge {
+    -webkit-user-select: text;
+    user-select: text;
   }
   body{background:var(--navy);display:flex;justify-content:center;color:var(--text);}
 
-  /* 크롬 자동완성 박스 제거 */
-  input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
+  input:-webkit-autofill {
     -webkit-text-fill-color: #ffffff !important;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
     transition: background-color 5000s ease-in-out 0s;
   }
 
-  /* 앱 배경 레이아웃 */
   .app{
     width:100%; max-width:430px; min-height:100vh;
     background: radial-gradient(900px 420px at 18% 6%, var(--bg-glow, rgba(110,231,216,.10)) 0%, rgba(110,231,216,0) 55%),
@@ -44,9 +48,6 @@
   .fxwon{ color:var(--mint); font-size:16px; font-weight:990; }
 
   .card{ margin-top:6px; background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:22px; box-shadow:0 10px 26px rgba(0,0,0,.26); overflow:hidden; padding-bottom:20px; transition: background 0.4s; }
-  .mode-buy .card { background: rgba(11, 32, 30, 0.74); border-color: rgba(110,231,216, 0.15); }
-  .mode-sell .card { background: rgba(25, 11, 46, 0.74); border-color: rgba(139,92,246, 0.15); }
-
   .card-h{ padding:12px 14px 8px; display:flex;align-items:center;justify-content:space-between; }
   .card-h .t{ display:flex;align-items:center;gap:8px; font-weight:990; font-size:14px; }
   .card-h .t i{color:var(--mint);font-size:18px}
@@ -55,25 +56,35 @@
   .price-label{ font-size:12px; font-weight:900; color:var(--muted2); margin-bottom:4px; }
   .price-val{ font-size:32px; font-weight:990; color:var(--mint); letter-spacing:.5px; }
 
-  .side{ margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  /* 파일 탭 스타일 결합 구간 */
+  .side{ margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:0; position: relative; z-index: 2; }
   .side-btn{
-    border-radius:18px; padding:14px 12px; border:1px solid var(--line); background:rgba(255,255,255,.05);
-    color:#fff; font-weight:990; font-size:14px; display:flex;align-items:center;justify-content:center;gap:10px;
-    cursor:pointer; transition:all .2s ease;
+    padding:16px 12px; border:1px solid var(--line); background:rgba(255,255,255,.03);
+    color:var(--muted2); font-weight:990; font-size:14px; display:flex;align-items:center;justify-content:center;gap:10px;
+    cursor:pointer; transition:all .2s ease; border-radius: 18px 18px 0 0;
   }
-  .side-btn.active.buy{
-    background: radial-gradient(780px 260px at 22% 30%, rgba(110,231,216,.40) 0%, rgba(110,231,216,0) 62%),
-                linear-gradient(135deg, rgba(110,231,216,.26), rgba(15,23,42,.56));
-    border:1px solid rgba(110,231,216,.55); box-shadow:0 12px 30px rgba(110,231,216,.10);
+  
+  /* 매수 탭 활성화 */
+  .mode-buy #sideBuy {
+    background: var(--card); color: var(--mint); 
+    border-color: var(--mint); border-bottom: none; z-index: 3;
   }
-  .side-btn.active.sell{
-    background: radial-gradient(780px 260px at 78% 22%, rgba(139,92,246,.40) 0%, rgba(139,92,246,0) 62%),
-                linear-gradient(135deg, rgba(139,92,246,.26), rgba(15,23,42,.56));
-    border:1px solid rgba(139,92,246,.55); box-shadow:0 12px 30px rgba(139,92,246,.10);
+  /* 매도 탭 활성화 */
+  .mode-sell #sideSell {
+    background: var(--card); color: var(--purple); 
+    border-color: var(--purple); border-bottom: none; z-index: 3;
   }
 
-  .order{ margin-top:12px; background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:22px; padding:14px; }
-  .order-h{ display:flex;align-items:center;justify-content:space-between; margin-bottom:10px; }
+  /* 하단 주문 박스 일체형 */
+  .order{ 
+    margin-top:-1px; background:var(--card); border:1px solid var(--line); 
+    border-radius:0 22px 22px 22px; padding:18px 14px 14px; position: relative; z-index: 1;
+    transition: all 0.3s ease;
+  }
+  .mode-buy .order { border-color: var(--mint); border-radius: 0 22px 22px 22px; }
+  .mode-sell .order { border-color: var(--purple); border-radius: 22px 0 22px 22px; }
+
+  .order-h{ display:flex;align-items:center;justify-content:space-between; margin-bottom:12px; }
   .order-h .t{ display:flex;align-items:center;gap:8px; font-weight:990; font-size:14px; }
   .order-h .t i{color:var(--mint); font-size:18px}
   .order-id-badge{ font-size:10px; color:var(--mint); background:rgba(110,231,216,0.1); padding:2px 8px; border-radius:5px; border:1px solid rgba(110,231,216,0.2); cursor:pointer; }
@@ -84,7 +95,6 @@
   input::placeholder { color: rgba(255,255,255,0.2); }
 
   #liveTotalHint { color: var(--mint); font-weight: 900; }
-
   .calc{ border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.05); padding:12px; }
   .calc-row{ display:flex;align-items:center;justify-content:space-between; font-size:13px; color:rgba(255,255,255,.80); font-weight:900; padding:6px 0; }
   .calc-row.total{ margin-top:6px; padding-top:10px; border-top:1px solid var(--line); color:#fff; }
@@ -95,45 +105,27 @@
     background: radial-gradient(900px 240px at 22% 30%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%),
                 radial-gradient(900px 240px at 82% 30%, rgba(139,92,246,.20) 0%, rgba(139,92,246,0) 62%),
                 linear-gradient(135deg, rgba(110,231,216,.16), rgba(139,92,246,.16));
-    border:1px solid var(--line);
-    position: relative; overflow: hidden;
+    border:1px solid var(--line); position: relative; overflow: hidden;
   }
   .send::before {
     content: ""; position: absolute; inset: 0;
     background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.04) 45%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.04) 55%, transparent 70%);
-    background-size: 300% 100%;
-    animation: flow 6s infinite linear;
-    pointer-events: none;
+    background-size: 300% 100%; animation: flow 6s infinite linear; pointer-events: none;
   }
-  @keyframes flow {
-    0% { background-position: 200% 0; }
-    100% { background-position: -100% 0; }
-  }
+  @keyframes flow { 0% { background-position: 200% 0; } 100% { background-position: -100% 0; } }
   .btn-content{ display:flex; align-items:center; justify-content:center; gap:8px; position:relative; z-index:1; }
-  .btn-icon{ width:20px; height:20px; object-fit:contain; }
 
   /* 커스텀 모달 */
   .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   }
   .modal-overlay.active { opacity: 1; pointer-events: auto; }
   .modal-box {
     width: 100%; max-width: 360px; background: #1a2235; border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 28px; padding: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.2, 1.1);
+    border-radius: 28px; padding: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: translateY(20px); transition: 0.3s;
   }
   .modal-overlay.active .modal-box { transform: translateY(0); }
-  .modal-h { font-size: 18px; font-weight: 990; margin-bottom: 12px; text-align: center; color: var(--mint); }
-  .modal-p { font-size: 14px; line-height: 1.6; color: var(--muted); text-align: center; margin-bottom: 24px; }
-  .modal-p b { color: #fff; font-size: 16px; }
-  .modal-btns { display: grid; grid-template-columns: 1fr 1.3fr; gap: 10px; }
-  .m-btn { border-radius: 16px; padding: 14px; font-size: 14px; font-weight: 900; border: none; cursor: pointer; transition: opacity 0.2s; }
-  .m-btn.cancel { background: rgba(255,255,255,0.08); color: var(--muted); }
-  .m-btn.confirm { background: linear-gradient(135deg, var(--mint), #4ade80); color: #000; }
-  .m-btn:active { opacity: 0.6; }
 </style>
 </head>
 <body>
@@ -182,17 +174,17 @@
       <div class="calc-row"><span>수수료 (2%)</span><span id="calcFee">—</span></div>
       <div class="calc-row total"><span>최종 결제 합계</span><b id="calcTotal">—</b></div>
     </div>
-    <button class="send" id="btnSend"><div class="btn-content"><img src="icon.png" class="btn-icon"><span>주문 전송하기</span></div></button>
+    <button class="send" id="btnSend"><div class="btn-content"><img src="icon.png" class="btn-icon" style="width:20px;"><span>주문 전송하기</span></div></button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
-    <div class="modal-h">주문 체결 확인</div>
-    <div class="modal-p" id="modalText"></div>
-    <div class="modal-btns">
-      <button class="m-btn cancel" id="modalCancel">취소</button>
-      <button class="m-btn confirm" id="modalConfirm">체결하기</button>
+    <div class="modal-h" style="font-size:18px; font-weight:990; text-align:center; color:var(--mint); margin-bottom:12px;">주문 체결 확인</div>
+    <div class="modal-p" id="modalText" style="font-size:14px; text-align:center; color:var(--muted); line-height:1.6; margin-bottom:24px;"></div>
+    <div class="modal-btns" style="display:grid; grid-template-columns:1fr 1.3fr; gap:10px;">
+      <button class="m-btn cancel" id="modalCancel" style="border-radius:16px; padding:14px; background:rgba(255,255,255,0.08); color:var(--muted); border:none; cursor:pointer;">취소</button>
+      <button class="m-btn confirm" id="modalConfirm" style="border-radius:16px; padding:14px; background:linear-gradient(135deg, var(--mint), #4ade80); color:#000; font-weight:900; border:none; cursor:pointer;">체결하기</button>
     </div>
   </div>
 </div>
@@ -268,8 +260,6 @@
     const usdtVal = document.getElementById("usdt").value;
     const userTG = document.getElementById("userTelegram").value;
     const sideText = selectedSide === "BUY" ? "매수(BUY)" : "매도(SELL)";
-    
-    // 요청하신 포맷: 2026-2-11 11:57
     const now = new Date();
     const timeStr = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
