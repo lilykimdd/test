@@ -22,7 +22,6 @@
   .top{ display:flex;align-items:center;justify-content:center; padding:7px 2px 5px; position:sticky; top:0; background:transparent !important; z-index:10; }
   .brand .logo{ height:58px; width:auto; display:block; filter:drop-shadow(0 10px 24px rgba(0,0,0,.28)); }
 
-  /* 배너 위치 미세조정: margin-top을 줄여 시각적 간격 보정 */
   .banner{
     margin-top:2px; border-radius:22px; overflow:hidden; border:1px solid rgba(255,255,255,.08); box-shadow:0 14px 44px rgba(0,0,0,.40); position:relative;
     background: radial-gradient(520px 360px at 24% 34%, rgba(110,231,216,.28) 0%, rgba(110,231,216,.10) 44%, rgba(110,231,216,0) 78%),
@@ -38,11 +37,16 @@
   .banner-h i{color:var(--mint)}
   .banner-p{ font-size:12px;line-height:1.55;color:var(--muted); max-width:360px; }
 
-  .ticker{ margin-top:12px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); position:relative; }
-  .ticker-track{ display:flex; gap:8px; white-space:nowrap; padding:10px 12px; animation:ticker 12s linear infinite; }
+  .ticker{ 
+    margin-top:12px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); position:relative; 
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  }
+  .ticker-track{ display:flex; width: max-content; animation:ticker 22s linear infinite; padding:10px 0; }
   @keyframes ticker{ 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-  .tick{ display:inline-flex;align-items:center;gap:6px; color:rgba(255,255,255,.86); font-weight:950; font-size:12px; }
-  .sep{opacity:.35;}
+  .tick-group{ display:flex; align-items:center; gap:12px; padding-right:12px; }
+  .tick{ display:inline-flex;align-items:center;gap:6px; color:rgba(255,255,255,.86); font-weight:950; font-size:12px; white-space:nowrap; }
+  .sep{opacity:.35; font-size:10px;}
   .tick .val{font-weight:990;color:rgba(255,255,255,.92)}
 
   .section-h{ margin-top:14px; display:flex;align-items:center;justify-content:space-between; padding:0 2px; }
@@ -65,25 +69,38 @@
   @keyframes blink{ 0%,100%{opacity:.28;transform:scale(.86)} 50%{opacity:1;transform:scale(1.22)} }
   
   .price{ font-size:32px; font-weight:860; letter-spacing:.2px; line-height:1.0; margin-top:-3px; }
-  
   .subline{ margin-top:10px; display:flex;justify-content:space-between; color:var(--muted2); font-size:12px; }
 
   .choose{ margin-top:20px; }
   .row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  
+  /* 은은하게 계속 순환하는 광택 효과 */
   .pick{
     border-radius:22px; padding:16px 14px 14px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06);
     cursor:pointer; transition:transform .12s ease; min-height:100px; display:flex; flex-direction:column; justify-content:space-between; align-items:center; text-align:center;
+    position:relative; overflow:hidden;
   }
+  .pick::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.04) 45%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.04) 55%, transparent 70%);
+    background-size: 300% 100%;
+    animation: flow 6s infinite linear;
+    pointer-events: none;
+  }
+  @keyframes flow {
+    0% { background-position: 200% 0; }
+    100% { background-position: -100% 0; }
+  }
+
   .pick:active{ transform: scale(0.97); }
-  .pick .topline{ display:flex; align-items:center; justify-content:center; gap:6px !important; margin: 0 auto; }
+  .pick .topline{ display:flex; align-items:center; justify-content:center; gap:6px !important; margin: 0 auto; position:relative; z-index:1; }
   .pick .topline .custom-icon{ width:22px; height:22px; object-fit:contain; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.2)); flex-shrink: 0; }
   .pick .label{ font-size:15.5px; font-weight:990; letter-spacing:-0.2px; padding: 0; margin: 0; line-height: 1.2; }
   
-  .pick .cta{ font-size:11px; font-weight:950; min-width:82px; justify-content:center; padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.16); display:inline-flex; align-items:center; gap:8px; margin-top:10px;}
+  .pick .cta{ font-size:11px; font-weight:950; min-width:82px; justify-content:center; padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.16); display:inline-flex; align-items:center; gap:8px; margin-top:10px; position:relative; z-index:1; }
   .pick.krw{ background: radial-gradient(520px 220px at 22% 18%, rgba(110,231,216,.22) 0%, rgba(110,231,216,0) 62%), linear-gradient(135deg, rgba(34,197,184,.22), rgba(15,23,42,.62)); border-color:rgba(110,231,216,.28); }
   .pick.php{ background: radial-gradient(520px 220px at 82% 18%, rgba(139,92,246,.24) 0%, rgba(139,92,246,0) 62%), linear-gradient(135deg, rgba(139,92,246,.20), rgba(15,23,42,.62)); border-color:rgba(199,179,255,.26); }
 
-  /* Footer & CS Buttons Section - 정렬 보정 패치 */
   .footer { margin-top:32px; padding-bottom: 20px; text-align:center; }
   .cs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
   .cs-btn {
@@ -99,8 +116,6 @@
     transition: all 0.2s ease;
   }
   .cs-btn:active { background: rgba(255, 255, 255, 0.12); transform: scale(0.96); }
-  
-  /* 아이콘과 텍스트의 베이스라인 시각적 보정 */
   .cs-btn i { font-size: 18px; color: var(--mint); position: relative; top: -0.5px; } 
   .cs-btn span { font-size: 14px; font-weight: 800; color: var(--text); position: relative; top: -1.5px; } 
 
@@ -120,12 +135,16 @@
 
   <div class="ticker">
     <div class="ticker-track">
-      <div class="tick">FX · KRW/USD <span class="val tick-krw-usd">—</span></div><div class="sep">•</div>
-      <div class="tick">FX · KRW/PHP <span class="val tick-krw-php">—</span></div><div class="sep">•</div>
-      <div class="tick">FX · USD/PHP <span class="val tick-usd-php">—</span></div><div class="sep">•</div>
-      <div class="tick">FX · KRW/USD <span class="val tick-krw-usd">—</span></div><div class="sep">•</div>
-      <div class="tick">FX · KRW/PHP <span class="val tick-krw-php">—</span></div><div class="sep">•</div>
-      <div class="tick">FX · USD/PHP <span class="val tick-usd-php">—</span></div>
+      <div class="tick-group">
+        <div class="tick">FX · KRW/USD <span class="val tick-krw-usd">—</span></div><div class="sep">●</div>
+        <div class="tick">FX · KRW/PHP <span class="val tick-krw-php">—</span></div><div class="sep">●</div>
+        <div class="tick">FX · USD/PHP <span class="val tick-usd-php">—</span></div><div class="sep">●</div>
+      </div>
+      <div class="tick-group">
+        <div class="tick">FX · KRW/USD <span class="val tick-krw-usd">—</span></div><div class="sep">●</div>
+        <div class="tick">FX · KRW/PHP <span class="val tick-krw-php">—</span></div><div class="sep">●</div>
+        <div class="tick">FX · USD/PHP <span class="val tick-usd-php">—</span></div><div class="sep">●</div>
+      </div>
     </div>
   </div>
 
@@ -184,6 +203,7 @@
 </div>
 
 <script>
+  /* JS remains identical as per instructions to only touch specific requested areas */
   function easeOutQuart(t){ return 1 - Math.pow(1 - t, 4); }
   function animateNumber(el, from, to, duration, formatter){
     const start = performance.now();
@@ -196,11 +216,9 @@
     }
     requestAnimationFrame(tick);
   }
-
   let lastUSD=null, lastPHP=null;
   const fmtUSD = v => v.toFixed(4) + " USD";
   const fmtPHP = v => "₱ " + v.toFixed(2);
-
   async function fetchPrices(){
     try{
       const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd,php");
@@ -216,7 +234,6 @@
       document.getElementById("t1").textContent = document.getElementById("t2").textContent = "기준: "+now;
     } catch(e){}
   }
-
   async function fetchFX(){
     try{
       const r = await fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/krw.json");
@@ -227,13 +244,11 @@
       document.querySelectorAll(".tick-usd-php").forEach(e=>e.textContent=u_p);
     } catch(e){}
   }
-
   document.getElementById("btnRefresh").onclick = async () => {
     document.getElementById("btnRefresh").classList.add("spin");
     await Promise.all([fetchPrices(), fetchFX()]);
     setTimeout(()=>document.getElementById("btnRefresh").classList.remove("spin"), 800);
   };
-
   window.onload = () => {
     setTimeout(()=>document.getElementById("cardUsd").classList.add("show"), 140);
     setTimeout(()=>document.getElementById("cardPhp").classList.add("show"), 260);
