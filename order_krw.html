@@ -93,7 +93,7 @@
   <div class="top">
     <div class="left">
       <div class="back" id="btnBack"><i class="ri-arrow-left-line"></i></div>
-      <img class="logo" id="logoHome" src="logo.png" alt="ZENBIT">
+      <img class="logo" id="logoHome" src="logo.png" alt="ZENBIT" onclick="location.href='index.html'">
     </div>
     <div class="pill"><span class="fxwon">₩</span> 테더/원화</div>
   </div>
@@ -117,7 +117,7 @@
   <div class="order">
     <div class="order-h">
       <div class="t"><i class="ri-edit-2-line"></i> 주문신청 (원화)</div>
-      <div class="order-id-badge" id="dispID">ID: 생성중</div>
+      <div class="order-id-badge" id="dispID">거래ID: 생성중</div>
     </div>
     
     <div class="field">
@@ -131,7 +131,7 @@
     <div class="field">
       <div class="label">
         <span>연락받을 텔레그램 ID</span>
-        <span style="color:var(--purple)">확인 후 즉시 연락드립니다</span>
+        <span style="color:var(--purple); font-weight:normal;">확인 후 즉시 연락드립니다</span>
       </div>
       <input id="userTelegram" type="text" placeholder="@아이디 또는 휴대폰번호" style="font-size:16px;" />
     </div>
@@ -156,11 +156,8 @@
 </div>
 
 <script>
-  // ────────────────────────────────────────────────────────────────
-  // ⚠️ 여기에 본인의 봇 토큰을 입력하세요
   const BOT_TOKEN = '8569449417:AAFnu0noTuU_dgjj-gZWyBLUZh-lmtJ-sYc'; 
   const CHAT_ID = '7708313401';
-  // ────────────────────────────────────────────────────────────────
 
   const FEE_RATE = 0.02;
   let lastMarket = null;
@@ -219,38 +216,43 @@
     if(!usdtVal || usdtVal <= 0) { alert("수량을 입력해주세요."); return; }
     if(!userTG) { alert("연락받으실 텔레그램 ID를 입력해주세요."); return; }
 
-    // 체결 의사 확인
     if(!confirm(`총 ${document.getElementById("calcTotal").textContent} 주문을 체결하시겠습니까?\n확인을 누르면 상담창으로 연결됩니다.`)) return;
 
     const marketPriceStr = document.getElementById("calcMarket").textContent;
     const totalStr = document.getElementById("calcTotal").textContent;
-    const sideText = selectedSide === "BUY" ? "매수" : "매도";
-    const n = new Date();
-    const timeStr = `${n.getMonth()+1}/${n.getDate()} ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+    const sideText = selectedSide === "BUY" ? "매수(BUY)" : "매도(SELL)";
+    
+    const now = new Date();
+    const timeStr = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-    // 봇으로 보낼 메시지 구성
     const summary = `🔔 [신규 주문 접수]\n` +
                     `─────────────\n` +
                     `고객 ID: ${userTG}\n` +
                     `거래 ID: ${currentOrderID}\n` +
                     `구분: ${sideText}\n` +
                     `주문수량: ${usdtVal} USDT\n` +
-                    `주문가격: ${marketPriceStr}\n` +
                     `최종 합계: ${totalStr}\n` +
                     `시간: ${timeStr}\n` +
                     `─────────────`;
 
     try {
-        // 1. 나에게 봇 메시지 전송
         await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ chat_id: CHAT_ID, text: summary })
         });
 
-        // 2. 고객을 내 텔레그램 상담창으로 이동
-        const clientText = encodeURIComponent(`안녕하세요, ZENBIT 주문 신청했습니다.\n거래 ID: ${currentOrderID}\n수량: ${usdtVal} USDT`);
-        window.location.href = `https://t.me/zenbit_cs?text=${clientText}`;
+        // 텔레그램 메시지에서 공손체 삭제
+        const detailMessage = `안녕하세요, ZENBIT 주문 신청합니다.\n` +
+                              `─────────────\n` +
+                              `● 고객 ID: ${userTG}\n` +
+                              `● 거래ID: ${currentOrderID}\n` +
+                              `● 거래구분: ${sideText}\n` +
+                              `● 주문수량: ${usdtVal} USDT\n` +
+                              `● 주문시간: ${timeStr}\n` +
+                              `─────────────`;
+        
+        window.location.href = `https://t.me/zenbit_cs?text=${encodeURIComponent(detailMessage)}`;
 
     } catch (e) {
         alert("전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
@@ -271,7 +273,7 @@
   
   window.onload = () => {
     currentOrderID = generateID();
-    document.getElementById("dispID").textContent = "ID: " + currentOrderID;
+    document.getElementById("dispID").textContent = "거래ID: " + currentOrderID;
     fetchMarketPriceOnce();
     setSide("BUY");
     document.getElementById("appRoot").classList.add("ready");
@@ -279,4 +281,3 @@
 </script>
 </body>
 </html>
-
